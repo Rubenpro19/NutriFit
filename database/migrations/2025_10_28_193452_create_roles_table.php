@@ -3,6 +3,8 @@
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Carbon;
 
 return new class extends Migration
 {
@@ -10,10 +12,18 @@ return new class extends Migration
     {
         Schema::create('roles', function (Blueprint $table) {
             $table->id();
-            $table->string('role_name')->unique();
+            $table->string('name')->unique();
             $table->string('description')->nullable();
             $table->timestamps();
         });
+
+        // Insertar roles iniciales
+        $now = Carbon::now();
+        DB::table('roles')->insertOrIgnore([
+            ['name' => 'administrador', 'description' => 'Acceso total', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'nutricionista', 'description' => 'Gestiona citas y atenciones', 'created_at' => $now, 'updated_at' => $now],
+            ['name' => 'paciente', 'description' => 'Agenda citas y consulta historial', 'created_at' => $now, 'updated_at' => $now],
+        ]);
     }
 
     public function down(): void

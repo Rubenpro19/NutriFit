@@ -53,4 +53,45 @@ class User extends Authenticatable
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
     }
+
+    public function role(): BelongsTo
+    {
+        return $this->belongsTo(Role::class);
+    }
+
+    public function userState(): BelongsTo
+    {
+        return $this->belongsTo(UserState::class, 'user_state_id');
+    }
+
+    public function personalData(): HasOne
+    {
+        return $this->hasOne(PersonalData::class);
+    }
+
+    public function appointmentsAsPaciente(): HasMany
+    {
+        return $this->hasMany(Appointment::class, 'paciente_id');
+    }
+
+    public function appointmentsAsNutricionista(): HasMany
+    {
+        return $this->hasMany(Appointment::class, 'nutricionista_id');
+    }
+
+    // 🔹 Helpers para roles
+    public function isAdmin(): bool
+    {
+        return $this->role?->name === 'administrador';
+    }
+
+    public function isNutricionista(): bool
+    {
+        return $this->role?->name === 'nutricionista';
+    }
+
+    public function isPaciente(): bool
+    {
+        return $this->role?->name === 'paciente';
+    }
 }
