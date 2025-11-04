@@ -16,14 +16,6 @@ return new class extends Migration
             $table->string('description')->nullable();
             $table->timestamps();
         });
-
-        // Insertar roles iniciales
-        $now = Carbon::now();
-        DB::table('roles')->insertOrIgnore([
-            ['name' => 'administrador', 'description' => 'Acceso total', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'nutricionista', 'description' => 'Gestiona citas y atenciones', 'created_at' => $now, 'updated_at' => $now],
-            ['name' => 'paciente', 'description' => 'Agenda citas y consulta historial', 'created_at' => $now, 'updated_at' => $now],
-        ]);
     }
 
     public function down(): void

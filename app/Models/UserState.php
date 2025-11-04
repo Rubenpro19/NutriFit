@@ -12,4 +12,9 @@ class UserState extends Model
         'name',
         'description',
     ];
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class, 'user_state_id');
+    }
 }

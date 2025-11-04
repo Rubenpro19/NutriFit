@@ -20,7 +20,7 @@ return new class extends Migration
             $table->rememberToken();
             // Relaciones
             $table->foreignId('role_id')->default(3)->constrained('roles')->onDelete('restrict');
-            $table->foreignId('user_state_id')->nullable()->constrained('user_states')->nullOnDelete();
+            $table->foreignId('user_state_id')->default(1)->constrained('user_states')->nullOnDelete();
             $table->timestamps();
         });
 
