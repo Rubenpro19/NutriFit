@@ -9,6 +9,7 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NutricionistaController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\SocialiteController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -51,3 +52,7 @@ Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->grou
 Route::middleware(['auth', 'role:paciente'])->prefix('paciente')->group(function () {
     Route::get('/dashboard', [PacienteController::class, 'index'])->name('paciente.dashboard');
 });
+
+//Rutas para iniciar sesión con Google
+Route::get('auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
+Route::get('auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
