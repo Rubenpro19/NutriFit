@@ -1,7 +1,7 @@
 {{-- HEADER --}}
 <header class="sticky top-0 z-50 border-b border-gray-200 bg-white shadow-sm backdrop-blur-sm dark:border-gray-800 dark:bg-gray-900/95">
     <div class="container mx-auto px-4">
-        <div class="flex h-16 items-center justify-between">
+        <div class="relative flex h-16 items-center justify-between">
             {{-- Logo --}}
             <div class="flex items-center gap-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 shadow-md">
@@ -12,8 +12,8 @@
                 </a>
             </div>
 
-            {{-- Navigation Desktop --}}
-            <nav class="hidden items-center gap-1 md:flex">
+            {{-- Navigation Desktop - Centrado --}}
+            <nav class="absolute left-1/2 hidden -translate-x-1/2 transform items-center gap-1 md:flex">
                 <a href="{{ route('home') }}" 
                    class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('home') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
                     <span class="material-symbols-outlined text-lg">home</span>

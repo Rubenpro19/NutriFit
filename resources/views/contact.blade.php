@@ -191,8 +191,8 @@
                                 </div>
                                 <div>
                                     <h3 class="mb-1 font-semibold text-gray-900">Ubicación</h3>
-                                    <p class="text-gray-700">Quito, Ecuador</p>
-                                    <p class="text-sm text-gray-600">Consultas virtuales disponibles</p>
+                                    <p class="text-gray-700">Santa Ana, Manabí, Ecuador</p>
+                                    {{-- <p class="text-sm text-gray-600">Consultas virtuales disponibles</p> --}}
                                 </div>
                             </div>
                         </div>

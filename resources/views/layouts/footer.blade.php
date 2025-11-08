@@ -29,7 +29,7 @@
                 <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
                 <span class="flex items-center gap-2 text-gray-600 dark:text-gray-400">
                     <span class="material-symbols-outlined text-base">location_on</span>
-                    Quito, Ecuador
+                    Santa Ana, Manabí
                 </span>
             </div>
         </div>

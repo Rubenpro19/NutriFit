@@ -140,8 +140,8 @@
                             <p class="font-medium">Información importante:</p>
                             <ul class="mt-2 list-inside list-disc space-y-1">
                                 <li>La contraseña debe tener al menos 8 caracteres</li>
-                                <li>El usuario recibirá un correo de bienvenida (si está configurado)</li>
-                                <li>Puedes cambiar el rol y estado después de crear el usuario</li>
+                                <li>El usuario recibirá un correo de bienvenida</li>
+                                <li>Puedes cambiar el estado después de crear el usuario</li>
                             </ul>
                         </div>
                     </div>
