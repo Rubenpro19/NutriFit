@@ -30,13 +30,11 @@ class CreateNewUser implements CreatesNewUsers
             'password' => $this->passwordRules(),
         ])->validate();
 
-        $roleId = $input['role_id'] ?? 3;
-        
         return User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
-            'role_id' => $roleId,
+            'role_id' => 3,
         ]);
     }
 }

@@ -16,7 +16,21 @@
             </a>
             @if (Route::has('login'))
                 @auth
-                    <a href="{{ url('/dashboard') }}" class="flex items-center gap-1 text-white hover:underline">
+                    @php
+                        $user = Auth::user();
+                        $roleSlug = 'user'; // fallback
+                        if (!empty($user->role->name)) {
+                            $roleSlug = strtolower(str_replace(' ', '-', $user->role->name));
+                        } elseif (!empty($user->role_name)) {
+                            $roleSlug = strtolower(str_replace(' ', '-', $user->role_name));
+                        } elseif (!empty($user->role_id)) {
+                            $map = [1 => 'admin', 2 => 'paciente', 3 => 'nutricionista']; // ajusta según tus ids
+                            $roleSlug = $map[$user->role_id] ?? 'user';
+                        }
+                        $dashboardUrl = url($roleSlug . '/dashboard');
+                    @endphp
+
+                    <a href="{{ $dashboardUrl }}" class="flex items-center gap-1 text-white hover:underline">
                         <span class="material-symbols-outlined text-sm">dashboard</span>
                         Dashboard
                     </a>

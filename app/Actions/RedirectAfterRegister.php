@@ -11,7 +11,7 @@ class RedirectAfterRegister implements RegisterResponseContract
         $user = $request->user();
 
         if ($user->isAdmin()) {
-            return redirect()->route('admin.dashboard');
+            return redirect()->route('dashboard');
         }
 
         if ($user->isNutricionista()) {
