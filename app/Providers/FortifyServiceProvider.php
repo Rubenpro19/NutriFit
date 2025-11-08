@@ -12,6 +12,8 @@ use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\LoginResponse; 
 use Laravel\Fortify\Fortify;
+use Laravel\Fortify\Contracts\RegisterResponse;
+use App\Actions\RedirectAfterRegister;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -21,6 +23,7 @@ class FortifyServiceProvider extends ServiceProvider
     public function register(): void
     {
         $this->app->singleton(LoginResponse::class, RedirectAfterLogin::class);
+        $this->app->singleton(RegisterResponse::class, RedirectAfterRegister::class);
     }
 
     /**

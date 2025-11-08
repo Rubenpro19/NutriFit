@@ -1,4 +1,4 @@
-    {{-- HEADER --}}
+{{-- HEADER --}}
     <header class="bg-[#8be28b] flex justify-between items-center px-8 py-3 shadow">
         <div class="flex items-center gap-2">
             <span class="material-symbols-outlined text-white text-2xl">eco</span>
@@ -21,15 +21,29 @@
                         Dashboard
                     </a>
                 @else
-                    <a href="{{ route('login') }}" class="flex items-center gap-1 text-white hover:underline">
-                        <span class="material-symbols-outlined text-sm">login</span>
-                        Iniciar sesión
-                    </a>
-                    @if (Route::has('register'))
-                        <a href="{{ route('register') }}" class="flex items-center gap-1 text-white hover:underline">
-                            <span class="material-symbols-outlined text-sm">person_add</span>
-                            Registrarse
+                    @if (request()->routeIs('login'))
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="flex items-center gap-1 text-white hover:underline">
+                                <span class="material-symbols-outlined text-sm">person_add</span>
+                                Registrarse
+                            </a>
+                        @endif
+                    @elseif (request()->routeIs('register'))
+                        <a href="{{ route('login') }}" class="flex items-center gap-1 text-white hover:underline">
+                            <span class="material-symbols-outlined text-sm">login</span>
+                            Iniciar sesión
                         </a>
+                    @else
+                        <a href="{{ route('login') }}" class="flex items-center gap-1 text-white hover:underline">
+                            <span class="material-symbols-outlined text-sm">login</span>
+                            Iniciar sesión
+                        </a>
+                        @if (Route::has('register'))
+                            <a href="{{ route('register') }}" class="flex items-center gap-1 text-white hover:underline">
+                                <span class="material-symbols-outlined text-sm">person_add</span>
+                                Registrarse
+                            </a>
+                        @endif
                     @endif
                 @endauth
             @endif
