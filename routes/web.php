@@ -10,10 +10,21 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NutricionistaController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\SocialiteController;
+use App\Http\Controllers\ContactController;
 
 Route::get('/', function () {
     return view('welcome');
 })->name('home');
+
+Route::get('/sobre-nosotros', function () {
+    return view('about');
+})->name('about');
+
+Route::get('/contacto', function () {
+    return view('contact');
+})->name('contact');
+
+Route::post('/contacto/enviar', [ContactController::class, 'send'])->name('contact.send');
 
 Route::middleware(['auth'])->group(function () {
     Route::redirect('settings', 'settings/profile');
