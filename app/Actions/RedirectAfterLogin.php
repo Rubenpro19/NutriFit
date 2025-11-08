@@ -11,7 +11,7 @@ class RedirectAfterLogin implements LoginResponseContract
         $user = $request->user();
 
         if ($user->isAdmin()) {
-            return redirect()->route('dashboard');
+            return redirect()->route('admin.dashboard');
         }
 
         if ($user->isNutricionista()) {

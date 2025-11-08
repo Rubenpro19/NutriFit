@@ -34,8 +34,33 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Panel administrador
-Route::middleware(['auth', 'role:administrador'])->prefix('admin')->group(function () {
+Route::middleware(['auth', 'role:administrador'])->prefix('administrador')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
+    
+    // Gestión de usuarios
+    Route::get('/users', [AdminController::class, 'users'])->name('users.index');
+    Route::get('/users/create', [AdminController::class, 'createUser'])->name('users.create');
+    Route::post('/users', [AdminController::class, 'storeUser'])->name('users.store');
+    Route::get('/users/{user}/edit', [AdminController::class, 'editUser'])->name('users.edit');
+    Route::put('/users/{user}', [AdminController::class, 'updateUser'])->name('users.update');
+    Route::post('/users/{user}/toggle-status', [AdminController::class, 'toggleUserStatus'])->name('users.toggle-status');
+    
+    // Gestión de nutricionistas
+    Route::get('/nutricionistas', [AdminController::class, 'nutricionistas'])->name('nutricionistas.index');
+    Route::get('/nutricionistas/{nutricionista}', [AdminController::class, 'showNutricionista'])->name('nutricionistas.show');
+    
+    // Gestión de pacientes
+    Route::get('/pacientes', [AdminController::class, 'pacientes'])->name('pacientes.index');
+    Route::get('/pacientes/{paciente}', [AdminController::class, 'showPaciente'])->name('pacientes.show');
+    
+    // Gestión de citas
+    Route::get('/appointments', [AdminController::class, 'appointments'])->name('appointments.index');
+    Route::get('/appointments/{appointment}', [AdminController::class, 'showAppointment'])->name('appointments.show');
+    Route::post('/appointments/{appointment}/cancel', [AdminController::class, 'cancelAppointment'])->name('appointments.cancel');
+    
+    // Reportes y configuración
+    Route::get('/reports', [AdminController::class, 'reports'])->name('reports.index');
+    Route::get('/settings', [AdminController::class, 'settings'])->name('settings.index');
 });
 
 
