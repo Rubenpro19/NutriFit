@@ -94,4 +94,15 @@ class User extends Authenticatable
     {
         return $this->role?->name === 'paciente';
     }
+
+    // 🔹 Helpers para estado
+    public function isActive(): bool
+    {
+        return $this->user_state_id === 1; // 1 = activo
+    }
+
+    public function isInactive(): bool
+    {
+        return $this->user_state_id === 2; // 2 = inactivo
+    }
 }

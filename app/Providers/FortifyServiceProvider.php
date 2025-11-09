@@ -14,6 +14,9 @@ use Laravel\Fortify\Contracts\LoginResponse;
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\RegisterResponse;
 use App\Actions\RedirectAfterRegister;
+use Illuminate\Support\Facades\Hash;
+use App\Models\User;
+use Illuminate\Validation\ValidationException;
 
 class FortifyServiceProvider extends ServiceProvider
 {
@@ -31,9 +34,33 @@ class FortifyServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
+        $this->configureAuthentication();
         $this->configureActions();
         $this->configureViews();
         $this->configureRateLimiting();
+    }
+
+    /**
+     * Configure custom authentication logic.
+     */
+    private function configureAuthentication(): void
+    {
+        Fortify::authenticateUsing(function (Request $request) {
+            $user = User::where('email', $request->email)->first();
+
+            if ($user && Hash::check($request->password, $user->password)) {
+                // Verificar si el usuario está activo
+                if ($user->isInactive()) {
+                    throw ValidationException::withMessages([
+                        Fortify::username() => ['Tu cuenta está inactiva. Por favor, contacta al administrador.'],
+                    ]);
+                }
+
+                return $user;
+            }
+
+            return null;
+        });
     }
 
     /**
