@@ -15,6 +15,8 @@ class UsersTable extends Component
     public $search = '';
     public $role_id = '';
     public $user_state_id = '';
+    public $userToToggle = null;
+    public $userToActivate = null;
 
     protected $queryString = [
         'search' => ['except' => ''],
@@ -24,6 +26,24 @@ class UsersTable extends Component
     ];
 
     protected $listeners = ['userUpdated' => '$refresh'];
+
+    public function openDeactivateModal($userId)
+    {
+        $this->userToToggle = $userId;
+        $this->userToActivate = null;
+    }
+
+    public function openActivateModal($userId)
+    {
+        $this->userToActivate = $userId;
+        $this->userToToggle = null;
+    }
+
+    public function closeModal()
+    {
+        $this->userToToggle = null;
+        $this->userToActivate = null;
+    }
 
     public function updatingSearch()
     {
@@ -48,7 +68,8 @@ class UsersTable extends Component
 
     public function render()
     {
-        $query = User::with(['role', 'userState']);
+        $query = User::with(['role', 'userState'])
+            ->where('id', '!=', auth()->id()); // Excluir al usuario autenticado
 
         if (!empty($this->role_id)) {
             $query->where('role_id', $this->role_id);

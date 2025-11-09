@@ -18,19 +18,19 @@
             {{-- Total Usuarios --}}
             <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="flex items-center justify-between">
-                    <div>
+                    <div class="min-w-0 flex-1">
                         <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Usuarios</p>
                         <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
                             {{ $stats['users_by_role']->sum('total') }}
                         </p>
                     </div>
-                    <div class="rounded-lg bg-blue-100 p-3 dark:bg-blue-900/30">
+                    <div class="flex-shrink-0 rounded-lg bg-blue-100 p-3 dark:bg-blue-900/30">
                         <span class="material-symbols-outlined text-2xl text-blue-600 dark:text-blue-400">group</span>
                     </div>
                 </div>
-                <div class="mt-4 flex items-center gap-4 text-xs text-gray-600 dark:text-gray-400">
+                <div class="mt-4 flex flex-wrap items-center gap-2 text-xs text-gray-600 dark:text-gray-400">
                     @foreach($stats['users_by_role'] as $userRole)
-                        <span>{{ ucfirst($userRole->role->name) }}: <strong>{{ $userRole->total }}</strong></span>
+                        <span class="whitespace-nowrap">{{ ucfirst($userRole->role->name) }}: <strong>{{ $userRole->total }}</strong></span>
                     @endforeach
                 </div>
             </div>
@@ -38,17 +38,17 @@
             {{-- Citas del Mes --}}
             <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="flex items-center justify-between">
-                    <div>
+                    <div class="min-w-0 flex-1">
                         <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Citas del Mes</p>
                         <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
                             {{ $stats['appointments_this_month'] }}
                         </p>
                     </div>
-                    <div class="rounded-lg bg-green-100 p-3 dark:bg-green-900/30">
+                    <div class="flex-shrink-0 rounded-lg bg-green-100 p-3 dark:bg-green-900/30">
                         <span class="material-symbols-outlined text-2xl text-green-600 dark:text-green-400">calendar_month</span>
                     </div>
                 </div>
-                <p class="mt-4 text-xs text-gray-600 dark:text-gray-400">
+                <p class="mt-4 truncate text-xs text-gray-600 dark:text-gray-400">
                     {{ now()->format('F Y') }}
                 </p>
             </div>
@@ -56,17 +56,17 @@
             {{-- Citas Hoy --}}
             <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="flex items-center justify-between">
-                    <div>
+                    <div class="min-w-0 flex-1">
                         <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Citas Hoy</p>
                         <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
                             {{ $stats['appointments_today'] }}
                         </p>
                     </div>
-                    <div class="rounded-lg bg-purple-100 p-3 dark:bg-purple-900/30">
+                    <div class="flex-shrink-0 rounded-lg bg-purple-100 p-3 dark:bg-purple-900/30">
                         <span class="material-symbols-outlined text-2xl text-purple-600 dark:text-purple-400">today</span>
                     </div>
                 </div>
-                <p class="mt-4 text-xs text-gray-600 dark:text-gray-400">
+                <p class="mt-4 truncate text-xs text-gray-600 dark:text-gray-400">
                     {{ now()->format('d/m/Y') }}
                 </p>
             </div>
@@ -74,13 +74,13 @@
             {{-- Usuarios Activos --}}
             <div class="rounded-xl border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="flex items-center justify-between">
-                    <div>
+                    <div class="min-w-0 flex-1">
                         <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Usuarios Activos</p>
                         <p class="mt-2 text-3xl font-bold text-gray-900 dark:text-white">
                             {{ $stats['users_by_state']->where('userState.name', 'activo')->first()->total ?? 0 }}
                         </p>
                     </div>
-                    <div class="rounded-lg bg-orange-100 p-3 dark:bg-orange-900/30">
+                    <div class="flex-shrink-0 rounded-lg bg-orange-100 p-3 dark:bg-orange-900/30">
                         <span class="material-symbols-outlined text-2xl text-orange-600 dark:text-orange-400">check_circle</span>
                     </div>
                 </div>
@@ -105,17 +105,17 @@
                     @if($stats['top_nutricionistas']->count() > 0)
                         <div class="space-y-4">
                             @foreach($stats['top_nutricionistas'] as $index => $nutricionista)
-                                <div class="flex items-center justify-between rounded-lg border border-gray-200 p-4 dark:border-gray-700">
-                                    <div class="flex items-center gap-3">
-                                        <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gray-200 text-sm font-bold text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                <div class="flex items-center justify-between gap-4 rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                                    <div class="flex min-w-0 flex-1 items-center gap-3">
+                                        <div class="flex h-10 w-10 flex-shrink-0 items-center justify-center rounded-lg bg-gray-200 text-sm font-bold text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                                             #{{ $index + 1 }}
                                         </div>
-                                        <div>
-                                            <p class="font-medium text-gray-900 dark:text-white">{{ $nutricionista->name }}</p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">{{ $nutricionista->email }}</p>
+                                        <div class="min-w-0 flex-1">
+                                            <p class="truncate font-medium text-gray-900 dark:text-white">{{ $nutricionista->name }}</p>
+                                            <p class="truncate text-sm text-gray-600 dark:text-gray-400">{{ $nutricionista->email }}</p>
                                         </div>
                                     </div>
-                                    <div class="text-right">
+                                    <div class="flex-shrink-0 text-right">
                                         <p class="text-2xl font-bold text-gray-900 dark:text-white">
                                             {{ $nutricionista->appointments_as_nutricionista_count }}
                                         </p>
@@ -208,40 +208,43 @@
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                                 Usuario
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                            <th class="hidden px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 sm:table-cell">
                                 Correo
                             </th>
                             <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
                                 Rol
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                            <th class="hidden px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 md:table-cell">
                                 Estado
                             </th>
-                            <th class="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400">
+                            <th class="hidden px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-600 dark:text-gray-400 lg:table-cell">
                                 Registrado
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="divide-y divide-zinc-200 dark:divide-zinc-800">
+                    <tbody class="divide-y divide-gray-200 dark:divide-gray-800">
                         @foreach($stats['recent_users'] as $user)
                             <tr class="hover:bg-gray-50 dark:hover:bg-gray-800/50">
-                                <td class="whitespace-nowrap px-6 py-4">
+                                <td class="px-6 py-4">
                                     <div class="flex items-center gap-3">
-                                        <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gray-200 text-xs font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300">
+                                        <div class="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-lg bg-gray-200 text-xs font-semibold text-gray-700 dark:bg-gray-700 dark:text-gray-300">
                                             {{ $user->initials() }}
                                         </div>
-                                        <span class="font-medium text-gray-900 dark:text-white">{{ $user->name }}</span>
+                                        <div class="min-w-0">
+                                            <p class="truncate font-medium text-gray-900 dark:text-white">{{ $user->name }}</p>
+                                            <p class="truncate text-xs text-gray-600 dark:text-gray-400 sm:hidden">{{ $user->email }}</p>
+                                        </div>
                                     </div>
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
-                                    {{ $user->email }}
+                                <td class="hidden max-w-xs px-6 py-4 sm:table-cell">
+                                    <p class="truncate text-sm text-gray-600 dark:text-gray-400">{{ $user->email }}</p>
                                 </td>
                                 <td class="whitespace-nowrap px-6 py-4">
                                     <span class="inline-flex rounded-full bg-blue-100 px-2 py-1 text-xs font-semibold text-blue-800 dark:bg-blue-900/30 dark:text-blue-400">
                                         {{ ucfirst($user->role->name) }}
                                     </span>
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4">
+                                <td class="hidden whitespace-nowrap px-6 py-4 md:table-cell">
                                     @if($user->userState->name === 'activo')
                                         <span class="inline-flex items-center gap-1 rounded-full bg-green-100 px-2 py-1 text-xs font-semibold text-green-800 dark:bg-green-900/30 dark:text-green-400">
                                             <span class="h-1.5 w-1.5 rounded-full bg-green-600"></span>
@@ -254,7 +257,7 @@
                                         </span>
                                     @endif
                                 </td>
-                                <td class="whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-400">
+                                <td class="hidden whitespace-nowrap px-6 py-4 text-sm text-gray-600 dark:text-gray-400 lg:table-cell">
                                     {{ $user->created_at->format('d/m/Y H:i') }}
                                 </td>
                             </tr>

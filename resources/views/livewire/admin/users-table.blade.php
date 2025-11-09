@@ -89,10 +89,14 @@
                                 </span>
                             </td>
                             <td class="px-4 py-3">
-                                <span class="inline-flex rounded-full px-2 py-1 text-xs font-medium
+                                <span class="inline-flex items-center gap-2 rounded-full px-2 py-1 text-xs font-medium
                                     @if($user->userState->name === 'activo') bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400
                                     @else bg-red-100 text-red-700 dark:bg-red-900/30 dark:text-red-400
                                     @endif">
+                                    <span class="inline-block h-2 w-2 flex-shrink-0 rounded-full
+                                        @if($user->userState->name === 'activo') bg-green-600 dark:bg-green-400
+                                        @else bg-red-600 dark:bg-red-400
+                                        @endif" aria-hidden="true"></span>
                                     {{ ucfirst($user->userState->name) }}
                                 </span>
                             </td>
@@ -107,16 +111,24 @@
                                         <span class="material-symbols-outlined text-base">edit</span>
                                     </a>
                                     @if($user->id !== auth()->id())
-                                        <form action="{{ route('admin.users.toggle-status', $user) }}" method="POST" class="inline">
-                                            @csrf
-                                            <button type="submit" 
+                                        @if($user->userState->name === 'activo')
+                                            {{-- Botón para desactivar (abre modal) --}}
+                                            <button type="button"
+                                                    wire:click="openDeactivateModal({{ $user->id }})"
                                                     class="rounded-md p-2 text-orange-600 hover:bg-orange-50 dark:text-orange-400 dark:hover:bg-orange-900/30"
-                                                    title="{{ $user->userState->name === 'activo' ? 'Desactivar usuario' : 'Activar usuario' }}">
-                                                <span class="material-symbols-outlined text-base">
-                                                    {{ $user->userState->name === 'activo' ? 'block' : 'check_circle' }}
-                                                </span>
+                                                    title="Desactivar usuario">
+                                                <span class="material-symbols-outlined text-base">block</span>
                                             </button>
-                                        </form>
+                                        @else
+                                            {{-- Botón para activar (abre modal) --}}
+                                            <button type="button"
+                                                    wire:click="openActivateModal({{ $user->id }})"
+                                                    class="rounded-md p-2 text-green-600 hover:bg-green-50 dark:text-green-400 dark:hover:bg-green-900/30"
+                                                    title="Activar usuario">
+                                                <span class="material-symbols-outlined text-base">check_circle</span>
+                                            </button>
+                                            </form>
+                                        @endif
                                     @endif
                                 </div>
                             </td>
@@ -136,4 +148,130 @@
     <div class="flex justify-center mt-4">
         {{ $users->links() }}
     </div>
+
+    {{-- Modal de Confirmación para Desactivar Usuario --}}
+    @if($userToToggle)
+        @php
+            $selectedUser = $users->firstWhere('id', $userToToggle);
+        @endphp
+        
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" wire:click.self="closeModal">
+            <div class="w-full max-w-md rounded-xl bg-white shadow-2xl dark:bg-gray-900" wire:click.stop>
+                <div class="space-y-4 p-6">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30">
+                            <span class="material-symbols-outlined text-2xl text-orange-600 dark:text-orange-400">warning</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Desactivar Usuario</h3>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">
+                            {{ ucfirst($selectedUser->role->name ?? $selectedUser->role_name ?? '') }}
+                        </p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">
+                            {{ $selectedUser->name ?? '' }}
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            {{ $selectedUser->email ?? '' }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-lg border border-orange-200 bg-orange-50 p-4 dark:border-orange-900/50 dark:bg-orange-900/20">
+                        <div class="flex gap-3">
+                            <span class="material-symbols-outlined flex-shrink-0 text-orange-600 dark:text-orange-400">info</span>
+                            <div class="flex-1 space-y-2">
+                                <p class="text-sm font-medium text-orange-800 dark:text-orange-300">
+                                    Importante:
+                                </p>
+                                <p class="text-sm text-orange-700 dark:text-orange-400">
+                                    Un usuario en estado <strong>inactivo</strong> no podrá iniciar sesión en la plataforma ni realizar ninguna acción hasta que sea reactivado.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="button"
+                                wire:click="closeModal"
+                                class="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+                            Cancelar
+                        </button>
+                        <form action="{{ $selectedUser ? route('admin.users.toggle-status', $selectedUser) : '#' }}" method="POST" class="flex-1">
+                            @csrf
+                            <button type="submit" 
+                                    class="w-full rounded-lg bg-orange-600 px-4 py-2 text-sm font-medium text-white hover:bg-orange-700 dark:bg-orange-500 dark:hover:bg-orange-600">
+                                Desactivar Usuario
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    {{-- Modal de Confirmación para Activar Usuario --}}
+    @if($userToActivate)
+        @php
+            $selectedUser = $users->firstWhere('id', $userToActivate);
+        @endphp
+        
+        <div class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" wire:click.self="closeModal">
+            <div class="w-full max-w-md rounded-xl bg-white shadow-2xl dark:bg-gray-900" wire:click.stop>
+                <div class="space-y-4 p-6">
+                    <div class="flex items-center gap-3">
+                        <div class="flex h-12 w-12 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30">
+                            <span class="material-symbols-outlined text-2xl text-green-600 dark:text-green-400">check_circle</span>
+                        </div>
+                        <div>
+                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">Activar Usuario</h3>
+                        </div>
+                    </div>
+
+                    <div class="space-y-3 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">
+                            {{ ucfirst($selectedUser->role->name ?? $selectedUser->role_name ?? '') }}
+                        </p>
+                        <p class="text-sm font-medium text-gray-900 dark:text-white">
+                            {{ $selectedUser->name ?? '' }}
+                        </p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            {{ $selectedUser->email ?? '' }}
+                        </p>
+                    </div>
+
+                    <div class="rounded-lg border border-green-200 bg-green-50 p-4 dark:border-green-900/50 dark:bg-green-900/20">
+                        <div class="flex gap-3">
+                            <span class="material-symbols-outlined flex-shrink-0 text-green-600 dark:text-green-400">info</span>
+                            <div class="flex-1 space-y-2">
+                                <p class="text-sm font-medium text-green-800 dark:text-green-300">
+                                    Confirmación:
+                                </p>
+                                <p class="text-sm text-green-700 dark:text-green-400">
+                                    Al activar este usuario, podrá <strong>iniciar sesión</strong> en la plataforma y realizar todas las acciones según su rol.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex gap-3 pt-2">
+                        <button type="button"
+                                wire:click="closeModal"
+                                class="flex-1 rounded-lg border border-gray-300 bg-white px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-50 dark:border-gray-600 dark:bg-gray-800 dark:text-gray-300 dark:hover:bg-gray-700">
+                            Cancelar
+                        </button>
+                        <form action="{{ $selectedUser ? route('admin.users.toggle-status', $selectedUser) : '#' }}" method="POST" class="flex-1">
+                            @csrf
+                            <button type="submit" 
+                                    class="w-full rounded-lg bg-green-600 px-4 py-2 text-sm font-medium text-white hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600">
+                                Activar Usuario
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

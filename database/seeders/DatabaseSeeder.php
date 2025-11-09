@@ -30,8 +30,8 @@ class DatabaseSeeder extends Seeder
         // 🔹 Obtener estado inactivo
         $inactivoState = UserState::where('name', 'inactivo')->first();
 
-        // 🔹 Obtener estado suspendido
-        $suspendidoState = UserState::where('name', 'suspendido')->first();
+        // // 🔹 Obtener estado suspendido
+        // $suspendidoState = UserState::where('name', 'suspendido')->first();
 
         // 🔹 Usuario administrador (contraseña desde .env (opcional))
         User::factory()->create([
@@ -48,7 +48,7 @@ class DatabaseSeeder extends Seeder
             'email' => 'ruben@gmail.com',
             'password' => Hash::make('ruben123'),
             'role_id' => $nutricionistaRole?->id,
-            'user_state_id' => $inactivoState?->id,
+            'user_state_id' => $activoState?->id,
         ]);
 
         // 🔹 Usuario paciente específico
