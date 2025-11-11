@@ -11,7 +11,7 @@
         {{-- Estadísticas principales --}}
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
             {{-- Total Usuarios --}}
-            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Usuarios</p>
@@ -24,7 +24,7 @@
             </div>
 
             {{-- Total Pacientes --}}
-            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Pacientes</p>
@@ -37,7 +37,7 @@
             </div>
 
             {{-- Total Nutricionistas --}}
-            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Nutricionistas</p>
@@ -52,7 +52,7 @@
             </div>
 
             {{-- Citas Pendientes --}}
-            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+            <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
                 <div class="flex items-center justify-between">
                     <div>
                         <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Citas Pendientes</p>
@@ -69,7 +69,7 @@
         {{-- Acciones rápidas --}}
         <div class="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
             <a href="{{ route('admin.users.index') }}"
-                class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600">
+                class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-600">
                 <div class="flex items-center gap-4">
                     <div class="rounded-full bg-blue-100 p-3 dark:bg-blue-900/30">
                         <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">manage_accounts</span>
@@ -123,7 +123,7 @@
             </a> --}}
 
             <a href="{{ route('admin.reports.index') }}"
-                class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600">
+                class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-600">
                 <div class="flex items-center gap-4">
                     <div class="rounded-full bg-indigo-100 p-3 dark:bg-indigo-900/30">
                         <span class="material-symbols-outlined text-indigo-600 dark:text-indigo-400">bar_chart</span>
@@ -136,7 +136,7 @@
             </a>
 
             <a href="{{ route('profile.edit') }}"
-                class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition hover:shadow-md dark:border-gray-700 dark:bg-gray-900 dark:hover:border-gray-600">
+                class="group rounded-lg border border-gray-200 bg-white p-6 shadow-sm transition-shadow hover:shadow-md dark:border-gray-800 dark:bg-gray-900 dark:hover:border-gray-600">
                 <div class="flex items-center gap-4">
                     <div class="rounded-full bg-gray-100 p-3 dark:bg-gray-800">
                         <span class="material-symbols-outlined text-gray-600 dark:text-gray-400">settings</span>
@@ -150,7 +150,7 @@
         </div>
 
         {{-- Información adicional --}}
-        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-700 dark:bg-gray-900">
+        <div class="rounded-lg border border-gray-200 bg-white p-6 shadow-sm dark:border-gray-800 dark:bg-gray-900">
             <h2 class="mb-4 text-lg font-semibold text-gray-900 dark:text-white">Actividad Reciente</h2>
             <p class="text-sm text-gray-600 dark:text-gray-400">Total de citas: {{ $stats['total_appointments'] }}</p>
         </div>
