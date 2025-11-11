@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('appointment_states', function (Blueprint $table) {
             $table->id();
-            $table->string('appointment_state_name')->unique();
+            $table->string('name')->unique();
             $table->text('description')->nullable();
             $table->timestamps();
         });

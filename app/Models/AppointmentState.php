@@ -9,7 +9,7 @@ class AppointmentState extends Model
     protected $table = 'appointment_states';
 
     protected $fillable = [
-        'appointment_state_name',
+        'name',
         'description',
     ];
 }

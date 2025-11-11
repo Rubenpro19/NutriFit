@@ -18,7 +18,9 @@ return new class extends Migration
             $table->foreignId('nutricionista_id')->constrained('users')->onDelete('cascade');
             $table->timestamp('start_time');
             $table->timestamp('end_time')->nullable();
-            $table->text('notes')->nullable();
+            $table->text('reason')->nullable(); // Motivo de la consulta
+            $table->decimal('price', 8, 2)->nullable(); // Precio de la consulta
+            $table->text('notes')->nullable(); // Notas adicionales
             $table->timestamps();
         });
     }

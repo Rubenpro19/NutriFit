@@ -24,7 +24,7 @@ class AdminController extends Controller
             'total_pacientes' => User::whereHas('role', fn($q) => $q->where('name', 'paciente'))->count(),
             'total_nutricionistas' => User::whereHas('role', fn($q) => $q->where('name', 'nutricionista'))->count(),
             'total_appointments' => Appointment::count(),
-            'pending_appointments' => Appointment::whereHas('appointmentState', fn($q) => $q->where('appointment_state_name', 'pendiente'))->count(),
+            'pending_appointments' => Appointment::whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))->count(),
         ];
 
         return view('admin.dashboard', compact('stats'));
@@ -156,10 +156,10 @@ class AdminController extends Controller
         $stats = [
             'total_appointments' => $nutricionista->appointmentsAsNutricionista()->count(),
             'completed_appointments' => $nutricionista->appointmentsAsNutricionista()
-                ->whereHas('appointmentState', fn($q) => $q->where('appointment_state_name', 'completada'))
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'completada'))
                 ->count(),
             'pending_appointments' => $nutricionista->appointmentsAsNutricionista()
-                ->whereHas('appointmentState', fn($q) => $q->where('appointment_state_name', 'pendiente'))
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
                 ->count(),
         ];
 
@@ -201,10 +201,10 @@ class AdminController extends Controller
         $stats = [
             'total_appointments' => $paciente->appointmentsAsPaciente()->count(),
             'completed_appointments' => $paciente->appointmentsAsPaciente()
-                ->whereHas('appointmentState', fn($q) => $q->where('appointment_state_name', 'completada'))
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'completada'))
                 ->count(),
             'pending_appointments' => $paciente->appointmentsAsPaciente()
-                ->whereHas('appointmentState', fn($q) => $q->where('appointment_state_name', 'pendiente'))
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
                 ->count(),
         ];
 
@@ -257,7 +257,7 @@ class AdminController extends Controller
      */
     public function cancelAppointment(Appointment $appointment)
     {
-        $cancelledState = AppointmentState::where('appointment_state_name', 'cancelada')->first();
+        $cancelledState = AppointmentState::where('name', 'cancelada')->first();
         
         $appointment->update([
             'appointment_state_id' => $cancelledState->id

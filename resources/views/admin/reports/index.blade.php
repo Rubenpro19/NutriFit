@@ -157,7 +157,7 @@
                             
                             @foreach($stats['appointments_by_state'] as $appointmentState)
                                 @php
-                                    $stateName = $appointmentState->appointmentState->appointment_state_name;
+                                    $stateName = $appointmentState->appointmentState->name;
                                     $percentage = $totalAppointments > 0 ? round(($appointmentState->total / $totalAppointments) * 100, 1) : 0;
                                     $color = $colors[$stateName] ?? ['bg' => 'bg-gray-500', 'text' => 'text-gray-600', 'dark' => 'dark:text-gray-400'];
                                 @endphp

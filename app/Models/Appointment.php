@@ -16,7 +16,15 @@ class Appointment extends Model
         'nutricionista_id',
         'start_time',
         'end_time',
+        'reason',
+        'price',
         'notes',
+    ];
+
+    protected $casts = [
+        'start_time' => 'datetime',
+        'end_time' => 'datetime',
+        'price' => 'decimal:2',
     ];
 
     public function appointmentState(): BelongsTo
