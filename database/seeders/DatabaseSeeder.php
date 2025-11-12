@@ -17,6 +17,7 @@ class DatabaseSeeder extends Seeder
         $this->call([
             RoleSeeder::class,
             UserStateSeeder::class,
+            AppointmentStateSeeder::class,
         ]);
 
         // 🔹 Obtenemos los roles
@@ -73,5 +74,11 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('paciente123'),
             'user_state_id' => $activoState?->id,
         ]);
+
+        // 🔹 Crear horarios de disponibilidad para nutricionistas
+        // $this->call([
+        //     NutricionistaScheduleSeeder::class,
+        //     AppointmentSeeder::class,
+        // ]);
     }
 }

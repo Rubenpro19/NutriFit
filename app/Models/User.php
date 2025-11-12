@@ -89,6 +89,11 @@ class User extends Authenticatable
         return $this->hasMany(Attention::class, 'nutricionista_id');
     }
 
+    public function schedules(): HasMany
+    {
+        return $this->hasMany(NutricionistaSchedule::class, 'nutricionista_id');
+    }
+
     // 🔹 Helpers para roles
     public function isAdmin(): bool
     {

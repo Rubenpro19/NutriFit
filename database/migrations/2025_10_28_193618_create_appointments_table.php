@@ -19,6 +19,7 @@ return new class extends Migration
             $table->timestamp('start_time');
             $table->timestamp('end_time')->nullable();
             $table->text('reason')->nullable(); // Motivo de la consulta
+            $table->enum('appointment_type', ['primera_vez', 'seguimiento', 'control'])->default('primera_vez'); // Tipo de consulta
             $table->decimal('price', 8, 2)->nullable(); // Precio de la consulta
             $table->text('notes')->nullable(); // Notas adicionales
             $table->timestamps();

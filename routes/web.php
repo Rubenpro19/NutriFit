@@ -76,8 +76,15 @@ Route::middleware(['auth', 'role:administrador'])->prefix('administrador')->name
 
 
 // Panel nutricionista
-Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->group(function () {
-    Route::get('/dashboard', [NutricionistaController::class, 'index'])->name('nutricionista.dashboard');
+Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->name('nutricionista.')->group(function () {
+    Route::get('/dashboard', [NutricionistaController::class, 'index'])->name('dashboard');
+    
+    // Gestión de horarios
+    Route::get('/horarios', [NutricionistaController::class, 'schedules'])->name('schedules.index');
+    Route::post('/horarios', [NutricionistaController::class, 'saveSchedules'])->name('schedules.save');
+    
+    // Gestión de citas
+    Route::get('/appointments/{appointment}', [NutricionistaController::class, 'showAppointment'])->name('appointments.show');
 });
 
 // Panel paciente
