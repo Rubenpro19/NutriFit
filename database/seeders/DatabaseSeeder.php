@@ -78,7 +78,6 @@ class DatabaseSeeder extends Seeder
         // 🔹 Crear horarios de disponibilidad para nutricionistas
         // $this->call([
         //     NutricionistaScheduleSeeder::class,
-        //     AppointmentSeeder::class,
         // ]);
     }
 }

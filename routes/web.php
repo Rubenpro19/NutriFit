@@ -88,8 +88,18 @@ Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->name
 });
 
 // Panel paciente
-Route::middleware(['auth', 'role:paciente'])->prefix('paciente')->group(function () {
-    Route::get('/dashboard', [PacienteController::class, 'index'])->name('paciente.dashboard');
+Route::middleware(['auth', 'role:paciente'])->prefix('paciente')->name('paciente.')->group(function () {
+    Route::get('/dashboard', [PacienteController::class, 'index'])->name('dashboard');
+    
+    // Agendar citas
+    Route::get('/agendar', [PacienteController::class, 'showBooking'])->name('booking.show');
+    Route::get('/agendar/{nutricionista}', [PacienteController::class, 'selectSchedule'])->name('booking.schedule');
+    Route::post('/agendar/{nutricionista}', [PacienteController::class, 'storeAppointment'])->name('booking.store');
+    
+    // Mis citas
+    Route::get('/citas', [PacienteController::class, 'myAppointments'])->name('appointments.index');
+    Route::get('/citas/{appointment}', [PacienteController::class, 'showAppointment'])->name('appointments.show');
+    Route::post('/citas/{appointment}/cancelar', [PacienteController::class, 'cancelAppointment'])->name('appointments.cancel');
 });
 
 //Rutas para iniciar sesión con Google
