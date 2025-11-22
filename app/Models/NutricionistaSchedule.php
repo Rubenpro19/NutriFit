@@ -97,11 +97,21 @@ class NutricionistaSchedule extends Model
             return false;
         }
 
-        // Verificar que no exista una cita en ese horario
+        // Construir la fecha y hora completa del slot
         $requestedDateTime = \Carbon\Carbon::parse($date . ' ' . $time);
         
+        // Verificar que el horario no haya pasado (debe ser futuro)
+        if ($requestedDateTime->isPast()) {
+            return false;
+        }
+
+        // Verificar que no exista una cita ACTIVA (pendiente) en ese horario
+        // Las citas canceladas, completadas o vencidas no bloquean el horario
         $existingAppointment = Appointment::where('nutricionista_id', $this->nutricionista_id)
             ->where('start_time', $requestedDateTime)
+            ->whereHas('appointmentState', function($query) {
+                $query->where('name', 'pendiente');
+            })
             ->exists();
 
         return !$existingAppointment;

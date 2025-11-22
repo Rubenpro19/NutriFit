@@ -45,7 +45,7 @@ class DatabaseSeeder extends Seeder
 
         // 🔹 Usuario nutricionista específico
         User::factory()->create([
-            'name' => 'Ruben',
+            'name' => 'Ruben Mera',
             'email' => 'ruben@gmail.com',
             'password' => Hash::make('ruben123'),
             'role_id' => $nutricionistaRole?->id,
@@ -54,7 +54,7 @@ class DatabaseSeeder extends Seeder
 
         // 🔹 Usuario paciente específico
         User::factory()->create([
-            'name' => 'Luis',
+            'name' => 'Luis Bravo',
             'email' => 'luis@gmail.com',
             'password' => Hash::make('luis123'),
             'role_id' => $pacienteRole?->id,

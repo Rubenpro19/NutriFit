@@ -15,11 +15,7 @@ class AppointmentStateSeeder extends Seeder
         $states = [
             [
                 'name' => 'pendiente',
-                'description' => 'Cita pendiente de confirmación',
-            ],
-            [
-                'name' => 'confirmada',
-                'description' => 'Cita confirmada por el nutricionista',
+                'description' => 'Cita pendiente de atención',
             ],
             [
                 'name' => 'completada',
@@ -29,10 +25,17 @@ class AppointmentStateSeeder extends Seeder
                 'name' => 'cancelada',
                 'description' => 'Cita cancelada por el paciente o nutricionista',
             ],
+            [
+                'name' => 'vencida',
+                'description' => 'Cita vencida por no haber sido atendida',
+            ],
         ];
 
         foreach ($states as $state) {
-            AppointmentState::create($state);
+            AppointmentState::updateOrCreate(
+                ['name' => $state['name']],
+                $state
+            );
         }
     }
 }

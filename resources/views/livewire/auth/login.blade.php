@@ -14,9 +14,10 @@
                 :label="__('Correo electrónico')"
                 type="email"
                 required
-                autofocus
+                :autofocus="!$errors->has('password')"
                 autocomplete="email"
                 placeholder="correo@ejemplo.com"
+                :value="old('email')"
             />
 
             <!-- Password -->
@@ -26,6 +27,7 @@
                     :label="__('Contraseña')"
                     type="password"
                     required
+                    :autofocus="$errors->has('password')"
                     autocomplete="current-password"
                     :placeholder="__('Contraseña')"
                     viewable

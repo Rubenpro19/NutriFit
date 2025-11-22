@@ -48,18 +48,28 @@ class FortifyServiceProvider extends ServiceProvider
         Fortify::authenticateUsing(function (Request $request) {
             $user = User::where('email', $request->email)->first();
 
-            if ($user && Hash::check($request->password, $user->password)) {
-                // Verificar si el usuario está activo
-                if ($user->isInactive()) {
-                    throw ValidationException::withMessages([
-                        Fortify::username() => ['Tu cuenta está inactiva. Por favor, contacta al administrador.'],
-                    ]);
-                }
-
-                return $user;
+            // Si no se encuentra el usuario con ese email
+            if (!$user) {
+                throw ValidationException::withMessages([
+                    'email' => ['Estas credenciales no coinciden con nuestros registros.'],
+                ]);
             }
 
-            return null;
+            // Si el usuario existe pero la contraseña es incorrecta
+            if (!Hash::check($request->password, $user->password)) {
+                throw ValidationException::withMessages([
+                    'password' => ['La contraseña es incorrecta.'],
+                ]);
+            }
+
+            // Verificar si el usuario está activo
+            if ($user->isInactive()) {
+                throw ValidationException::withMessages([
+                    'email' => ['Tu cuenta está inactiva. Por favor, contacta al administrador.'],
+                ]);
+            }
+
+            return $user;
         });
     }
 

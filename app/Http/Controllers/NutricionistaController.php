@@ -14,29 +14,36 @@ class NutricionistaController extends Controller
         $nutricionista = auth()->user();
         $today = now();
 
-        // Estadísticas del nutricionista
+        // Marcar citas vencidas
+        Appointment::markExpiredAppointments();
+
+        // Estadísticas del nutricionista - solo citas pendientes
         $stats = [
-            // Citas de hoy
+            // Citas de hoy (solo pendientes)
             'appointments_today' => Appointment::where('nutricionista_id', $nutricionista->id)
                 ->whereDate('start_time', $today)
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
                 ->count(),
             
-            // Citas de esta semana
+            // Citas de esta semana (solo pendientes)
             'appointments_this_week' => Appointment::where('nutricionista_id', $nutricionista->id)
                 ->whereBetween('start_time', [$today->copy()->startOfWeek(), $today->copy()->endOfWeek()])
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
                 ->count(),
         ];
 
-        // Próxima cita (la más cercana desde ahora)
+        // Próxima cita (la más cercana desde ahora y pendiente)
         $nextAppointment = Appointment::where('nutricionista_id', $nutricionista->id)
+            ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
             ->where('start_time', '>=', now())
             ->with(['paciente', 'appointmentState'])
             ->orderBy('start_time', 'asc')
             ->first();
 
-        // Agenda de hoy (todas las citas de hoy)
+        // Agenda de hoy (solo citas pendientes)
         $todayAppointments = Appointment::where('nutricionista_id', $nutricionista->id)
             ->whereDate('start_time', $today)
+            ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
             ->with(['paciente', 'appointmentState'])
             ->orderBy('start_time', 'asc')
             ->get();

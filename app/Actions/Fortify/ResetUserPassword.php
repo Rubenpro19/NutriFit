@@ -19,6 +19,12 @@ class ResetUserPassword implements ResetsUserPasswords
     {
         Validator::make($input, [
             'password' => $this->passwordRules(),
+        ], [
+            'password.required' => 'La contraseña es obligatoria.',
+            'password.confirmed' => 'La confirmación de la contraseña no coincide.',
+            'password.min' => 'La contraseña debe tener al menos :min caracteres.',
+        ], [
+            'password' => 'contraseña',
         ])->validate();
 
         $user->forceFill([
