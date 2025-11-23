@@ -211,16 +211,35 @@ class PacienteController extends Controller
             ->with(['nutricionista.personalData', 'appointmentState', 'attention']);
 
         // Filtrar por estado si se proporciona
-        if ($request->has('estado') && $request->estado !== '') {
+        if ($request->filled('estado')) {
             $query->whereHas('appointmentState', function($q) use ($request) {
                 $q->where('name', $request->estado);
             });
         }
 
+        // Filtrar por nutricionista si se proporciona
+        if ($request->filled('nutricionista')) {
+            $query->where('nutricionista_id', $request->nutricionista);
+        }
+
+        // Filtrar por rango de fechas
+        if ($request->filled('fecha_desde')) {
+            $query->whereDate('start_time', '>=', $request->fecha_desde);
+        }
+
+        if ($request->filled('fecha_hasta')) {
+            $query->whereDate('start_time', '<=', $request->fecha_hasta);
+        }
+
         // Ordenar por fecha más reciente
         $appointments = $query->orderBy('start_time', 'desc')->paginate(10);
 
-        return view('paciente.appointments.index', compact('appointments'));
+        // Obtener lista de nutricionistas con los que el paciente ha tenido citas
+        $nutricionistas = User::whereHas('appointmentsAsNutricionista', function($q) use ($paciente) {
+            $q->where('paciente_id', $paciente->id);
+        })->orderBy('name')->get();
+
+        return view('paciente.appointments.index', compact('appointments', 'nutricionistas'));
     }
 
     /**

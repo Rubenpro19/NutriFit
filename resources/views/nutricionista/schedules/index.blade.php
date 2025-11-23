@@ -6,7 +6,7 @@
 <body class="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
     @include('layouts.header')
 
-    <main class="pt-24 pb-16 px-4 sm:px-6 lg:px-8">
+    <main class="pt-8 pb-16 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
             <!-- Header -->
             <div class="mb-8">

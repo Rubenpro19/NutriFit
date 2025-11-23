@@ -3,10 +3,10 @@
 @section('title', 'Mis Citas - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 flex-grow">
         <!-- Breadcrumb -->
         <nav class="mb-6 flex items-center gap-2 text-sm">
             <a href="{{ route('paciente.dashboard') }}" class="text-purple-600 dark:text-purple-400 hover:underline">Dashboard</a>
@@ -48,6 +48,36 @@
                         <option value="cancelada" {{ request('estado') === 'cancelada' ? 'selected' : '' }}>Canceladas</option>
                         <option value="vencida" {{ request('estado') === 'vencida' ? 'selected' : '' }}>Vencidas</option>
                     </select>
+                </div>
+
+                <div class="flex-1 min-w-[200px]">
+                    <label for="nutricionista" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Filtrar por nutricionista
+                    </label>
+                    <select name="nutricionista" id="nutricionista" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                        <option value="">Todos los nutricionistas</option>
+                        @foreach($nutricionistas as $nutricionista)
+                            <option value="{{ $nutricionista->id }}" {{ request('nutricionista') == $nutricionista->id ? 'selected' : '' }}>
+                                {{ $nutricionista->name }}
+                            </option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <div class="flex-1 min-w-[200px]">
+                    <label for="fecha_desde" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Fecha desde
+                    </label>
+                    <input type="date" name="fecha_desde" id="fecha_desde" value="{{ request('fecha_desde') }}" 
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                </div>
+
+                <div class="flex-1 min-w-[200px]">
+                    <label for="fecha_hasta" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Fecha hasta
+                    </label>
+                    <input type="date" name="fecha_hasta" id="fecha_hasta" value="{{ request('fecha_hasta') }}" 
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
                 </div>
 
                 <div class="flex gap-2">

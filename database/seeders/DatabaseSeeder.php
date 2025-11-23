@@ -34,6 +34,20 @@ class DatabaseSeeder extends Seeder
         // // 🔹 Obtener estado suspendido
         // $suspendidoState = UserState::where('name', 'suspendido')->first();
 
+        // 🔹 Algunos nutricionistas
+        User::factory(3)->create([
+            'role_id' => $nutricionistaRole?->id,
+            'password' => Hash::make('nutri123'),
+            'user_state_id' => $activoState?->id,
+        ]);
+
+        // 🔹 Algunos pacientes
+        User::factory(5)->create([
+            'role_id' => $pacienteRole?->id,
+            'password' => Hash::make('paciente123'),
+            'user_state_id' => $activoState?->id,
+        ]);
+
         // 🔹 Usuario administrador (contraseña desde .env (opcional))
         User::factory()->create([
             'name' => 'Administrador',
@@ -52,26 +66,21 @@ class DatabaseSeeder extends Seeder
             'user_state_id' => $activoState?->id,
         ]);
 
+        // 🔹 Usuario nutricionista específico
+        User::factory()->create([
+            'name' => 'Rossy Vélez',
+            'email' => 'rossy@gmail.com',
+            'password' => Hash::make('rossy123'),
+            'role_id' => $nutricionistaRole?->id,
+            'user_state_id' => $activoState?->id,
+        ]);
+
         // 🔹 Usuario paciente específico
         User::factory()->create([
             'name' => 'Luis Bravo',
             'email' => 'luis@gmail.com',
             'password' => Hash::make('luis123'),
             'role_id' => $pacienteRole?->id,
-            'user_state_id' => $activoState?->id,
-        ]);
-
-        // 🔹 Algunos nutricionistas
-        User::factory(3)->create([
-            'role_id' => $nutricionistaRole?->id,
-            'password' => Hash::make('nutri123'),
-            'user_state_id' => $activoState?->id,
-        ]);
-
-        // 🔹 Algunos pacientes
-        User::factory(5)->create([
-            'role_id' => $pacienteRole?->id,
-            'password' => Hash::make('paciente123'),
             'user_state_id' => $activoState?->id,
         ]);
 

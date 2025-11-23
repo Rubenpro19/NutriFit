@@ -178,7 +178,15 @@
                             Contáctanos
                         </a>
                     @else
-                        <a href="{{ route('admin.dashboard') }}" 
+                        @php
+                            $dashboardRoute = match(auth()->user()->role->name) {
+                                'administrador' => route('admin.dashboard'),
+                                'nutricionista' => route('nutricionista.dashboard'),
+                                'paciente' => route('paciente.dashboard'),
+                                default => route('paciente.dashboard')
+                            };
+                        @endphp
+                        <a href="{{ $dashboardRoute }}" 
                            class="inline-flex items-center justify-center gap-2 rounded-lg bg-green-600 px-8 py-3 font-semibold text-white shadow-md transition hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700">
                             <span class="material-symbols-outlined">dashboard</span>
                             Ir al Dashboard

@@ -3,10 +3,10 @@
 @section('title', 'Detalle de Cita - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 flex-grow">
         <!-- Breadcrumb -->
         <nav class="mb-6 flex items-center gap-2 text-sm">
             <a href="{{ route('paciente.dashboard') }}" class="text-purple-600 dark:text-purple-400 hover:underline">Dashboard</a>
