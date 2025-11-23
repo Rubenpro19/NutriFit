@@ -15,12 +15,12 @@ return new class extends Migration
             $table->id();
             $table->foreignId('attention_id')->constrained('attentions')->onDelete('cascade');
             $table->decimal('weight', 5, 2)->nullable();
-            $table->decimal('height', 4, 2)->nullable();
+            $table->decimal('height', 5, 2)->nullable(); // Cambiado de 4,2 a 5,2 para soportar hasta 999.99 cm
             $table->decimal('bmi', 5, 2)->nullable();
             $table->decimal('waist', 5, 2)->nullable();
             $table->decimal('hip', 5, 2)->nullable();
             $table->decimal('body_fat', 5, 2)->nullable();
-            $table->string('blood_pressure', 10)->nullable();
+            $table->string('blood_pressure', 20)->nullable(); // Aumentado a 20 caracteres para soportar formatos como "120/80"
             $table->timestamps();
         });
     }

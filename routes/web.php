@@ -9,6 +9,7 @@ use Laravel\Fortify\Features;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NutricionistaController;
 use App\Http\Controllers\PacienteController;
+use App\Http\Controllers\AttentionController;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\ContactController;
 
@@ -85,6 +86,11 @@ Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->name
     
     // Gestión de citas
     Route::get('/appointments/{appointment}', [NutricionistaController::class, 'showAppointment'])->name('appointments.show');
+    Route::post('/appointments/{appointment}/cancel', [NutricionistaController::class, 'cancelAppointment'])->name('appointments.cancel');
+    
+    // Gestión de atenciones
+    Route::get('/citas/{appointment}/atender', [AttentionController::class, 'create'])->name('attentions.create');
+    Route::post('/citas/{appointment}/atender', [AttentionController::class, 'store'])->name('attentions.store');
 });
 
 // Panel paciente
@@ -97,6 +103,8 @@ Route::middleware(['auth', 'role:paciente'])->prefix('paciente')->name('paciente
     Route::post('/agendar/{nutricionista}', [PacienteController::class, 'storeAppointment'])->name('booking.store');
     
     // Gestión de citas
+    Route::get('/citas', [PacienteController::class, 'appointments'])->name('appointments.index');
+    Route::get('/citas/{appointment}', [PacienteController::class, 'showAppointment'])->name('appointments.show');
     Route::post('/citas/{appointment}/cancelar', [PacienteController::class, 'cancelAppointment'])->name('appointments.cancel');
 });
 

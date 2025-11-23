@@ -115,7 +115,7 @@
                             @endif
 
                             <div class="flex gap-3">
-                                <a href="#" class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 text-center font-semibold text-white transition hover:from-purple-700 hover:to-pink-700 flex items-center justify-center gap-2">
+                                <a href="{{ route('paciente.appointments.show', $nextAppointment) }}" class="flex-1 rounded-lg bg-gradient-to-r from-purple-600 to-pink-600 px-4 py-3 text-center font-semibold text-white transition hover:from-purple-700 hover:to-pink-700 flex items-center justify-center gap-2">
                                     <span class="material-symbols-outlined">visibility</span>
                                     Ver Detalles
                                 </a>
@@ -174,72 +174,58 @@
                 </div>
             </div>
 
-            {{-- Historial de Citas --}}
-            <div class="mt-8 rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                <h2 class="mb-6 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                    <span class="material-symbols-outlined text-purple-600 dark:text-purple-400">history</span>
-                    Historial de Citas
-                </h2>
-                
-                @if($recentAppointments->count() > 0)
-                    <div class="overflow-x-auto">
-                        <table class="w-full">
-                            <thead>
-                                <tr class="border-b border-gray-200 dark:border-gray-700">
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Nutricionista</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Fecha</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Hora</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Tipo</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Estado</th>
-                                    <th class="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">Acciones</th>
-                                </tr>
-                            </thead>
-                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
-                                @foreach($recentAppointments as $appointment)
-                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-750">
-                                        <td class="px-4 py-4 whitespace-nowrap">
-                                            <div class="flex items-center gap-3">
-                                                <div class="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center text-white font-bold text-sm">
-                                                    {{ $appointment->nutricionista->initials() }}
-                                                </div>
-                                                <div>
-                                                    <p class="font-medium text-gray-900 dark:text-white">{{ $appointment->nutricionista->name }}</p>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                                            {{ \Carbon\Carbon::parse($appointment->start_time)->locale('es')->isoFormat('D MMM, YYYY') }}
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                                            {{ \Carbon\Carbon::parse($appointment->start_time)->format('h:i A') }}
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-gray-300">
-                                            {{ ucfirst(str_replace('_', ' ', $appointment->appointment_type ?? 'general')) }}
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap">
-                                            <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
-                                                @if($appointment->appointmentState->name === 'completada') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
-                                                @elseif($appointment->appointmentState->name === 'pendiente') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
-                                                @elseif($appointment->appointmentState->name === 'cancelada') bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
-                                                @else bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400
-                                                @endif">
-                                                {{ ucfirst($appointment->appointmentState->name) }}
-                                            </span>
-                                        </td>
-                                        <td class="px-4 py-4 whitespace-nowrap text-sm">
-                                            <a href="#" class="text-purple-600 hover:text-purple-900 dark:text-purple-400 dark:hover:text-purple-300 font-medium">
-                                                Ver detalles
-                                            </a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            </tbody>
-                        </table>
+            {{-- Acceso Rápido al Historial de Citas --}}
+            <div class="mt-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-16 h-16 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center">
+                                <span class="material-symbols-outlined text-3xl text-white">history</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
+                                Historial de Citas
+                            </h2>
+                            <p class="text-gray-600 dark:text-gray-400 mb-1">
+                                Visualiza todas tus citas pasadas y próximas
+                            </p>
+                            <p class="text-sm text-gray-500 dark:text-gray-500">
+                                Revisa detalles de atenciones, diagnósticos y recomendaciones
+                            </p>
+                        </div>
                     </div>
-                @else
-                    <div class="py-12 text-center">
-                        <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600">event_note</span>
-                        <p class="mt-4 text-gray-500 dark:text-gray-400">No tienes citas registradas aún</p>
+                    <div class="flex-shrink-0">
+                        <a href="{{ route('paciente.appointments.index') }}" 
+                           class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-purple-700 hover:to-pink-700 transition shadow-lg">
+                            <span class="material-symbols-outlined">calendar_view_month</span>
+                            Ver Todas las Citas
+                        </a>
+                    </div>
+                </div>
+
+                @if($recentAppointments->count() > 0)
+                    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+                            <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4">
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Última cita</p>
+                                <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    {{ \Carbon\Carbon::parse($recentAppointments->first()->start_time)->locale('es')->isoFormat('D [de] MMMM') }}
+                                </p>
+                            </div>
+                            <div class="bg-pink-50 dark:bg-pink-900/20 rounded-xl p-4">
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Total registradas</p>
+                                <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    {{ $recentAppointments->count() }} {{ $recentAppointments->count() === 1 ? 'cita' : 'citas' }}
+                                </p>
+                            </div>
+                            <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4">
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Atenciones completadas</p>
+                                <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    {{ $stats['completadas'] }}
+                                </p>
+                            </div>
+                        </div>
                     </div>
                 @endif
             </div>

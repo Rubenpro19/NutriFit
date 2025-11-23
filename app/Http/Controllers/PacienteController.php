@@ -195,4 +195,51 @@ class PacienteController extends Controller
 
         return back()->with('success', 'Cita cancelada exitosamente.');
     }
+
+    /**
+     * Mostrar el historial de citas del paciente
+     */
+    public function appointments(Request $request)
+    {
+        $paciente = auth()->user();
+
+        // Marcar citas vencidas
+        Appointment::markExpiredAppointments();
+
+        // Query base
+        $query = Appointment::where('paciente_id', $paciente->id)
+            ->with(['nutricionista.personalData', 'appointmentState', 'attention']);
+
+        // Filtrar por estado si se proporciona
+        if ($request->has('estado') && $request->estado !== '') {
+            $query->whereHas('appointmentState', function($q) use ($request) {
+                $q->where('name', $request->estado);
+            });
+        }
+
+        // Ordenar por fecha más reciente
+        $appointments = $query->orderBy('start_time', 'desc')->paginate(10);
+
+        return view('paciente.appointments.index', compact('appointments'));
+    }
+
+    /**
+     * Mostrar el detalle de una cita específica
+     */
+    public function showAppointment(Appointment $appointment)
+    {
+        // Verificar que la cita pertenezca al paciente autenticado
+        if ($appointment->paciente_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para ver esta cita.');
+        }
+
+        // Cargar relaciones necesarias
+        $appointment->load([
+            'nutricionista.personalData',
+            'appointmentState',
+            'attention.attentionData'
+        ]);
+
+        return view('paciente.appointments.show', compact('appointment'));
+    }
 }

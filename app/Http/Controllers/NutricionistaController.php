@@ -68,6 +68,34 @@ class NutricionistaController extends Controller
     }
 
     /**
+     * Cancelar una cita
+     */
+    public function cancelAppointment(Appointment $appointment)
+    {
+        // Verificar que la cita pertenece al nutricionista autenticado
+        if ($appointment->nutricionista_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para cancelar esta cita.');
+        }
+
+        // Verificar que la cita esté en estado pendiente
+        if ($appointment->appointmentState->name !== 'pendiente') {
+            return redirect()
+                ->route('nutricionista.appointments.show', $appointment)
+                ->with('error', 'Solo se pueden cancelar citas en estado pendiente.');
+        }
+
+        // Cambiar el estado a cancelada
+        $canceledState = \App\Models\AppointmentState::where('name', 'cancelada')->first();
+        $appointment->update([
+            'state_id' => $canceledState->id,
+        ]);
+
+        return redirect()
+            ->route('nutricionista.appointments.show', $appointment)
+            ->with('success', 'La cita ha sido cancelada exitosamente.');
+    }
+
+    /**
      * Mostrar el gestor de horarios del nutricionista
      */
     public function schedules()
