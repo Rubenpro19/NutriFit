@@ -3,15 +3,15 @@
 @section('title', 'Seleccionar Horario - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8 flex-grow">
         <!-- Breadcrumb -->
         <nav class="mb-6 flex items-center gap-2 text-sm">
-            <a href="{{ route('paciente.dashboard') }}" class="text-purple-600 dark:text-purple-400 hover:underline">Dashboard</a>
+            <a href="{{ route('paciente.dashboard') }}" class="text-green-600 dark:text-green-400 hover:underline">Dashboard</a>
             <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
-            <a href="{{ route('paciente.booking.index') }}" class="text-purple-600 dark:text-purple-400 hover:underline">Nutricionistas</a>
+            <a href="{{ route('paciente.booking.index') }}" class="text-green-600 dark:text-green-400 hover:underline">Nutricionistas</a>
             <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
             <span class="text-gray-600 dark:text-gray-400">Agendar cita</span>
         </nav>
@@ -29,7 +29,7 @@
                 <!-- Información del Nutricionista -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
                     <div class="flex items-start gap-4 mb-6">
-                        <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
+                        <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
                             {{ substr($nutricionista->name, 0, 1) }}
                         </div>
                         <div class="flex-1">
@@ -43,18 +43,18 @@
                     <div class="space-y-3 text-sm">
                         @if($nutricionista->email)
                             <div class="flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                                <span class="material-symbols-outlined text-purple-600 dark:text-purple-400">email</span>
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400">email</span>
                                 <span>{{ $nutricionista->email }}</span>
                             </div>
                         @endif
                         @if($nutricionista->personalData && $nutricionista->personalData->phone)
                             <div class="flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                                <span class="material-symbols-outlined text-purple-600 dark:text-purple-400">call</span>
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400">call</span>
                                 <span>{{ $nutricionista->personalData->phone }}</span>
                             </div>
                         @endif
                         <div class="flex items-center gap-3 text-gray-700 dark:text-gray-300">
-                            <span class="material-symbols-outlined text-purple-600 dark:text-purple-400">schedule</span>
+                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">schedule</span>
                             <span>Duración: 45 minutos</span>
                         </div>
                     </div>
@@ -63,7 +63,7 @@
                 <!-- Formulario de Reserva -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 sticky top-24">
                     <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-purple-600">event_available</span>
+                        <span class="material-symbols-outlined text-green-600">event_available</span>
                         Detalles de la Cita
                     </h3>
                     
@@ -74,23 +74,23 @@
                         <input type="hidden" name="time" id="selectedTime">
 
                         <!-- Horario Seleccionado -->
-                        <div class="mb-6 p-4 bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl border-2 border-dashed border-purple-300 dark:border-purple-600">
+                        <div class="mb-6 p-4 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border-2 border-dashed border-green-300 dark:border-green-600">
                             <div id="selectionDisplay" class="text-center py-4">
-                                <span class="material-symbols-outlined text-5xl text-purple-400 dark:text-purple-500 mb-3 block">event_note</span>
+                                <span class="material-symbols-outlined text-5xl text-green-400 dark:text-green-500 mb-3 block">event_note</span>
                                 <p class="text-sm text-gray-600 dark:text-gray-400 font-medium">
                                     Selecciona una fecha y hora disponible
                                 </p>
                             </div>
                             <div id="selectedInfo" class="hidden space-y-3">
                                 <div class="flex items-center gap-3 p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                    <span class="material-symbols-outlined text-purple-600 dark:text-purple-400">calendar_today</span>
+                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400">calendar_today</span>
                                     <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Fecha</p>
                                         <p id="displayDate" class="font-bold text-gray-900 dark:text-white"></p>
                                     </div>
                                 </div>
                                 <div class="flex items-center gap-3 p-3 bg-white dark:bg-gray-700 rounded-lg">
-                                    <span class="material-symbols-outlined text-purple-600 dark:text-purple-400">schedule</span>
+                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400">schedule</span>
                                     <div>
                                         <p class="text-xs text-gray-500 dark:text-gray-400">Hora</p>
                                         <p id="displayTime" class="font-bold text-gray-900 dark:text-white"></p>
@@ -105,7 +105,7 @@
                                 Tipo de Consulta <span class="text-red-500">*</span>
                             </label>
                             <select name="appointment_type" required
-                                    class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-4 py-3 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800 transition">
+                                    class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-4 py-3 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
                                 <option value="">Selecciona el tipo de consulta</option>
                                 <option value="primera_vez">🆕 Primera vez</option>
                                 <option value="seguimiento">📊 Seguimiento</option>
@@ -126,7 +126,7 @@
                                 <span class="text-gray-400 font-normal">(Opcional)</span>
                             </label>
                             <textarea name="reason" rows="4"
-                                      class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-4 py-3 focus:border-purple-500 focus:outline-none focus:ring-2 focus:ring-purple-200 dark:focus:ring-purple-800 transition resize-none"
+                                      class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-4 py-3 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition resize-none"
                                       placeholder="Ej: Control de peso, plan alimenticio personalizado, orientación nutricional..."></textarea>
                             @error('reason')
                                 <p class="mt-2 text-sm text-red-600 flex items-center gap-1">
@@ -138,7 +138,7 @@
 
                         <!-- Botón de Confirmar -->
                         <button type="submit" id="submitBtn" disabled
-                                class="w-full rounded-xl bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4 font-bold text-white text-lg transition-all hover:from-purple-700 hover:to-pink-700 hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2 group">
+                                class="w-full rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 font-bold text-white text-lg transition-all hover:from-green-700 hover:to-emerald-700 hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2 group">
                             <span class="material-symbols-outlined group-disabled:animate-none">check_circle</span>
                             <span id="btnText">Selecciona un horario</span>
                         </button>
@@ -150,11 +150,11 @@
             <div class="lg:col-span-3">
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
                     <!-- Header del Calendario -->
-                    <div class="bg-gradient-to-r from-purple-600 to-pink-600 px-6 py-4">
+                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4">
                         <div class="flex items-center justify-between flex-wrap gap-4">
                             <div>
                                 <h2 class="text-2xl font-bold text-white mb-1">Horarios Disponibles</h2>
-                                <p class="text-purple-100 text-sm">Selecciona el día y hora que prefieras</p>
+                                <p class="text-green-100 text-sm">Selecciona el día y hora que prefieras</p>
                             </div>
                             <div class="flex items-center gap-3 bg-white/20 backdrop-blur-sm rounded-lg px-4 py-2">
                                 <div class="flex items-center gap-2">
@@ -182,7 +182,7 @@
                                 @foreach($weeks as $weekIndex => $week)
                                     <button onclick="showWeek({{ $weekIndex }})" 
                                             data-week="{{ $weekIndex }}"
-                                            class="week-tab flex-shrink-0 px-6 py-3 rounded-lg font-semibold transition-all {{ $weekIndex === 0 ? 'bg-gradient-to-r from-purple-600 to-pink-600 text-white shadow-lg' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
+                                            class="week-tab flex-shrink-0 px-6 py-3 rounded-lg font-semibold transition-all {{ $weekIndex === 0 ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
                                         <div class="text-xs opacity-90 mb-1">Semana {{ $weekIndex + 1 }}</div>
                                         <div class="text-sm font-bold">{{ $week[0]['date']->locale('es')->isoFormat('D MMM') }}</div>
                                     </button>
@@ -215,15 +215,15 @@
                                     @foreach($week as $day)
                                         <div class="flex flex-col">
                                             <!-- Encabezado del Día -->
-                                            <div class="text-center mb-3 pb-2 border-b-2 {{ $day['date']->isToday() ? 'border-purple-500' : 'border-gray-200 dark:border-gray-700' }}">
+                                            <div class="text-center mb-3 pb-2 border-b-2 {{ $day['date']->isToday() ? 'border-green-500' : 'border-gray-200 dark:border-gray-700' }}">
                                                 <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">
                                                     {{ $day['date']->locale('es')->isoFormat('ddd') }}
                                                 </div>
-                                                <div class="text-lg font-bold {{ $day['date']->isToday() ? 'text-purple-600 dark:text-purple-400' : 'text-gray-900 dark:text-white' }}">
+                                                <div class="text-lg font-bold {{ $day['date']->isToday() ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white' }}">
                                                     {{ $day['date']->format('d') }}
                                                 </div>
                                                 @if($day['date']->isToday())
-                                                    <div class="text-xs text-purple-600 dark:text-purple-400 font-semibold mt-1">Hoy</div>
+                                                    <div class="text-xs text-green-600 dark:text-green-400 font-semibold mt-1">Hoy</div>
                                                 @endif
                                             </div>
                                             
@@ -290,14 +290,14 @@
         function selectSlot(date, time, button) {
             // Remover selección anterior
             if (selectedButton) {
-                selectedButton.classList.remove('ring-4', 'ring-purple-400', 'bg-purple-600');
+                selectedButton.classList.remove('ring-4', 'ring-green-400', 'bg-green-600');
                 selectedButton.classList.add('bg-green-500');
             }
 
             // Aplicar selección actual
             selectedButton = button;
             button.classList.remove('bg-green-500');
-            button.classList.add('bg-purple-600', 'ring-4', 'ring-purple-400');
+            button.classList.add('bg-green-600', 'ring-4', 'ring-green-400');
 
             // Actualizar campos del formulario
             document.getElementById('selectedDate').value = date;
@@ -338,9 +338,9 @@
             document.querySelectorAll('.week-tab').forEach((tab, index) => {
                 if (index === weekIndex) {
                     tab.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
-                    tab.classList.add('bg-gradient-to-r', 'from-purple-600', 'to-pink-600', 'text-white', 'shadow-lg');
+                    tab.classList.add('bg-gradient-to-r', 'from-green-600', 'to-emerald-600', 'text-white', 'shadow-lg');
                 } else {
-                    tab.classList.remove('bg-gradient-to-r', 'from-purple-600', 'to-pink-600', 'text-white', 'shadow-lg');
+                    tab.classList.remove('bg-gradient-to-r', 'from-green-600', 'to-emerald-600', 'text-white', 'shadow-lg');
                     tab.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
                 }
             });

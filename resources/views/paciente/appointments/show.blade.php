@@ -3,15 +3,15 @@
 @section('title', 'Detalle de Cita - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8 flex-grow">
         <!-- Breadcrumb -->
         <nav class="mb-6 flex items-center gap-2 text-sm">
-            <a href="{{ route('paciente.dashboard') }}" class="text-purple-600 dark:text-purple-400 hover:underline">Dashboard</a>
+            <a href="{{ route('paciente.dashboard') }}" class="text-green-600 dark:text-green-400 hover:underline">Dashboard</a>
             <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
-            <a href="{{ route('paciente.appointments.index') }}" class="text-purple-600 dark:text-purple-400 hover:underline">Mis Citas</a>
+            <a href="{{ route('paciente.appointments.index') }}" class="text-green-600 dark:text-green-400 hover:underline">Mis Citas</a>
             <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
             <span class="text-gray-600 dark:text-gray-400">Detalle</span>
         </nav>
@@ -36,11 +36,11 @@
                 <!-- Información del Nutricionista -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-purple-600">person</span>
+                        <span class="material-symbols-outlined text-green-600">person</span>
                         Nutricionista
                     </h2>
                     <div class="flex items-start gap-4">
-                        <div class="w-20 h-20 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
+                        <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
                             {{ substr($appointment->nutricionista->name, 0, 1) }}
                         </div>
                         <div class="flex-1">
@@ -66,12 +66,12 @@
                 <!-- Detalles de la Cita -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-purple-600">event</span>
+                        <span class="material-symbols-outlined text-green-600">event</span>
                         Detalles de la Cita
                     </h2>
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4">
-                            <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 mb-1">
+                        <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
+                            <div class="flex items-center gap-2 text-green-600 dark:text-green-400 mb-1">
                                 <span class="material-symbols-outlined text-sm">calendar_month</span>
                                 <span class="text-xs font-semibold uppercase">Fecha</span>
                             </div>
@@ -80,8 +80,8 @@
                             </p>
                         </div>
 
-                        <div class="bg-pink-50 dark:bg-pink-900/20 rounded-xl p-4">
-                            <div class="flex items-center gap-2 text-pink-600 dark:text-pink-400 mb-1">
+                        <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-4">
+                            <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mb-1">
                                 <span class="material-symbols-outlined text-sm">schedule</span>
                                 <span class="text-xs font-semibold uppercase">Hora</span>
                             </div>
@@ -90,8 +90,8 @@
                             </p>
                         </div>
 
-                        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4">
-                            <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 mb-1">
+                        <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
+                            <div class="flex items-center gap-2 text-green-600 dark:text-green-400 mb-1">
                                 <span class="material-symbols-outlined text-sm">category</span>
                                 <span class="text-xs font-semibold uppercase">Tipo</span>
                             </div>
@@ -100,8 +100,8 @@
                             </p>
                         </div>
 
-                        <div class="bg-pink-50 dark:bg-pink-900/20 rounded-xl p-4">
-                            <div class="flex items-center gap-2 text-pink-600 dark:text-pink-400 mb-1">
+                        <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-4">
+                            <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mb-1">
                                 <span class="material-symbols-outlined text-sm">timer</span>
                                 <span class="text-xs font-semibold uppercase">Duración</span>
                             </div>
@@ -110,8 +110,8 @@
                             </p>
                         </div>
 
-                        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4">
-                            <div class="flex items-center gap-2 text-purple-600 dark:text-purple-400 mb-1">
+                        <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
+                            <div class="flex items-center gap-2 text-green-600 dark:text-green-400 mb-1">
                                 <span class="material-symbols-outlined text-sm">payments</span>
                                 <span class="text-xs font-semibold uppercase">Precio</span>
                             </div>
@@ -120,8 +120,8 @@
                             </p>
                         </div>
 
-                        <div class="bg-pink-50 dark:bg-pink-900/20 rounded-xl p-4">
-                            <div class="flex items-center gap-2 text-pink-600 dark:text-pink-400 mb-1">
+                        <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-4">
+                            <div class="flex items-center gap-2 text-emerald-600 dark:text-emerald-400 mb-1">
                                 <span class="material-symbols-outlined text-sm">info</span>
                                 <span class="text-xs font-semibold uppercase">Estado</span>
                             </div>
@@ -176,8 +176,8 @@
                                     @endif
 
                                     @if($appointment->attention->attentionData->height)
-                                        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4 text-center">
-                                            <span class="material-symbols-outlined text-purple-600 dark:text-purple-400 text-3xl mb-1">straighten</span>
+                                        <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 text-center">
+                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-3xl mb-1">straighten</span>
                                             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $appointment->attention->attentionData->height }}</p>
                                             <p class="text-xs text-gray-600 dark:text-gray-400">cm</p>
                                         </div>
@@ -200,8 +200,8 @@
                                     @endif
 
                                     @if($appointment->attention->attentionData->hip)
-                                        <div class="bg-pink-50 dark:bg-pink-900/20 rounded-xl p-4 text-center">
-                                            <span class="material-symbols-outlined text-pink-600 dark:text-pink-400 text-3xl mb-1">accessibility</span>
+                                        <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-4 text-center">
+                                            <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-3xl mb-1">accessibility</span>
                                             <p class="text-2xl font-bold text-gray-900 dark:text-white">{{ $appointment->attention->attentionData->hip }}</p>
                                             <p class="text-xs text-gray-600 dark:text-gray-400">cm cadera</p>
                                         </div>
@@ -281,7 +281,7 @@
                         </div>
                     @endif
 
-                    <a href="{{ route('paciente.appointments.index') }}" class="w-full flex items-center justify-center gap-2 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 font-semibold py-3 px-4 rounded-xl hover:bg-purple-200 dark:hover:bg-purple-900/50 transition">
+                    <a href="{{ route('paciente.appointments.index') }}" class="w-full flex items-center justify-center gap-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-semibold py-3 px-4 rounded-xl hover:bg-green-200 dark:hover:bg-green-900/50 transition">
                         <span class="material-symbols-outlined">arrow_back</span>
                         Volver al Historial
                     </a>

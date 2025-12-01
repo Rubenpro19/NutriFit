@@ -3,13 +3,13 @@
 @section('title', 'Mis Citas - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-purple-50 via-pink-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8 flex-grow">
         <!-- Breadcrumb -->
         <nav class="mb-6 flex items-center gap-2 text-sm">
-            <a href="{{ route('paciente.dashboard') }}" class="text-purple-600 dark:text-purple-400 hover:underline">Dashboard</a>
+            <a href="{{ route('paciente.dashboard') }}" class="text-green-600 dark:text-green-400 hover:underline">Dashboard</a>
             <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
             <span class="text-gray-600 dark:text-gray-400">Mis Citas</span>
         </nav>
@@ -41,7 +41,7 @@
                     <label for="estado" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Filtrar por estado
                     </label>
-                    <select name="estado" id="estado" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <select name="estado" id="estado" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent">
                         <option value="">Todas las citas</option>
                         <option value="pendiente" {{ request('estado') === 'pendiente' ? 'selected' : '' }}>Pendientes</option>
                         <option value="completada" {{ request('estado') === 'completada' ? 'selected' : '' }}>Completadas</option>
@@ -54,7 +54,7 @@
                     <label for="nutricionista" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                         Filtrar por nutricionista
                     </label>
-                    <select name="nutricionista" id="nutricionista" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                    <select name="nutricionista" id="nutricionista" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent">
                         <option value="">Todos los nutricionistas</option>
                         @foreach($nutricionistas as $nutricionista)
                             <option value="{{ $nutricionista->id }}" {{ request('nutricionista') == $nutricionista->id ? 'selected' : '' }}>
@@ -69,7 +69,7 @@
                         Fecha desde
                     </label>
                     <input type="date" name="fecha_desde" id="fecha_desde" value="{{ request('fecha_desde') }}" 
-                           class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 </div>
 
                 <div class="flex-1 min-w-[200px]">
@@ -77,11 +77,11 @@
                         Fecha hasta
                     </label>
                     <input type="date" name="fecha_hasta" id="fecha_hasta" value="{{ request('fecha_hasta') }}" 
-                           class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-purple-500 focus:border-transparent">
+                           class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent">
                 </div>
 
                 <div class="flex gap-2">
-                    <button type="submit" class="flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition shadow-lg">
+                    <button type="submit" class="flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-2 px-6 rounded-lg hover:from-green-700 hover:to-emerald-700 transition shadow-lg">
                         <span class="material-symbols-outlined">filter_alt</span>
                         Filtrar
                     </button>
@@ -102,7 +102,7 @@
                             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                                 <!-- Info del Nutricionista -->
                                 <div class="flex items-start gap-4 flex-1">
-                                    <div class="w-16 h-16 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
+                                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
                                         {{ substr($appointment->nutricionista->name, 0, 1) }}
                                     </div>
                                     <div class="flex-1">
@@ -155,13 +155,13 @@
                                     <div class="flex gap-2">
                                         @if($appointment->appointmentState->name === 'completada')
                                             <a href="{{ route('paciente.appointments.show', $appointment) }}" 
-                                               class="flex items-center gap-1 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-2 px-4 rounded-lg hover:from-purple-700 hover:to-pink-700 transition text-sm">
+                                               class="flex items-center gap-1 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-2 px-4 rounded-lg hover:from-green-700 hover:to-emerald-700 transition text-sm">
                                                 <span class="material-symbols-outlined text-sm">visibility</span>
                                                 Ver Detalle
                                             </a>
                                         @elseif($appointment->appointmentState->name === 'pendiente')
                                             <a href="{{ route('paciente.appointments.show', $appointment) }}" 
-                                               class="flex items-center gap-1 bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400 font-semibold py-2 px-4 rounded-lg hover:bg-purple-200 dark:hover:bg-purple-900/50 transition text-sm">
+                                               class="flex items-center gap-1 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-semibold py-2 px-4 rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition text-sm">
                                                 <span class="material-symbols-outlined text-sm">info</span>
                                                 Ver Info
                                             </a>
@@ -191,7 +191,7 @@
                     @endif
                 </p>
                 <a href="{{ route('paciente.booking.index') }}" 
-                   class="inline-flex items-center gap-2 bg-gradient-to-r from-purple-600 to-pink-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-purple-700 hover:to-pink-700 transition shadow-lg">
+                   class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-lg hover:from-green-700 hover:to-emerald-700 transition shadow-lg">
                     <span class="material-symbols-outlined">add</span>
                     Agendar Nueva Cita
                 </a>
