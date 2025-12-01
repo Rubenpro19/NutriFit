@@ -16,10 +16,15 @@
 
     <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                Detalle de Cita
-            </h1>
-            <p class="text-gray-600 dark:text-gray-400">
+            <div class="flex items-center gap-3 mb-2">
+                <a href="{{ route('nutricionista.dashboard') }}" class="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                    <span class="material-symbols-outlined text-2xl">arrow_back</span>
+                </a>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+                    Detalle de Cita
+                </h1>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 ml-11">
                 Información completa del paciente y la cita
             </p>
         </div>

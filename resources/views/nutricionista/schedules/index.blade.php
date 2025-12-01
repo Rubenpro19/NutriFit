@@ -8,6 +8,13 @@
 
     <main class="pt-8 pb-16 px-4 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
+            <!-- Breadcrumb -->
+            <nav class="mb-6 text-sm text-gray-600 dark:text-gray-400">
+                <a href="{{ route('nutricionista.dashboard') }}" class="hover:text-green-600 dark:hover:text-green-400">Dashboard</a>
+                <span class="mx-2">/</span>
+                <span class="text-gray-900 dark:text-white">Gestión de Horarios</span>
+            </nav>
+
             <!-- Header -->
             <div class="mb-8">
                 <div class="flex items-center gap-3 mb-2">

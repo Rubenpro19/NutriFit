@@ -18,13 +18,18 @@
 
         <!-- Header -->
         <div class="mb-8">
-            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">
-                Registrar Atención
-            </h1>
-            <p class="text-gray-600 dark:text-gray-400">
+            <div class="flex items-center gap-3 mb-2">
+                <a href="{{ route('nutricionista.appointments.show', $appointment) }}" class="text-gray-600 dark:text-gray-400 hover:text-emerald-600 dark:hover:text-emerald-400 transition-colors">
+                    <span class="material-symbols-outlined text-2xl">arrow_back</span>
+                </a>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+                    Registrar Atención
+                </h1>
+            </div>
+            <p class="text-gray-600 dark:text-gray-400 ml-11">
                 Paciente: <span class="font-semibold text-gray-900 dark:text-white">{{ $appointment->paciente->name }}</span>
             </p>
-            <p class="text-sm text-gray-500 dark:text-gray-400">
+            <p class="text-sm text-gray-500 dark:text-gray-400 ml-11">
                 Cita: {{ \Carbon\Carbon::parse($appointment->start_time)->format('d/m/Y H:i') }}
             </p>
         </div>

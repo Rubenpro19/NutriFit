@@ -8,17 +8,24 @@
 
     <main class="container mx-auto px-4 py-8">
         {{-- Mensaje de Bienvenida --}}
-        <div class="mb-8 rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-8 text-white shadow-lg">
-            <div class="flex items-center justify-between">
-                <div>
-                    <h1 class="text-3xl font-bold">¡Buen día, {{ auth()->user()->name }}!</h1>
+        <div class="mb-8 rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-6 md:p-8 text-white shadow-lg">
+            <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
+                <div class="flex-1">
+                    <h1 class="text-2xl md:text-3xl font-bold">¡Buen día, {{ auth()->user()->name }}!</h1>
                     <p class="mt-2 text-blue-100">Aquí está el resumen de su jornada.</p>
                 </div>
-                <a href="{{ route('nutricionista.schedules.index') }}" 
-                   class="flex items-center gap-2 rounded-lg bg-white px-6 py-3 text-green-600 font-semibold transition hover:bg-green-50">
-                    <span class="material-symbols-outlined">schedule</span>
-                    Gestionar Horarios
-                </a>
+                <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="{{ route('nutricionista.patients.index') }}" 
+                       class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-blue-600 font-semibold transition hover:bg-blue-50 whitespace-nowrap">
+                        <span class="material-symbols-outlined">groups</span>
+                        Mis Pacientes
+                    </a>
+                    <a href="{{ route('nutricionista.schedules.index') }}" 
+                       class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-green-600 font-semibold transition hover:bg-green-50 whitespace-nowrap">
+                        <span class="material-symbols-outlined">schedule</span>
+                        Gestionar Horarios
+                    </a>
+                </div>
             </div>
         </div>
 

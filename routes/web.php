@@ -84,6 +84,10 @@ Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->name
     Route::get('/horarios', [NutricionistaController::class, 'schedules'])->name('schedules.index');
     Route::post('/horarios', [NutricionistaController::class, 'saveSchedules'])->name('schedules.save');
     
+    // Gestión de pacientes
+    Route::get('/pacientes', [NutricionistaController::class, 'patients'])->name('patients.index');
+    Route::get('/pacientes/{patient}', [NutricionistaController::class, 'showPatient'])->name('patients.show');
+    
     // Gestión de citas
     Route::get('/appointments/{appointment}', [NutricionistaController::class, 'showAppointment'])->name('appointments.show');
     Route::post('/appointments/{appointment}/cancel', [NutricionistaController::class, 'cancelAppointment'])->name('appointments.cancel');

@@ -221,50 +221,6 @@
                     @endif
                 </div>
             </div>
-
-            <!-- Estadísticas -->
-            <div class="mt-8 grid gap-6 md:grid-cols-3">
-                <div
-                    class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800 transition hover:shadow-xl">
-                    <div class="text-center">
-                        <div
-                            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-4">
-                            <span
-                                class="material-symbols-outlined text-3xl text-green-600 dark:text-green-400">event</span>
-                        </div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Total de Citas</p>
-                        <p class="mt-2 text-4xl font-bold text-green-600 dark:text-green-400">{{ $stats['total'] }}</p>
-                    </div>
-                </div>
-
-                <div
-                    class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800 transition hover:shadow-xl">
-                    <div class="text-center">
-                        <div
-                            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-4">
-                            <span
-                                class="material-symbols-outlined text-3xl text-green-600 dark:text-green-400">check_circle</span>
-                        </div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Completadas</p>
-                        <p class="mt-2 text-4xl font-bold text-green-600 dark:text-green-400">{{ $stats['completadas'] }}
-                        </p>
-                    </div>
-                </div>
-
-                <div
-                    class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800 transition hover:shadow-xl">
-                    <div class="text-center">
-                        <div
-                            class="inline-flex items-center justify-center w-16 h-16 rounded-full bg-yellow-100 dark:bg-yellow-900/30 mb-4">
-                            <span
-                                class="material-symbols-outlined text-3xl text-yellow-600 dark:text-yellow-400">schedule</span>
-                        </div>
-                        <p class="text-sm font-medium text-gray-600 dark:text-gray-400">Pendientes</p>
-                        <p class="mt-2 text-4xl font-bold text-yellow-600 dark:text-yellow-400">{{ $stats['pendientes'] }}
-                        </p>
-                    </div>
-                </div>
-            </div>
         </main>
 
         @include('layouts.footer')

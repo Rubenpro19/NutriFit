@@ -126,6 +126,59 @@ class NutricionistaController extends Controller
     }
 
     /**
+     * Ver lista de pacientes del nutricionista
+     */
+    public function patients()
+    {
+        return view('nutricionista.patients.index');
+    }
+
+    /**
+     * Ver detalle de un paciente
+     */
+    public function showPatient(User $patient)
+    {
+        $nutricionista = auth()->user();
+        
+        // Verificar que el paciente tenga al menos una cita con este nutricionista
+        $hasAppointments = $patient->appointmentsAsPaciente()
+            ->where('nutricionista_id', $nutricionista->id)
+            ->exists();
+            
+        if (!$hasAppointments) {
+            abort(403, 'No tienes acceso a este paciente.');
+        }
+
+        // Cargar información del paciente
+        $patient->load(['userState', 'personalData']);
+
+        // Obtener todas las citas del paciente con este nutricionista
+        $appointments = $patient->appointmentsAsPaciente()
+            ->where('nutricionista_id', $nutricionista->id)
+            ->with(['appointmentState', 'attention.attentionData'])
+            ->orderBy('start_time', 'desc')
+            ->get();
+
+        // Estadísticas del paciente
+        $stats = [
+            'total_appointments' => $appointments->count(),
+            'completed' => $appointments->filter(fn($a) => $a->appointmentState->name === 'completada')->count(),
+            'cancelled' => $appointments->filter(fn($a) => $a->appointmentState->name === 'cancelada')->count(),
+            'pending' => $appointments->filter(fn($a) => $a->appointmentState->name === 'pendiente')->count(),
+        ];
+
+        // Próxima cita
+        $nextAppointment = $appointments->filter(function($a) {
+            return $a->appointmentState->name === 'pendiente' && $a->start_time >= now();
+        })->first();
+
+        // Última atención
+        $lastAttention = $appointments->filter(fn($a) => $a->attention)->first()?->attention;
+
+        return view('nutricionista.patients.show', compact('patient', 'appointments', 'stats', 'nextAppointment', 'lastAttention'));
+    }
+
+    /**
      * Guardar o actualizar horarios del nutricionista
      */
     public function saveSchedules(Request $request)
