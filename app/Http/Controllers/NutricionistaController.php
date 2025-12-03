@@ -87,7 +87,7 @@ class NutricionistaController extends Controller
         // Cambiar el estado a cancelada
         $canceledState = \App\Models\AppointmentState::where('name', 'cancelada')->first();
         $appointment->update([
-            'state_id' => $canceledState->id,
+            'appointment_state_id' => $canceledState->id,
         ]);
 
         return redirect()
@@ -131,6 +131,207 @@ class NutricionistaController extends Controller
     public function patients()
     {
         return view('nutricionista.patients.index');
+    }
+
+    /**
+     * Mostrar formulario para asignar cita a un paciente
+     */
+    public function createAppointment()
+    {
+        $nutricionista = auth()->user();
+        
+        // Obtener pacientes del nutricionista que NO tengan citas pendientes
+        $pacientes = User::whereHas('role', fn($q) => $q->where('name', 'paciente'))
+            ->whereHas('appointmentsAsPaciente', function($q) use ($nutricionista) {
+                $q->where('nutricionista_id', $nutricionista->id);
+            })
+            ->whereDoesntHave('appointmentsAsPaciente', function($q) use ($nutricionista) {
+                $q->where('nutricionista_id', $nutricionista->id)
+                  ->whereHas('appointmentState', fn($sq) => $sq->where('name', 'pendiente'))
+                  ->where('start_time', '>=', now());
+            })
+            ->with(['personalData'])
+            ->orderBy('name')
+            ->get();
+
+        return view('nutricionista.appointments.create', compact('pacientes'));
+    }
+
+    /**
+     * Obtener horarios disponibles para un paciente específico
+     */
+    public function getAvailableSchedules(User $paciente)
+    {
+        $nutricionista = auth()->user();
+        
+        // Verificar que el paciente sea del nutricionista
+        $hasRelation = $paciente->appointmentsAsPaciente()
+            ->where('nutricionista_id', $nutricionista->id)
+            ->exists();
+            
+        if (!$hasRelation) {
+            return response()->json(['error' => 'Paciente no autorizado'], 403);
+        }
+
+        // Verificar que el paciente no tenga citas pendientes
+        $hasPendingAppointment = $paciente->appointmentsAsPaciente()
+            ->where('nutricionista_id', $nutricionista->id)
+            ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
+            ->where('start_time', '>=', now())
+            ->exists();
+            
+        if ($hasPendingAppointment) {
+            return response()->json(['error' => 'El paciente ya tiene una cita pendiente'], 400);
+        }
+
+        // Obtener horarios del nutricionista
+        $schedules = NutricionistaSchedule::where('nutricionista_id', $nutricionista->id)
+            ->where('is_active', true)
+            ->orderBy('day_of_week')
+            ->get()
+            ->groupBy('day_of_week');
+
+        // Generar 4 semanas desde el inicio de la semana actual (lunes)
+        $weeks = [];
+        $startDate = now()->startOfWeek(); // Empieza el lunes
+        
+        for ($weekIndex = 0; $weekIndex < 4; $weekIndex++) {
+            $weekDays = [];
+            
+            for ($dayIndex = 0; $dayIndex < 7; $dayIndex++) {
+                $date = $startDate->copy()->addDays(($weekIndex * 7) + $dayIndex);
+                $dateStr = $date->format('Y-m-d');
+                $dayOfWeek = $date->dayOfWeek;
+                
+                $dayData = [
+                    'date' => $dateStr,
+                    'date_formatted' => $date->locale('es')->isoFormat('dddd, D [de] MMMM'),
+                    'day_name' => $date->locale('es')->isoFormat('dddd'),
+                    'day_number' => $date->format('d'),
+                    'is_today' => $date->isToday(),
+                    'is_past' => $date->isPast() && !$date->isToday(),
+                    'slots' => []
+                ];
+                
+                // Si el día no es pasado y existe horario configurado
+                if (!$dayData['is_past'] && isset($schedules[$dayOfWeek])) {
+                    foreach ($schedules[$dayOfWeek] as $schedule) {
+                        $timeSlots = $schedule->generateTimeSlots();
+                        
+                        foreach ($timeSlots as $slot) {
+                            $slotDateTime = \Carbon\Carbon::parse($dateStr . ' ' . $slot['start']);
+                            
+                            // Solo incluir si es futuro y está disponible
+                            if ($slotDateTime->isFuture() && $schedule->isTimeSlotAvailable($dateStr, $slot['start'])) {
+                                $dayData['slots'][] = [
+                                    'time' => $slot['start'],
+                                    'time_formatted' => \Carbon\Carbon::parse($slot['start'])->format('h:i A'),
+                                    'datetime' => $slotDateTime->toIso8601String(),
+                                ];
+                            }
+                        }
+                    }
+                }
+                
+                // Solo incluir días que tienen slots disponibles o para mantener estructura de semana completa
+                $weekDays[] = $dayData;
+            }
+            
+            // Solo añadir la semana si tiene al menos un día con slots
+            $hasSlots = collect($weekDays)->some(fn($day) => !empty($day['slots']));
+            if ($hasSlots || $weekIndex === 0) { // Siempre incluir la primera semana
+                $weeks[] = [
+                    'week_number' => $weekIndex + 1,
+                    'start_date' => $weekDays[0]['date'],
+                    'start_date_formatted' => \Carbon\Carbon::parse($weekDays[0]['date'])->locale('es')->isoFormat('D MMM'),
+                    'days' => $weekDays
+                ];
+            }
+        }
+
+        return response()->json([
+            'paciente' => [
+                'id' => $paciente->id,
+                'name' => $paciente->name,
+                'email' => $paciente->email,
+            ],
+            'weeks' => $weeks
+        ]);
+    }
+
+    /**
+     * Guardar la cita asignada
+     */
+    public function storeAppointment(Request $request)
+    {
+        $nutricionista = auth()->user();
+        
+        $validated = $request->validate([
+            'paciente_id' => 'required|exists:users,id',
+            'appointment_date' => 'required|date|after:today',
+            'appointment_time' => 'required',
+            'appointment_type' => 'required|in:primera_vez,seguimiento,control',
+            'reason' => 'nullable|string|max:500',
+            'notes' => 'nullable|string|max:1000',
+            'price' => 'required|numeric|min:0',
+        ]);
+
+        // Verificar que el paciente sea del nutricionista
+        $paciente = User::findOrFail($validated['paciente_id']);
+        $hasRelation = $paciente->appointmentsAsPaciente()
+            ->where('nutricionista_id', $nutricionista->id)
+            ->exists();
+            
+        if (!$hasRelation) {
+            return back()->with('error', 'No tienes autorización para asignar citas a este paciente.');
+        }
+
+        // Verificar que el paciente no tenga citas pendientes
+        $hasPendingAppointment = $paciente->appointmentsAsPaciente()
+            ->where('nutricionista_id', $nutricionista->id)
+            ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
+            ->where('start_time', '>=', now())
+            ->exists();
+            
+        if ($hasPendingAppointment) {
+            return back()->with('error', 'El paciente ya tiene una cita pendiente contigo.');
+        }
+
+        // Construir fecha y hora completa
+        $startDateTime = \Carbon\Carbon::parse($validated['appointment_date'] . ' ' . $validated['appointment_time']);
+        $endDateTime = $startDateTime->copy()->addMinutes(45);
+
+        // Verificar disponibilidad del horario
+        $dayOfWeek = $startDateTime->dayOfWeek;
+        $timeStr = $startDateTime->format('H:i');
+
+        $schedule = NutricionistaSchedule::where('nutricionista_id', $nutricionista->id)
+            ->where('day_of_week', $dayOfWeek)
+            ->where('is_active', true)
+            ->first();
+
+        if (!$schedule || !$schedule->isTimeSlotAvailable($validated['appointment_date'], $validated['appointment_time'])) {
+            return back()->with('error', 'El horario seleccionado ya no está disponible.');
+        }
+
+        // Crear la cita
+        $pendienteState = \App\Models\AppointmentState::where('name', 'pendiente')->first();
+
+        $appointment = Appointment::create([
+            'appointment_state_id' => $pendienteState->id,
+            'paciente_id' => $validated['paciente_id'],
+            'nutricionista_id' => $nutricionista->id,
+            'start_time' => $startDateTime,
+            'end_time' => $endDateTime,
+            'appointment_type' => $validated['appointment_type'],
+            'reason' => $validated['reason'],
+            'notes' => $validated['notes'],
+            'price' => $validated['price'],
+        ]);
+
+        return redirect()
+            ->route('nutricionista.appointments.show', $appointment)
+            ->with('success', 'Cita asignada exitosamente al paciente ' . $paciente->name);
     }
 
     /**

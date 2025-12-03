@@ -15,6 +15,11 @@
                     <p class="mt-2 text-blue-100">Aquí está el resumen de su jornada.</p>
                 </div>
                 <div class="flex flex-col sm:flex-row gap-3">
+                    <a href="{{ route('nutricionista.appointments.create') }}" 
+                       class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-purple-600 font-semibold transition hover:bg-purple-50 whitespace-nowrap">
+                        <span class="material-symbols-outlined">add_circle</span>
+                        Asignar Cita
+                    </a>
                     <a href="{{ route('nutricionista.patients.index') }}" 
                        class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-blue-600 font-semibold transition hover:bg-blue-50 whitespace-nowrap">
                         <span class="material-symbols-outlined">groups</span>

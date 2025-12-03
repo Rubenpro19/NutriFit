@@ -3,7 +3,16 @@
 @section('title', 'Seleccionar Horario - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+<style>
+    .scrollbar-hide::-webkit-scrollbar {
+        display: none;
+    }
+    .scrollbar-hide {
+        -ms-overflow-style: none;
+        scrollbar-width: none;
+    }
+</style>
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8 flex-grow">
@@ -172,106 +181,57 @@
 
                     <!-- Navegación de Semanas (Pestañas) -->
                     <div class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30">
-                        <div class="flex items-center justify-between px-6 py-3">
-                            <button onclick="changeWeek(-1)" id="prevWeek" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
-                                <span class="material-symbols-outlined">chevron_left</span>
-                                Anterior
+                        <div class="flex items-center justify-between px-3 sm:px-6 py-3">
+                            <button onclick="changeWeek(-1)" id="prevWeek" class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span class="material-symbols-outlined text-lg sm:text-base">chevron_left</span>
+                                <span class="hidden sm:inline">Anterior</span>
                             </button>
                             
-                            <div class="flex gap-2 overflow-x-auto pb-2 flex-1 mx-4 justify-center">
+                            <div class="flex gap-2 overflow-x-auto pb-2 flex-1 mx-2 sm:mx-4 justify-start sm:justify-center scrollbar-hide">
                                 @foreach($weeks as $weekIndex => $week)
                                     <button onclick="showWeek({{ $weekIndex }})" 
                                             data-week="{{ $weekIndex }}"
-                                            class="week-tab flex-shrink-0 px-6 py-3 rounded-lg font-semibold transition-all {{ $weekIndex === 0 ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
-                                        <div class="text-xs opacity-90 mb-1">Semana {{ $weekIndex + 1 }}</div>
-                                        <div class="text-sm font-bold">{{ $week[0]['date']->locale('es')->isoFormat('D MMM') }}</div>
+                                            class="week-tab flex-shrink-0 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all {{ $weekIndex === 0 ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
+                                        <div class="text-xs opacity-90 mb-1">Sem {{ $weekIndex + 1 }}</div>
+                                        <div class="text-xs sm:text-sm font-bold">{{ $week['start_date_formatted'] }}</div>
                                     </button>
                                 @endforeach
                             </div>
 
-                            <button onclick="changeWeek(1)" id="nextWeek" class="flex items-center gap-2 px-4 py-2 text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
-                                Siguiente
-                                <span class="material-symbols-outlined">chevron_right</span>
+                            <button onclick="changeWeek(1)" id="nextWeek" class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                <span class="hidden sm:inline">Siguiente</span>
+                                <span class="material-symbols-outlined text-lg sm:text-base">chevron_right</span>
                             </button>
                         </div>
                     </div>
 
                     <!-- Contenido del Calendario -->
-                    <div class="p-6">
+                    <div class="p-3 sm:p-6">
                         @foreach($weeks as $weekIndex => $week)
-                            <div id="week-{{ $weekIndex }}" class="week-content {{ $weekIndex !== 0 ? 'hidden' : '' }}">
-                                <!-- Header de la Semana -->
-                                <div class="mb-6 text-center">
-                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-1">
-                                        {{ $week[0]['date']->locale('es')->isoFormat('MMMM YYYY') }}
-                                    </h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">
-                                        Del {{ $week[0]['date']->locale('es')->isoFormat('D') }} al {{ end($week)['date']->locale('es')->isoFormat('D [de] MMMM') }}
-                                    </p>
-                                </div>
-
-                                <!-- Grid de Días -->
-                                <div class="grid grid-cols-7 gap-3">
-                                    @foreach($week as $day)
-                                        <div class="flex flex-col">
-                                            <!-- Encabezado del Día -->
-                                            <div class="text-center mb-3 pb-2 border-b-2 {{ $day['date']->isToday() ? 'border-green-500' : 'border-gray-200 dark:border-gray-700' }}">
-                                                <div class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-1">
-                                                    {{ $day['date']->locale('es')->isoFormat('ddd') }}
-                                                </div>
-                                                <div class="text-lg font-bold {{ $day['date']->isToday() ? 'text-green-600 dark:text-green-400' : 'text-gray-900 dark:text-white' }}">
-                                                    {{ $day['date']->format('d') }}
-                                                </div>
-                                                @if($day['date']->isToday())
-                                                    <div class="text-xs text-green-600 dark:text-green-400 font-semibold mt-1">Hoy</div>
-                                                @endif
-                                            </div>
-                                            
-                                            <!-- Slots de Horarios -->
-                                            <div class="space-y-2">
-                                                @if($day['isPast'])
-                                                    <div class="text-center py-6">
-                                                        <span class="material-symbols-outlined text-gray-300 dark:text-gray-700 text-3xl">schedule_send</span>
-                                                        <p class="text-xs text-gray-400 dark:text-gray-600 mt-1">Pasado</p>
-                                                    </div>
-                                                @elseif(!isset($schedules[$day['dayOfWeek']]) || $schedules[$day['dayOfWeek']]->isEmpty())
-                                                    <div class="text-center py-6">
-                                                        <span class="material-symbols-outlined text-gray-300 dark:text-gray-700 text-3xl">event_busy</span>
-                                                        <p class="text-xs text-gray-400 dark:text-gray-600 mt-1">Sin horarios</p>
-                                                    </div>
-                                                @else
-                                                    @foreach($schedules[$day['dayOfWeek']] as $schedule)
-                                                        @php
-                                                            $startTime = \Carbon\Carbon::parse($schedule->start_time);
-                                                            $endTime = \Carbon\Carbon::parse($schedule->end_time);
-                                                            $currentTime = $startTime->copy();
-                                                            $slots = [];
-                                                            
-                                                            while ($currentTime->lt($endTime)) {
-                                                                $slot = $currentTime->format('H:i');
-                                                                $isAvailable = $schedule->isTimeSlotAvailable($day['date']->format('Y-m-d'), $slot);
-                                                                $slots[] = ['time' => $slot, 'available' => $isAvailable];
-                                                                $currentTime->addMinutes(45);
-                                                            }
-                                                        @endphp
-                                                        
-                                                        @foreach($slots as $slotData)
-                                                            <button type="button"
-                                                                    onclick="selectSlot('{{ $day['date']->format('Y-m-d') }}', '{{ $slotData['time'] }}', this)"
-                                                                    {{ !$slotData['available'] ? 'disabled' : '' }}
-                                                                    class="time-slot w-full px-3 py-2.5 text-sm font-semibold rounded-lg transition-all duration-200 {{ $slotData['available'] ? 'bg-green-500 text-white hover:bg-green-600 hover:shadow-lg hover:scale-105 active:scale-95' : 'bg-gray-200 dark:bg-gray-700 text-gray-400 dark:text-gray-500 cursor-not-allowed opacity-50' }}">
-                                                                <div class="flex items-center justify-center gap-1">
-                                                                    <span class="material-symbols-outlined text-xs">schedule</span>
-                                                                    <span>{{ $slotData['time'] }}</span>
-                                                                </div>
-                                                            </button>
-                                                        @endforeach
-                                                    @endforeach
-                                                @endif
-                                            </div>
+                            <div id="week-{{ $weekIndex }}" class="week-content {{ $weekIndex !== 0 ? 'hidden' : '' }} space-y-3 sm:space-y-4">
+                                @foreach($week['days'] as $day)
+                                    <div class="border border-gray-200 dark:border-gray-700 rounded-lg p-3 sm:p-4">
+                                        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between mb-3 gap-2">
+                                            <h4 class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white capitalize flex items-center gap-2">
+                                                <span class="material-symbols-outlined text-green-600 text-lg sm:text-xl">calendar_today</span>
+                                                <span>{{ $day['date_formatted'] }}</span>
+                                            </h4>
+                                            <span class="text-xs text-gray-500 dark:text-gray-400 pl-7 sm:pl-0">{{ count($day['slots']) }} horarios</span>
                                         </div>
-                                    @endforeach
-                                </div>
+                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                                            @foreach($day['slots'] as $slot)
+                                                <button
+                                                    type="button"
+                                                    onclick="selectSlot('{{ $day['date']->format('Y-m-d') }}', '{{ $slot['time'] }}', this)"
+                                                    class="time-slot px-2 sm:px-3 py-2 sm:py-2.5 rounded-lg text-xs sm:text-sm font-medium transition-all duration-200 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-green-100 dark:hover:bg-green-900/30 hover:shadow-md hover:scale-105 flex items-center justify-center gap-1"
+                                                >
+                                                    <span class="material-symbols-outlined text-xs">schedule</span>
+                                                    <span>{{ $slot['time'] }}</span>
+                                                </button>
+                                            @endforeach
+                                        </div>
+                                    </div>
+                                @endforeach
                             </div>
                         @endforeach
                     </div>
@@ -290,14 +250,14 @@
         function selectSlot(date, time, button) {
             // Remover selección anterior
             if (selectedButton) {
-                selectedButton.classList.remove('ring-4', 'ring-green-400', 'bg-green-600');
-                selectedButton.classList.add('bg-green-500');
+                selectedButton.classList.remove('ring-4', 'ring-green-400', 'bg-green-600', 'text-white', 'shadow-lg', 'scale-105', '!bg-green-600');
+                selectedButton.classList.add('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
             }
 
             // Aplicar selección actual
             selectedButton = button;
-            button.classList.remove('bg-green-500');
-            button.classList.add('bg-green-600', 'ring-4', 'ring-green-400');
+            button.classList.remove('bg-gray-100', 'dark:bg-gray-700', 'text-gray-700', 'dark:text-gray-300');
+            button.classList.add('bg-green-600', 'text-white', 'ring-4', 'ring-green-400', 'shadow-lg', 'scale-105', '!bg-green-600');
 
             // Actualizar campos del formulario
             document.getElementById('selectedDate').value = date;

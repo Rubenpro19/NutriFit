@@ -95,25 +95,69 @@ class PacienteController extends Controller
                 ->with('error', 'Este nutricionista no tiene horarios disponibles en este momento.');
         }
 
-        // Generar 4 semanas desde hoy
+        // Generar 4 semanas desde el inicio de la semana actual (lunes)
         $weeks = [];
-        $startDate = Carbon::now()->startOfWeek();
+        $startDate = Carbon::now()->startOfWeek(); // Empieza el lunes
         
-        for ($i = 0; $i < 4; $i++) {
-            $week = [];
-            for ($j = 0; $j < 7; $j++) {
-                $date = $startDate->copy()->addDays(($i * 7) + $j);
-                $week[] = [
+        for ($weekIndex = 0; $weekIndex < 4; $weekIndex++) {
+            $weekDays = [];
+            
+            for ($dayIndex = 0; $dayIndex < 7; $dayIndex++) {
+                $date = $startDate->copy()->addDays(($weekIndex * 7) + $dayIndex);
+                $dateStr = $date->format('Y-m-d');
+                $dayOfWeek = $date->dayOfWeek;
+                
+                $dayData = [
                     'date' => $date,
-                    'dayOfWeek' => $date->dayOfWeek,
-                    'isToday' => $date->isToday(),
-                    'isPast' => $date->isPast() && !$date->isToday(),
+                    'date_formatted' => $date->locale('es')->isoFormat('dddd, D [de] MMMM'),
+                    'day_name' => $date->locale('es')->isoFormat('dddd'),
+                    'day_number' => $date->format('d'),
+                    'is_today' => $date->isToday(),
+                    'is_past' => $date->isPast() && !$date->isToday(),
+                    'slots' => []
+                ];
+                
+                // Si el día no es pasado y existe horario configurado
+                if (!$dayData['is_past'] && isset($schedules[$dayOfWeek])) {
+                    foreach ($schedules[$dayOfWeek] as $schedule) {
+                        $startTime = Carbon::parse($schedule->start_time);
+                        $endTime = Carbon::parse($schedule->end_time);
+                        $currentTime = $startTime->copy();
+                        
+                        while ($currentTime->lt($endTime)) {
+                            $slot = $currentTime->format('H:i');
+                            $isAvailable = $schedule->isTimeSlotAvailable($dateStr, $slot);
+                            
+                            if ($isAvailable) {
+                                $dayData['slots'][] = [
+                                    'time' => $slot,
+                                    'time_formatted' => $currentTime->format('h:i A'),
+                                ];
+                            }
+                            
+                            $currentTime->addMinutes(45);
+                        }
+                    }
+                }
+                
+                // Solo incluir días que tienen slots disponibles
+                if (!empty($dayData['slots'])) {
+                    $weekDays[] = $dayData;
+                }
+            }
+            
+            // Solo añadir la semana si tiene al menos un día con slots
+            if (!empty($weekDays)) {
+                $weeks[] = [
+                    'week_number' => $weekIndex + 1,
+                    'start_date' => $weekDays[0]['date'],
+                    'start_date_formatted' => $weekDays[0]['date']->locale('es')->isoFormat('D MMM'),
+                    'days' => $weekDays
                 ];
             }
-            $weeks[] = $week;
         }
 
-        return view('paciente.booking.schedule', compact('nutricionista', 'schedules', 'weeks'));
+        return view('paciente.booking.schedule', compact('nutricionista', 'weeks'));
     }
 
     /**
