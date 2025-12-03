@@ -138,18 +138,7 @@ class NutricionistaController extends Controller
      */
     public function createAppointment()
     {
-        $nutricionista = auth()->user();
-        
-        // Obtener pacientes del nutricionista que NO tengan citas pendientes
         $pacientes = User::whereHas('role', fn($q) => $q->where('name', 'paciente'))
-            ->whereHas('appointmentsAsPaciente', function($q) use ($nutricionista) {
-                $q->where('nutricionista_id', $nutricionista->id);
-            })
-            ->whereDoesntHave('appointmentsAsPaciente', function($q) use ($nutricionista) {
-                $q->where('nutricionista_id', $nutricionista->id)
-                  ->whereHas('appointmentState', fn($sq) => $sq->where('name', 'pendiente'))
-                  ->where('start_time', '>=', now());
-            })
             ->with(['personalData'])
             ->orderBy('name')
             ->get();
@@ -164,24 +153,43 @@ class NutricionistaController extends Controller
     {
         $nutricionista = auth()->user();
         
-        // Verificar que el paciente sea del nutricionista
-        $hasRelation = $paciente->appointmentsAsPaciente()
-            ->where('nutricionista_id', $nutricionista->id)
-            ->exists();
-            
-        if (!$hasRelation) {
-            return response()->json(['error' => 'Paciente no autorizado'], 403);
+        // Permitir obtener horarios para cualquier paciente con rol 'paciente'.
+        // Solo rechazamos si el usuario no es paciente.
+        if (!$paciente->role || $paciente->role->name !== 'paciente') {
+            return response()->json(['error' => 'Paciente no válido'], 403);
         }
 
-        // Verificar que el paciente no tenga citas pendientes
+        // Verificar que el paciente no tenga citas pendientes con NINGÚN nutricionista
         $hasPendingAppointment = $paciente->appointmentsAsPaciente()
-            ->where('nutricionista_id', $nutricionista->id)
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
             ->where('start_time', '>=', now())
             ->exists();
             
         if ($hasPendingAppointment) {
-            return response()->json(['error' => 'El paciente ya tiene una cita pendiente'], 400);
+            // Obtener información de la cita pendiente
+            $pendingAppointment = $paciente->appointmentsAsPaciente()
+                ->with(['nutricionista', 'appointmentState'])
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
+                ->where('start_time', '>=', now())
+                ->first();
+            
+            $nutricionistaName = $pendingAppointment->nutricionista->name ?? 'otro nutricionista';
+            $isOwnAppointment = $pendingAppointment->nutricionista_id === $nutricionista->id;
+            
+            return response()->json([
+                'error' => $isOwnAppointment 
+                    ? "El paciente ya tiene una cita pendiente contigo"
+                    : "El paciente ya tiene una cita pendiente con {$nutricionistaName}",
+                'isOwnAppointment' => $isOwnAppointment,
+                'appointment' => $isOwnAppointment ? [
+                    'id' => $pendingAppointment->id,
+                    'start_time' => $pendingAppointment->start_time->format('Y-m-d H:i'),
+                    'start_time_formatted' => $pendingAppointment->start_time->locale('es')->isoFormat('dddd, D [de] MMMM [de] YYYY [a las] h:mm A'),
+                    'appointment_type' => $pendingAppointment->appointment_type,
+                    'reason' => $pendingAppointment->reason,
+                    'price' => $pendingAppointment->price,
+                ] : null
+            ], 400);
         }
 
         // Obtener horarios del nutricionista
@@ -203,18 +211,23 @@ class NutricionistaController extends Controller
                 $dateStr = $date->format('Y-m-d');
                 $dayOfWeek = $date->dayOfWeek;
                 
+                // Saltar días pasados completamente
+                if ($date->isPast() && !$date->isToday()) {
+                    continue;
+                }
+                
                 $dayData = [
                     'date' => $dateStr,
                     'date_formatted' => $date->locale('es')->isoFormat('dddd, D [de] MMMM'),
                     'day_name' => $date->locale('es')->isoFormat('dddd'),
                     'day_number' => $date->format('d'),
                     'is_today' => $date->isToday(),
-                    'is_past' => $date->isPast() && !$date->isToday(),
+                    'is_past' => false, // Ya filtramos los pasados arriba
                     'slots' => []
                 ];
                 
-                // Si el día no es pasado y existe horario configurado
-                if (!$dayData['is_past'] && isset($schedules[$dayOfWeek])) {
+                // Si existe horario configurado para este día
+                if (isset($schedules[$dayOfWeek])) {
                     foreach ($schedules[$dayOfWeek] as $schedule) {
                         $timeSlots = $schedule->generateTimeSlots();
                         
@@ -233,13 +246,12 @@ class NutricionistaController extends Controller
                     }
                 }
                 
-                // Solo incluir días que tienen slots disponibles o para mantener estructura de semana completa
+                // Añadir el día a la semana (incluso si no tiene slots, para mostrar mensaje)
                 $weekDays[] = $dayData;
             }
             
-            // Solo añadir la semana si tiene al menos un día con slots
-            $hasSlots = collect($weekDays)->some(fn($day) => !empty($day['slots']));
-            if ($hasSlots || $weekIndex === 0) { // Siempre incluir la primera semana
+            // Añadir la semana si tiene al menos un día (ya filtramos los pasados)
+            if (!empty($weekDays)) {
                 $weeks[] = [
                     'week_number' => $weekIndex + 1,
                     'start_date' => $weekDays[0]['date'],
@@ -268,7 +280,7 @@ class NutricionistaController extends Controller
         
         $validated = $request->validate([
             'paciente_id' => 'required|exists:users,id',
-            'appointment_date' => 'required|date|after:today',
+            'appointment_date' => 'required|date|after_or_equal:today',
             'appointment_time' => 'required',
             'appointment_type' => 'required|in:primera_vez,seguimiento,control',
             'reason' => 'nullable|string|max:500',
@@ -276,25 +288,26 @@ class NutricionistaController extends Controller
             'price' => 'required|numeric|min:0',
         ]);
 
-        // Verificar que el paciente sea del nutricionista
+        // Obtener paciente y verificar que sea un usuario con rol 'paciente'
         $paciente = User::findOrFail($validated['paciente_id']);
-        $hasRelation = $paciente->appointmentsAsPaciente()
-            ->where('nutricionista_id', $nutricionista->id)
-            ->exists();
-            
-        if (!$hasRelation) {
-            return back()->with('error', 'No tienes autorización para asignar citas a este paciente.');
+        if (!$paciente->role || $paciente->role->name !== 'paciente') {
+            return back()->with('error', 'El usuario seleccionado no es un paciente válido.');
         }
 
-        // Verificar que el paciente no tenga citas pendientes
-        $hasPendingAppointment = $paciente->appointmentsAsPaciente()
-            ->where('nutricionista_id', $nutricionista->id)
+        // Verificar que el paciente no tenga citas pendientes con NINGÚN nutricionista
+        $pendingAppointmentQuery = $paciente->appointmentsAsPaciente()
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
-            ->where('start_time', '>=', now())
-            ->exists();
+            ->where('start_time', '>=', now());
             
-        if ($hasPendingAppointment) {
-            return back()->with('error', 'El paciente ya tiene una cita pendiente contigo.');
+        if ($pendingAppointmentQuery->exists()) {
+            $pendingAppointment = $pendingAppointmentQuery->with('nutricionista')->first();
+            $nutricionistaName = $pendingAppointment->nutricionista->name ?? 'otro nutricionista';
+            
+            if ($pendingAppointment->nutricionista_id === $nutricionista->id) {
+                return back()->with('error', 'El paciente ya tiene una cita pendiente contigo.');
+            } else {
+                return back()->with('error', "El paciente ya tiene una cita pendiente con {$nutricionistaName}. Un paciente solo puede tener una cita pendiente a la vez.");
+            }
         }
 
         // Construir fecha y hora completa
@@ -341,13 +354,9 @@ class NutricionistaController extends Controller
     {
         $nutricionista = auth()->user();
         
-        // Verificar que el paciente tenga al menos una cita con este nutricionista
-        $hasAppointments = $patient->appointmentsAsPaciente()
-            ->where('nutricionista_id', $nutricionista->id)
-            ->exists();
-            
-        if (!$hasAppointments) {
-            abort(403, 'No tienes acceso a este paciente.');
+        // Permitir ver cualquier paciente, siempre que sea un usuario con rol 'paciente'.
+        if (!$patient->role || $patient->role->name !== 'paciente') {
+            abort(403, 'No tienes acceso a este recurso.');
         }
 
         // Cargar información del paciente

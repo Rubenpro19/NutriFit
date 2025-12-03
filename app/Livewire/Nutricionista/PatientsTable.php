@@ -61,11 +61,8 @@ class PatientsTable extends Component
     {
         $nutricionista = auth()->user();
         
-        // Query base: obtener pacientes que tienen citas con este nutricionista
+        // Query base: obtener todos los usuarios con rol 'paciente' (no limitar a los que ya tienen citas)
         $query = User::whereHas('role', fn($q) => $q->where('name', 'paciente'))
-            ->whereHas('appointmentsAsPaciente', function($q) use ($nutricionista) {
-                $q->where('nutricionista_id', $nutricionista->id);
-            })
             ->with(['userState', 'personalData'])
             ->withCount([
                 'appointmentsAsPaciente as total_appointments' => function($q) use ($nutricionista) {

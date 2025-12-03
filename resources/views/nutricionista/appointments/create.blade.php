@@ -3,7 +3,7 @@
 @section('title', 'Asignar Cita - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8 flex-grow">
@@ -44,24 +44,7 @@
         @endif
 
         <div x-data="appointmentAssignment()" x-init="init()">
-            @if($pacientes->isEmpty())
-                <!-- Sin Pacientes Disponibles -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-12 text-center border border-gray-200 dark:border-gray-700">
-                    <div class="text-6xl mb-4">📅</div>
-                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">No hay pacientes disponibles</h3>
-                    <p class="text-gray-600 dark:text-gray-400 mb-6">
-                        Todos tus pacientes ya tienen citas pendientes asignadas o no tienes pacientes registrados.
-                    </p>
-                    <a 
-                        href="{{ route('nutricionista.patients.index') }}"
-                        class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl"
-                    >
-                        <span class="material-symbols-outlined">groups</span>
-                        Ver Mis Pacientes
-                    </a>
-                </div>
-            @else
-                <div class="grid lg:grid-cols-3 gap-6">
+            <div class="grid lg:grid-cols-3 gap-6">
                     <!-- Columna Izquierda: Selección de Paciente -->
                     <div class="lg:col-span-1">
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 lg:sticky lg:top-6">
@@ -70,9 +53,11 @@
                                 Seleccionar Paciente
                             </h2>
 
+                            <!-- Lista de pacientes -->
                             <div class="space-y-3 max-h-96 overflow-y-auto">
-                                @foreach($pacientes as $paciente)
+                                @forelse($pacientes as $paciente)
                                     <button
+                                        type="button"
                                         @click="selectPatient({{ $paciente->id }})"
                                         :class="selectedPatientId === {{ $paciente->id }} ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-green-300'"
                                         class="w-full text-left p-4 rounded-lg border-2 transition-all duration-200"
@@ -88,7 +73,12 @@
                                             <span x-show="selectedPatientId === {{ $paciente->id }}" class="material-symbols-outlined text-green-600">check_circle</span>
                                         </div>
                                     </button>
-                                @endforeach
+                                @empty
+                                    <div class="text-center py-8">
+                                        <span class="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-600 mb-2">search_off</span>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">No hay pacientes disponibles</p>
+                                    </div>
+                                @endforelse
                             </div>
                         </div>
                     </div>
@@ -110,8 +100,92 @@
                             <p class="text-gray-600 dark:text-gray-400">Cargando horarios disponibles...</p>
                         </div>
 
+                        <!-- Mensaje cuando el paciente ya tiene una cita pendiente -->
+                        <div x-show="selectedPatientId && !loading && hasError" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 sm:p-12 border border-orange-200 dark:border-orange-800">
+                            <div class="text-center mb-6">
+                                <span class="material-symbols-outlined text-5xl sm:text-6xl text-orange-500 dark:text-orange-400 mb-4 inline-block">event_busy</span>
+                                <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">Paciente no disponible</h3>
+                            </div>
+                            
+                            <div class="bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 rounded-lg p-6 mb-6">
+                                <p class="text-sm sm:text-base text-orange-800 dark:text-orange-200 text-center" x-text="errorMessage"></p>
+                            </div>
+
+                            <!-- Mostrar información de la cita si es del mismo nutricionista -->
+                            <div x-show="isOwnAppointment && appointmentData" class="mb-6">
+                                <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-lg p-6 border border-blue-200 dark:border-blue-800">
+                                    <h4 class="font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-blue-600">info</span>
+                                        Información de la cita pendiente
+                                    </h4>
+                                    
+                                    <div class="space-y-3">
+                                        <div class="flex items-start gap-3">
+                                            <span class="material-symbols-outlined text-blue-600 text-lg">schedule</span>
+                                            <div>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400">Fecha y hora</p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-white capitalize" x-text="appointmentData?.start_time_formatted"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-start gap-3" x-show="appointmentData?.appointment_type">
+                                            <span class="material-symbols-outlined text-blue-600 text-lg">medical_services</span>
+                                            <div>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400">Tipo de consulta</p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-white capitalize" x-text="appointmentData?.appointment_type?.replace('_', ' ')"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-start gap-3" x-show="appointmentData?.reason">
+                                            <span class="material-symbols-outlined text-blue-600 text-lg">description</span>
+                                            <div>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400">Motivo</p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="appointmentData?.reason"></p>
+                                            </div>
+                                        </div>
+
+                                        <div class="flex items-start gap-3" x-show="appointmentData?.price">
+                                            <span class="material-symbols-outlined text-blue-600 text-lg">payments</span>
+                                            <div>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400">Precio</p>
+                                                <p class="text-sm font-medium text-gray-900 dark:text-white" x-text="'$' + appointmentData?.price"></p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div x-show="!isOwnAppointment" class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6">
+                                <p class="text-xs sm:text-sm text-blue-800 dark:text-blue-200 flex items-start gap-2">
+                                    <span class="material-symbols-outlined text-lg flex-shrink-0">info</span>
+                                    <span>Un paciente solo puede tener una cita pendiente a la vez. Debe completar o cancelar su cita actual antes de poder agendar una nueva.</span>
+                                </p>
+                            </div>
+
+                            <div class="flex flex-col sm:flex-row justify-center gap-3">
+                                <!-- Botón para gestionar la cita (solo si es del mismo nutricionista) -->
+                                <a 
+                                    x-show="isOwnAppointment && appointmentData"
+                                    :href="'/nutricionista/appointments/' + appointmentData?.id"
+                                    class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold rounded-lg hover:from-blue-700 hover:to-indigo-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                                >
+                                    <span class="material-symbols-outlined">event</span>
+                                    Gestionar esta cita
+                                </a>
+
+                                <button 
+                                    type="button"
+                                    @click="resetSelection"
+                                    class="inline-flex items-center justify-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl"
+                                >
+                                    <span class="material-symbols-outlined">arrow_back</span>
+                                    Seleccionar otro paciente
+                                </button>
+                            </div>
+                        </div>
+
                         <!-- Horarios Disponibles y Formulario -->
-                        <div x-show="selectedPatientId && !loading && weeks.length > 0">
+                        <div x-show="selectedPatientId && !loading && !hasError && weeks.length > 0">
                             <form method="POST" action="{{ route('nutricionista.appointments.store') }}" @submit="submitting = true">
                                 @csrf
                                 <input type="hidden" name="paciente_id" x-model="selectedPatientId">
@@ -295,9 +369,11 @@
                                                                 <span class="material-symbols-outlined text-green-600 text-lg sm:text-xl">calendar_today</span>
                                                                 <span x-text="daySlots.date_formatted"></span>
                                                             </h4>
-                                                            <span class="text-xs text-gray-500 dark:text-gray-400 pl-7 sm:pl-0" x-text="daySlots.slots.length + ' horarios'"></span>
+                                                            <span class="text-xs text-gray-500 dark:text-gray-400 pl-7 sm:pl-0" x-text="daySlots.slots.length > 0 ? daySlots.slots.length + ' horarios' : 'Sin horarios'"></span>
                                                         </div>
-                                                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
+                                                        
+                                                        <!-- Mostrar horarios o mensaje de "sin horarios" -->
+                                                        <div x-show="daySlots.slots.length > 0" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2">
                                                             <template x-for="slot in daySlots.slots" :key="slot.time">
                                                                 <button
                                                                     type="button"
@@ -312,6 +388,17 @@
                                                                 </button>
                                                             </template>
                                                         </div>
+                                                        
+                                                        <!-- Mensaje cuando no hay horarios para este día -->
+                                                        <div x-show="daySlots.slots.length === 0" class="bg-gray-50 dark:bg-gray-900/50 rounded-lg p-4 sm:p-6 text-center">
+                                                            <span class="material-symbols-outlined text-3xl sm:text-4xl text-gray-400 dark:text-gray-600 mb-2">event_busy</span>
+                                                            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
+                                                                No hay horarios disponibles para este día
+                                                            </p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-500 mt-1">
+                                                                Todos los espacios están ocupados o no has configurado horarios para este día
+                                                            </p>
+                                                        </div>
                                                     </div>
                                                 </template>
                                             </div>
@@ -322,12 +409,18 @@
                         </div>
 
                         <!-- Sin Horarios Disponibles -->
-                        <div x-show="selectedPatientId && !loading && weeks.length === 0" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-12 text-center border border-gray-200 dark:border-gray-700">
-                            <span class="material-symbols-outlined text-6xl text-orange-400 mb-4">event_busy</span>
-                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">No hay horarios disponibles</h3>
-                            <p class="text-gray-600 dark:text-gray-400 mb-6">
-                                No tienes horarios configurados o todos están ocupados para las próximas 4 semanas.
+                        <div x-show="selectedPatientId && !loading && !hasError && weeks.length === 0" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 sm:p-12 text-center border border-gray-200 dark:border-gray-700">
+                            <span class="material-symbols-outlined text-5xl sm:text-6xl text-orange-400 mb-4">event_busy</span>
+                            <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">No hay horarios disponibles</h3>
+                            <p class="text-sm sm:text-base text-gray-600 dark:text-gray-400 mb-6">
+                                No tienes horarios configurados o todos los espacios están ocupados para las próximas 4 semanas.
                             </p>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg p-4 mb-6 text-left">
+                                <p class="text-sm text-blue-800 dark:text-blue-200 flex items-start gap-2">
+                                    <span class="material-symbols-outlined text-lg flex-shrink-0">info</span>
+                                    <span>Para poder asignar citas, primero debes configurar tus horarios de disponibilidad en la sección de Horarios.</span>
+                                </p>
+                            </div>
                             <a 
                                 href="{{ route('nutricionista.schedules.index') }}"
                                 class="inline-flex items-center gap-2 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl"
@@ -338,7 +431,7 @@
                         </div>
                     </div>
                 </div>
-            @endif
+            </div>
         </div>
     </main>
 
@@ -355,6 +448,10 @@
                 selectedTime: null,
                 loading: false,
                 submitting: false,
+                hasError: false,
+                errorMessage: '',
+                isOwnAppointment: false,
+                appointmentData: null,
 
                 init() {
                     // Inicialización si es necesaria
@@ -367,6 +464,10 @@
                     this.currentWeek = 0;
                     this.selectedDate = null;
                     this.selectedTime = null;
+                    this.hasError = false;
+                    this.errorMessage = '';
+                    this.isOwnAppointment = false;
+                    this.appointmentData = null;
 
                     try {
                         const response = await fetch(`/nutricionista/citas/asignar/${patientId}/horarios`);
@@ -377,14 +478,19 @@
                             this.weeks = data.weeks.map(week => ({
                                 label: week.start_date_formatted,
                                 week_number: week.week_number,
-                                days: week.days.filter(day => day.slots.length > 0) // Solo días con horarios
+                                days: week.days // Mostrar todos los días, incluso sin horarios
                             }));
                         } else {
-                            alert(data.error || 'Error al cargar horarios');
+                            // Mostrar error en la interfaz en lugar de alert
+                            this.hasError = true;
+                            this.errorMessage = data.error || 'Error al cargar horarios';
+                            this.isOwnAppointment = data.isOwnAppointment || false;
+                            this.appointmentData = data.appointment || null;
                         }
                     } catch (error) {
                         console.error('Error:', error);
-                        alert('Error al cargar los horarios disponibles');
+                        this.hasError = true;
+                        this.errorMessage = 'Error al cargar los horarios disponibles';
                     } finally {
                         this.loading = false;
                     }
@@ -413,9 +519,13 @@
                     this.currentWeek = 0;
                     this.selectedDate = null;
                     this.selectedTime = null;
+                    this.hasError = false;
+                    this.errorMessage = '';
+                    this.isOwnAppointment = false;
+                    this.appointmentData = null;
                 }
             }
         }
     </script>
-</body>
+</div>
 @endsection

@@ -73,14 +73,14 @@ class PacienteController extends Controller
     {
         $paciente = auth()->user();
 
-        // VALIDACIÓN: Verificar si el paciente ya tiene una cita pendiente
+        // VALIDACIÓN: Verificar si el paciente ya tiene una cita pendiente (con cualquier nutricionista)
         $hasActiveAppointment = Appointment::where('paciente_id', $paciente->id)
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
             ->exists();
 
         if ($hasActiveAppointment) {
             return redirect()->route('paciente.dashboard')
-                ->with('error', 'Ya tienes una cita pendiente. Debes esperar a que se complete o cancele antes de agendar otra.');
+                ->with('error', 'Ya tienes una cita pendiente. Solo puedes tener una cita activa a la vez. Debes esperar a que se complete o cancele antes de agendar otra.');
         }
 
         // Obtener horarios del nutricionista
@@ -167,13 +167,13 @@ class PacienteController extends Controller
     {
         $paciente = auth()->user();
 
-        // VALIDACIÓN: Verificar nuevamente si el paciente ya tiene una cita activa
+        // VALIDACIÓN: Verificar nuevamente si el paciente ya tiene una cita activa (con cualquier nutricionista)
         $hasActiveAppointment = Appointment::where('paciente_id', $paciente->id)
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
             ->exists();
 
         if ($hasActiveAppointment) {
-            return back()->with('error', 'Ya tienes una cita pendiente. Debes esperar a que se complete o cancele antes de agendar otra.');
+            return back()->with('error', 'Ya tienes una cita pendiente. Solo puedes tener una cita activa a la vez.');
         }
 
         $request->validate([
