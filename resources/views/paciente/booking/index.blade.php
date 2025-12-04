@@ -3,10 +3,10 @@
 @section('title', 'Agendar Cita - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
-    <main class="container mx-auto px-4 py-8">
+    <main class="container mx-auto px-4 py-8 flex-grow">
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center gap-3 mb-2">

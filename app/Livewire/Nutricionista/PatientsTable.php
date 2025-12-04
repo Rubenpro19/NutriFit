@@ -14,14 +14,12 @@ class PatientsTable extends Component
     public $search = '';
     public $estado = '';
     public $proximas_citas = '';
-    public $con_atenciones = '';
     public $sort = 'name';
 
     protected $queryString = [
         'search' => ['except' => ''],
         'estado' => ['except' => ''],
         'proximas_citas' => ['except' => ''],
-        'con_atenciones' => ['except' => ''],
         'sort' => ['except' => 'name'],
         'page' => ['except' => 1],
     ];
@@ -41,11 +39,6 @@ class PatientsTable extends Component
         $this->resetPage();
     }
 
-    public function updatedConAtenciones()
-    {
-        $this->resetPage();
-    }
-
     public function updatedSort()
     {
         $this->resetPage();
@@ -53,7 +46,10 @@ class PatientsTable extends Component
 
     public function clearFilters()
     {
-        $this->reset(['search', 'estado', 'proximas_citas', 'con_atenciones', 'sort']);
+        $this->search = '';
+        $this->estado = '';
+        $this->proximas_citas = '';
+        $this->sort = 'name';
         $this->resetPage();
     }
 
@@ -106,14 +102,6 @@ class PatientsTable extends Component
                 $q->where('nutricionista_id', $nutricionista->id)
                   ->whereHas('appointmentState', fn($sq) => $sq->where('name', 'pendiente'))
                   ->where('start_time', '>=', now());
-            });
-        }
-
-        // Filtro por pacientes con atenciones completadas
-        if ($this->con_atenciones === '1') {
-            $query->whereHas('appointmentsAsPaciente', function($q) use ($nutricionista) {
-                $q->where('nutricionista_id', $nutricionista->id)
-                  ->whereHas('attention');
             });
         }
 

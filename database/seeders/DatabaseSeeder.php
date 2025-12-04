@@ -31,24 +31,14 @@ class DatabaseSeeder extends Seeder
         // 🔹 Obtener estado inactivo
         $inactivoState = UserState::where('name', 'inactivo')->first();
 
-        // // 🔹 Obtener estado suspendido
-        // $suspendidoState = UserState::where('name', 'suspendido')->first();
-
-        // 🔹 Algunos nutricionistas
-        User::factory(3)->create([
-            'role_id' => $nutricionistaRole?->id,
-            'password' => Hash::make('nutri123'),
-            'user_state_id' => $activoState?->id,
-        ]);
-
         // 🔹 Algunos pacientes
-        User::factory(5)->create([
+        User::factory(3)->create([
             'role_id' => $pacienteRole?->id,
             'password' => Hash::make('paciente123'),
             'user_state_id' => $activoState?->id,
         ]);
 
-        // 🔹 Usuario administrador (contraseña desde .env (opcional))
+        // 🔹 Usuario administrador (contraseña desde .env)
         User::factory()->create([
             'name' => 'Administrador',
             'email' => 'admin@gmail.com',
@@ -84,9 +74,13 @@ class DatabaseSeeder extends Seeder
             'user_state_id' => $activoState?->id,
         ]);
 
-        // 🔹 Crear horarios de disponibilidad para nutricionistas
-        // $this->call([
-        //     NutricionistaScheduleSeeder::class,
-        // ]);
+        // 🔹 Usuario paciente específico
+        User::factory()->create([
+            'name' => 'Pepe Gonzales',
+            'email' => 'pepe@gmail.com',
+            'password' => Hash::make('pepe123'),
+            'role_id' => $pacienteRole?->id,
+            'user_state_id' => $activoState?->id,
+        ]);
     }
 }

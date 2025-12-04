@@ -12,6 +12,7 @@
                         type="text" 
                         id="search" 
                         wire:model.live.debounce.500ms="search"
+                        value="{{ $search }}"
                         placeholder="Nombre o email..."
                         class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-green-500 focus:border-transparent"
                     >
@@ -67,19 +68,8 @@
                 </div>
             </div>
 
-            <!-- Filtro adicional: Con Atenciones -->
-            <div class="flex items-center justify-between">
-                <label class="flex items-center space-x-2 cursor-pointer">
-                    <input 
-                        type="checkbox" 
-                        wire:model.live="con_atenciones"
-                        value="1"
-                        class="w-4 h-4 text-green-600 border-gray-300 rounded focus:ring-green-500"
-                    >
-                    <span class="text-sm text-gray-700">Solo pacientes con atenciones completadas</span>
-                </label>
-
-                <!-- Botón Limpiar Filtros -->
+            <!-- Botón Limpiar Filtros -->
+            <div class="flex justify-end">
                 <button 
                     wire:click="clearFilters"
                     class="inline-flex items-center gap-2 px-4 py-2 bg-gray-200 text-gray-700 font-semibold rounded-lg hover:bg-gray-300 transition-all duration-200"
@@ -91,27 +81,19 @@
         </div>
     </div>
 
-    <!-- Contador de Resultados -->
-    <div class="mb-6">
-        <p class="text-gray-600">
-            <span class="font-semibold text-gray-900">{{ $patients->total() }}</span> 
-            {{ $patients->total() === 1 ? 'paciente encontrado' : 'pacientes encontrados' }}
-        </p>
-    </div>
-
     @if($patients->isEmpty())
         <!-- Sin Resultados -->
         <div class="bg-white rounded-xl shadow-lg p-12 text-center">
             <div class="text-6xl mb-4">🔍</div>
             <h3 class="text-xl font-bold text-gray-900 mb-2">No se encontraron pacientes</h3>
             <p class="text-gray-600 mb-6">
-                @if($search || $estado || $proximas_citas || $con_atenciones)
+                @if($search || $estado || $proximas_citas)
                     Intenta ajustar los filtros de búsqueda
                 @else
                     Aún no tienes pacientes registrados
                 @endif
             </p>
-            @if($search || $estado || $proximas_citas || $con_atenciones)
+            @if($search || $estado || $proximas_citas)
                 <button 
                     wire:click="clearFilters"
                     class="inline-flex items-center px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl"

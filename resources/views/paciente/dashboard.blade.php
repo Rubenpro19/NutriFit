@@ -181,45 +181,6 @@
                     @endif
                 </div>
 
-                {{-- Nutricionistas Disponibles --}}
-                <div
-                    class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                        <span class="material-symbols-outlined text-green-600 dark:text-green-400">group</span>
-                        Nutricionistas
-                    </h2>
-
-                    @if ($nutricionistas->count() > 0)
-                        <div class="space-y-3">
-                            @foreach ($nutricionistas->take(5) as $nutricionista)
-                                <div
-                                    class="flex items-center gap-3 p-3 rounded-lg border border-gray-200 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-750 transition">
-                                    <div
-                                        class="w-12 h-12 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold">
-                                        {{ $nutricionista->initials() }}
-                                    </div>
-                                    <div class="flex-1 min-w-0">
-                                        <p class="font-semibold text-gray-900 dark:text-white truncate">
-                                            {{ $nutricionista->name }}</p>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">
-                                            {{ $nutricionista->schedules_count }} horarios</p>
-                                    </div>
-                                    <a href="{{ route('paciente.booking.schedule', $nutricionista) }}"
-                                        class="flex-shrink-0 rounded-lg bg-green-600 px-3 py-2 text-sm font-medium text-white transition hover:bg-green-700">
-                                        Agendar
-                                    </a>
-                                </div>
-                            @endforeach
-                        </div>
-
-                        <a href="{{ route('paciente.booking.index') }}"
-                            class="mt-4 block text-center text-sm text-green-600 dark:text-green-400 hover:underline">
-                            Ver todos los nutricionistas →
-                        </a>
-                    @else
-                        <p class="text-center text-gray-500 dark:text-gray-400 py-8">No hay nutricionistas disponibles</p>
-                    @endif
-                </div>
             </div>
         </main>
 

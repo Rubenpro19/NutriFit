@@ -53,32 +53,62 @@
                                 Seleccionar Paciente
                             </h2>
 
+                            <!-- Barra de búsqueda -->
+                            <div class="mb-4">
+                                <div class="relative">
+                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                                    <input 
+                                        type="text" 
+                                        x-model="searchQuery"
+                                        @input="filterPatients"
+                                        placeholder="Buscar paciente..."
+                                        class="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+                                    >
+                                    <button 
+                                        x-show="searchQuery.length > 0"
+                                        @click="searchQuery = ''; filterPatients()"
+                                        type="button"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                                    >
+                                        <span class="material-symbols-outlined text-lg">close</span>
+                                    </button>
+                                </div>
+                            </div>
+
                             <!-- Lista de pacientes -->
                             <div class="space-y-3 max-h-96 overflow-y-auto">
-                                @forelse($pacientes as $paciente)
+                                <template x-for="paciente in filteredPatients" :key="paciente.id">
                                     <button
                                         type="button"
-                                        @click="selectPatient({{ $paciente->id }})"
-                                        :class="selectedPatientId === {{ $paciente->id }} ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-green-300'"
+                                        @click="selectPatient(paciente.id)"
+                                        :class="selectedPatientId === paciente.id ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-green-300'"
                                         class="w-full text-left p-4 rounded-lg border-2 transition-all duration-200"
                                     >
                                         <div class="flex items-center gap-3">
                                             <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                                                {{ $paciente->initials() }}
+                                                <span x-text="paciente.initials"></span>
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <p class="font-semibold text-gray-900 dark:text-white truncate">{{ $paciente->name }}</p>
-                                                <p class="text-xs text-gray-600 dark:text-gray-400 truncate">{{ $paciente->email }}</p>
+                                                <p class="font-semibold text-gray-900 dark:text-white truncate" x-text="paciente.name"></p>
+                                                <p class="text-xs text-gray-600 dark:text-gray-400 truncate" x-text="paciente.email"></p>
                                             </div>
-                                            <span x-show="selectedPatientId === {{ $paciente->id }}" class="material-symbols-outlined text-green-600">check_circle</span>
+                                            <span x-show="selectedPatientId === paciente.id" class="material-symbols-outlined text-green-600">check_circle</span>
                                         </div>
                                     </button>
-                                @empty
-                                    <div class="text-center py-8">
-                                        <span class="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-600 mb-2">search_off</span>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">No hay pacientes disponibles</p>
-                                    </div>
-                                @endforelse
+                                </template>
+
+                                <!-- Sin resultados -->
+                                <div x-show="filteredPatients.length === 0" class="text-center py-8">
+                                    <span class="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-600 mb-2">search_off</span>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">No se encontraron pacientes</p>
+                                    <button 
+                                        x-show="searchQuery.length > 0"
+                                        @click="searchQuery = ''; filterPatients()"
+                                        class="mt-3 text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 font-medium"
+                                    >
+                                        Limpiar búsqueda
+                                    </button>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -440,6 +470,19 @@
     <script>
         function appointmentAssignment() {
             return {
+                // Datos de pacientes
+                allPatients: {!! json_encode($pacientes->map(function($p) {
+                    return [
+                        'id' => $p->id,
+                        'name' => $p->name,
+                        'email' => $p->email,
+                        'initials' => $p->initials()
+                    ];
+                })) !!},
+                filteredPatients: [],
+                searchQuery: '',
+                
+                // Estado de selección
                 selectedPatientId: null,
                 selectedPatient: null,
                 weeks: [],
@@ -448,13 +491,28 @@
                 selectedTime: null,
                 loading: false,
                 submitting: false,
+                
+                // Estado de error
                 hasError: false,
                 errorMessage: '',
                 isOwnAppointment: false,
                 appointmentData: null,
 
                 init() {
-                    // Inicialización si es necesaria
+                    this.filteredPatients = this.allPatients;
+                },
+
+                filterPatients() {
+                    const query = this.searchQuery.toLowerCase().trim();
+                    
+                    if (query === '') {
+                        this.filteredPatients = this.allPatients;
+                    } else {
+                        this.filteredPatients = this.allPatients.filter(patient => 
+                            patient.name.toLowerCase().includes(query) || 
+                            patient.email.toLowerCase().includes(query)
+                        );
+                    }
                 },
 
                 async selectPatient(patientId) {
