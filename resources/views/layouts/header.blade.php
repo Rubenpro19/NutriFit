@@ -7,29 +7,43 @@
                 <div class="flex h-10 w-10 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-emerald-600 shadow-md">
                     <span class="material-symbols-outlined text-2xl text-white">eco</span>
                 </div>
-                <a href="{{ route('home') }}" class="text-xl font-bold text-gray-900 dark:text-white">
+                @php
+                    $logoRoute = 'home';
+                    if (auth()->check()) {
+                        if (auth()->user()->isNutricionista()) {
+                            $logoRoute = 'nutricionista.dashboard';
+                        } elseif (auth()->user()->isPaciente()) {
+                            $logoRoute = 'paciente.dashboard';
+                        } elseif (auth()->user()->isAdmin()) {
+                            $logoRoute = 'admin.dashboard';
+                        }
+                    }
+                @endphp
+                <a href="{{ route($logoRoute) }}" class="text-xl font-bold text-gray-900 dark:text-white">
                     Nutri<span class="text-green-600">Fit</span>
                 </a>
             </div>
 
             {{-- Navigation Desktop - Centrado --}}
-            <nav class="absolute left-1/2 hidden -translate-x-1/2 transform items-center gap-1 md:flex">
-                <a href="{{ route('home') }}" 
-                   class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('home') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
-                    <span class="material-symbols-outlined text-lg">home</span>
-                    Inicio
-                </a>
-                <a href="{{ route('about') }}" 
-                   class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('about') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
-                    <span class="material-symbols-outlined text-lg">group</span>
-                    Sobre Nosotros
-                </a>
-                <a href="{{ route('contact') }}" 
-                   class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('contact') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
-                    <span class="material-symbols-outlined text-lg">mail</span>
-                    Contacto
-                </a>
-            </nav>
+            @if (!auth()->check() || auth()->user()->isAdmin())
+                <nav class="absolute left-1/2 hidden -translate-x-1/2 transform items-center gap-1 md:flex">
+                    <a href="{{ route('home') }}" 
+                       class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('home') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
+                        <span class="material-symbols-outlined text-lg">home</span>
+                        Inicio
+                    </a>
+                    <a href="{{ route('about') }}" 
+                       class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('about') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
+                        <span class="material-symbols-outlined text-lg">group</span>
+                        Sobre Nosotros
+                    </a>
+                    <a href="{{ route('contact') }}" 
+                       class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('contact') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
+                        <span class="material-symbols-outlined text-lg">mail</span>
+                        Contacto
+                    </a>
+                </nav>
+            @endif
 
             {{-- Auth Buttons --}}
             <div class="hidden items-center gap-3 md:flex">
@@ -132,21 +146,23 @@
         {{-- Mobile Navigation --}}
         <div id="mobile-menu" class="hidden border-t border-gray-200 py-4 dark:border-gray-800 md:hidden">
             <nav class="flex flex-col gap-2">
-                <a href="{{ route('home') }}" 
-                   class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 {{ request()->routeIs('home') ? 'bg-green-50 text-green-600 dark:bg-green-900/20' : '' }}">
-                    <span class="material-symbols-outlined text-lg">home</span>
-                    Inicio
-                </a>
-                <a href="{{ route('about') }}" 
-                   class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 {{ request()->routeIs('about') ? 'bg-green-50 text-green-600 dark:bg-green-900/20' : '' }}">
-                    <span class="material-symbols-outlined text-lg">group</span>
-                    Sobre Nosotros
-                </a>
-                <a href="{{ route('contact') }}" 
-                   class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 {{ request()->routeIs('contact') ? 'bg-green-50 text-green-600 dark:bg-green-900/20' : '' }}">
-                    <span class="material-symbols-outlined text-lg">mail</span>
-                    Contacto
-                </a>
+                @if (!auth()->check() || auth()->user()->isAdmin())
+                    <a href="{{ route('home') }}" 
+                       class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 {{ request()->routeIs('home') ? 'bg-green-50 text-green-600 dark:bg-green-900/20' : '' }}">
+                        <span class="material-symbols-outlined text-lg">home</span>
+                        Inicio
+                    </a>
+                    <a href="{{ route('about') }}" 
+                       class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 {{ request()->routeIs('about') ? 'bg-green-50 text-green-600 dark:bg-green-900/20' : '' }}">
+                        <span class="material-symbols-outlined text-lg">group</span>
+                        Sobre Nosotros
+                    </a>
+                    <a href="{{ route('contact') }}" 
+                       class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 {{ request()->routeIs('contact') ? 'bg-green-50 text-green-600 dark:bg-green-900/20' : '' }}">
+                        <span class="material-symbols-outlined text-lg">mail</span>
+                        Contacto
+                    </a>
+                @endif
                 
                 @if (Route::has('login'))
                     @auth
