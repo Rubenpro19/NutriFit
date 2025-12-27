@@ -31,6 +31,13 @@ class AttentionController extends Controller
         // Cargar relaciones necesarias
         $appointment->load(['paciente.personalData', 'appointmentState']);
 
+        // Verificar si el paciente tiene datos personales
+        if (!$appointment->paciente->personalData) {
+            return redirect()
+                ->route('nutricionista.patients.data', $appointment->paciente)
+                ->with('warning', 'Antes de iniciar la atención, debes completar los datos personales del paciente.');
+        }
+
         return view('nutricionista.attentions.create', compact('appointment'));
     }
 

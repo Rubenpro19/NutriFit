@@ -7,6 +7,7 @@
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8 flex-grow">
+        <div class="max-w-7xl mx-auto">
         <!-- Breadcrumb -->
         <nav class="mb-6 text-sm text-gray-600 dark:text-gray-400">
             <a href="{{ route('nutricionista.dashboard') }}" class="hover:text-green-600 dark:hover:text-green-400">Dashboard</a>
@@ -585,5 +586,6 @@
             }
         }
     </script>
+</div>
 </div>
 @endsection

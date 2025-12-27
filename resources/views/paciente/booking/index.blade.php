@@ -7,6 +7,7 @@
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8 flex-grow">
+        <div class="max-w-7xl mx-auto">
         <!-- Header -->
         <div class="mb-8">
             <div class="flex items-center gap-3 mb-2">
@@ -84,6 +85,7 @@
                     </a>
                 </div>
             @endif
+        </div>
     </main>
 
     @include('layouts.footer')

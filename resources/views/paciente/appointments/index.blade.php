@@ -7,6 +7,7 @@
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8 flex-grow">
+        <div class="max-w-7xl mx-auto">
         <!-- Breadcrumb -->
         <nav class="mb-6 flex items-center gap-2 text-sm">
             <a href="{{ route('paciente.dashboard') }}" class="text-green-600 dark:text-green-400 hover:underline">Dashboard</a>
@@ -197,6 +198,7 @@
                 </a>
             </div>
         @endif
+        </div>
     </main>
 
     @include('layouts.footer')

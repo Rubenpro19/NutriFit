@@ -7,6 +7,7 @@
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
     <!-- Breadcrumb -->
     <nav class="mb-6 text-sm text-gray-600 dark:text-gray-400">
         <a href="{{ route('nutricionista.dashboard') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400">Dashboard</a>
@@ -294,6 +295,7 @@
                 </div>
             </div>
         </div>
+    </div>
     </main>
 
     @include('layouts.footer')

@@ -9,10 +9,22 @@
         @include('layouts.header')
 
         <main class="container mx-auto px-4 py-8">
+            <div class="max-w-7xl mx-auto">
             <!-- Header -->
             <div class="mb-8 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-600 p-8 text-white shadow-lg">
-                <h1 class="text-3xl font-bold mb-2">¡Hola, {{ auth()->user()->name }}!</h1>
-                <p class="text-green-100">Gestiona tus citas y encuentra al nutricionista perfecto para ti</p>
+                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                    <div>
+                        <h1 class="text-3xl font-bold mb-2">¡Hola, {{ auth()->user()->name }}!</h1>
+                        <p class="text-green-100">Gestiona tus citas y encuentra al nutricionista perfecto para ti</p>
+                    </div>
+                    <div>
+                        <a href="{{ route('paciente.profile') }}" 
+                           class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold py-3 px-6 rounded-xl transition border border-white/30">
+                            <span class="material-symbols-outlined">person</span>
+                            Mi Perfil
+                        </a>
+                    </div>
+                </div>
             </div>
 
             {{-- Acceso Rápido al Historial de Citas --}}
@@ -181,6 +193,7 @@
                     @endif
                 </div>
 
+            </div>
             </div>
         </main>
 

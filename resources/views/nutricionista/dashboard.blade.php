@@ -7,6 +7,7 @@
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8">
+        <div class="max-w-7xl mx-auto">
         {{-- Mensaje de Bienvenida --}}
         <div class="mb-8 rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-6 md:p-8 text-white shadow-lg">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
@@ -173,6 +174,7 @@
                     </div>
                 @endif
             </div>
+        </div>
         </div>
     </main>
 

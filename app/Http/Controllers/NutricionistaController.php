@@ -474,4 +474,19 @@ class NutricionistaController extends Controller
         return redirect()->route('nutricionista.schedules.index')
             ->with('success', 'Horarios guardados correctamente');
     }
+
+    /**
+     * Muestra el formulario de datos personales del paciente
+     */
+    public function patientData(User $patient)
+    {
+        $nutricionista = auth()->user();
+        
+        // Verificar que es un paciente
+        if (!$patient->role || $patient->role->name !== 'paciente') {
+            abort(404, 'Paciente no encontrado.');
+        }
+
+        return view('nutricionista.patients.data', compact('patient'));
+    }
 }

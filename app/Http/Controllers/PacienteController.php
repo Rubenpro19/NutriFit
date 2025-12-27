@@ -305,4 +305,12 @@ class PacienteController extends Controller
 
         return view('paciente.appointments.show', compact('appointment'));
     }
+
+    /**
+     * Muestra el perfil del paciente
+     */
+    public function profile()
+    {
+        return view('paciente.profile');
+    }
 }

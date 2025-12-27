@@ -7,6 +7,7 @@
     @include('layouts.header')
 
     <main class="container mx-auto px-4 py-8">
+    <div class="max-w-6xl mx-auto">
     <!-- Breadcrumb -->
     <nav class="mb-6 text-sm text-gray-600 dark:text-gray-400">
         <a href="{{ route('nutricionista.dashboard') }}" class="hover:text-emerald-600 dark:hover:text-emerald-400">Dashboard</a>
@@ -40,10 +41,14 @@
             </div>
         @endif
 
-        <form method="POST" action="{{ route('nutricionista.attentions.store', $appointment) }}" class="max-w-4xl">
-            @csrf
+        <!-- Grid principal: Formulario + Panel de Resultados -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+            <!-- Columna Izquierda: Formulario (2/3) -->
+            <div class="lg:col-span-2">
+                <form method="POST" action="{{ route('nutricionista.attentions.store', $appointment) }}" id="attention-form">
+                    @csrf
 
-            <!-- Datos Antropométricos -->
+                    <!-- Datos Antropométricos -->
             <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 mb-6">
                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
                     <span class="material-symbols-outlined text-emerald-600">straighten</span>
@@ -54,18 +59,28 @@
                     <!-- Peso -->
                     <div>
                         <label for="weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Peso (kg) <span class="text-red-500">*</span>
+                            Peso <span class="text-red-500">*</span>
                         </label>
-                        <input 
-                            type="number" 
-                            step="0.01" 
-                            id="weight" 
-                            name="weight" 
-                            value="{{ old('weight') }}"
-                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('weight') border-red-500 @enderror"
-                            placeholder="70.5"
-                            required
-                        >
+                        <div class="flex gap-2">
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                id="weight-input" 
+                                value="{{ old('weight') }}"
+                                class="flex-1 px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('weight') border-red-500 @enderror"
+                                placeholder="70.5"
+                                required
+                            >
+                            <select 
+                                id="weight-unit"
+                                class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition"
+                            >
+                                <option value="kg">kg</option>
+                                <option value="lb">lb</option>
+                            </select>
+                        </div>
+                        <!-- Campo oculto que enviará el peso en kg -->
+                        <input type="hidden" id="weight" name="weight" value="{{ old('weight') }}">
                         @error('weight')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
@@ -247,39 +262,221 @@
                 </button>
             </div>
         </form>
+        </div>
+
+        <!-- Columna Derecha: Panel de Resultados (1/3) -->
+        <div class="lg:col-span-1">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 sticky top-8">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-blue-600">query_stats</span>
+                    Análisis Corporal
+                </h2>
+
+                <!-- Visualización de la Figura -->
+                <div class="mb-6">
+                    <div class="flex justify-center items-end h-64 bg-gradient-to-b from-blue-50 to-transparent dark:from-gray-700 rounded-xl p-4">
+                        <!-- Figura SVG que cambia según el IMC -->
+                        <svg id="body-figure" class="transition-all duration-500" width="120" height="220" viewBox="0 0 120 220">
+                            <!-- Cabeza -->
+                            <circle cx="60" cy="20" r="15" fill="#FDB44B" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- Torso -->
+                            <ellipse id="torso" cx="60" cy="80" rx="25" ry="40" fill="#4A90E2" stroke="#333" stroke-width="2"/>
+                            
+                            <!-- Brazos -->
+                            <line id="arm-left" x1="35" y1="60" x2="20" y2="100" stroke="#FDB44B" stroke-width="8" stroke-linecap="round"/>
+                            <line id="arm-right" x1="85" y1="60" x2="100" y2="100" stroke="#FDB44B" stroke-width="8" stroke-linecap="round"/>
+                            
+                            <!-- Piernas -->
+                            <line id="leg-left" x1="50" y1="120" x2="45" y2="200" stroke="#4A90E2" stroke-width="12" stroke-linecap="round"/>
+                            <line id="leg-right" x1="70" y1="120" x2="75" y2="200" stroke="#4A90E2" stroke-width="12" stroke-linecap="round"/>
+                        </svg>
+                    </div>
+                    
+                    <!-- Indicador de Estado -->
+                    <div id="body-status" class="text-center mt-4">
+                        <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">
+                            Ingresa peso y altura para ver el análisis
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Métricas Calculadas -->
+                <div class="space-y-4">
+                    <!-- IMC -->
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">IMC</span>
+                            <span id="display-bmi" class="text-2xl font-bold text-gray-900 dark:text-white">--</span>
+                        </div>
+                        <div id="bmi-bar" class="h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
+                            <div id="bmi-indicator" class="h-full bg-blue-500 transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <p id="bmi-category" class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">-</p>
+                    </div>
+
+                    <!-- Espacio para más cálculos futuros -->
+                    <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
+                        <p class="text-xs text-gray-500 dark:text-gray-400 text-center italic">
+                            Más métricas se mostrarán aquí próximamente
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        </div>
     </div>
 
     <!-- Script para cálculo automático del IMC -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            const weightInput = document.getElementById('weight');
+            const weightInputDisplay = document.getElementById('weight-input');
+            const weightUnit = document.getElementById('weight-unit');
+            const weightInput = document.getElementById('weight'); // Campo oculto que se envía
             const heightInput = document.getElementById('height');
             const bmiInput = document.getElementById('bmi');
 
+            // Elementos del panel derecho
+            const displayBmi = document.getElementById('display-bmi');
+            const bmiIndicator = document.getElementById('bmi-indicator');
+            const bmiCategory = document.getElementById('bmi-category');
+            const bodyStatus = document.getElementById('body-status');
+            const torso = document.getElementById('torso');
+            const armLeft = document.getElementById('arm-left');
+            const armRight = document.getElementById('arm-right');
+            const legLeft = document.getElementById('leg-left');
+            const legRight = document.getElementById('leg-right');
+
             function calculateBMI() {
-                const weight = parseFloat(weightInput.value);
+                const weightDisplay = parseFloat(weightInputDisplay.value);
+                const unit = weightUnit.value;
                 const height = parseFloat(heightInput.value);
 
-                if (weight > 0 && height > 0) {
+                if (weightDisplay > 0 && height > 0) {
+                    // Convertir peso a kg si está en libras
+                    let weightInKg = weightDisplay;
+                    if (unit === 'lb') {
+                        weightInKg = weightDisplay * 0.453592; // 1 lb = 0.453592 kg
+                    }
+
+                    // Guardar el peso en kg en el campo oculto
+                    weightInput.value = weightInKg.toFixed(2);
+
                     // IMC = peso (kg) / (altura (m))^2
                     const heightInMeters = height / 100;
-                    const bmi = weight / (heightInMeters * heightInMeters);
-                    bmiInput.value = bmi.toFixed(2);
+                    const bmi = weightInKg / (heightInMeters * heightInMeters);
+                    const bmiValue = bmi.toFixed(2);
+                    bmiInput.value = bmiValue;
+
+                    // Actualizar display del IMC
+                    displayBmi.textContent = bmiValue;
+
+                    // Determinar categoría y color
+                    let category = '';
+                    let color = '';
+                    let percentage = 0;
+                    
+                    if (bmi < 18.5) {
+                        category = 'Bajo peso';
+                        color = 'text-blue-600';
+                        percentage = (bmi / 18.5) * 25;
+                        updateBodyFigure('thin');
+                    } else if (bmi < 25) {
+                        category = 'Peso normal';
+                        color = 'text-green-600';
+                        percentage = 25 + ((bmi - 18.5) / (25 - 18.5)) * 25;
+                        updateBodyFigure('normal');
+                    } else if (bmi < 30) {
+                        category = 'Sobrepeso';
+                        color = 'text-yellow-600';
+                        percentage = 50 + ((bmi - 25) / (30 - 25)) * 25;
+                        updateBodyFigure('overweight');
+                    } else {
+                        category = 'Obesidad';
+                        color = 'text-red-600';
+                        percentage = Math.min(75 + ((bmi - 30) / 10) * 25, 100);
+                        updateBodyFigure('obese');
+                    }
+
+                    bmiCategory.textContent = category;
+                    bmiCategory.className = `text-sm font-semibold mt-2 text-center ${color}`;
+                    bmiIndicator.style.width = percentage + '%';
+                    
+                    // Actualizar color del indicador
+                    if (bmi < 18.5) {
+                        bmiIndicator.className = 'h-full bg-blue-500 transition-all duration-500';
+                    } else if (bmi < 25) {
+                        bmiIndicator.className = 'h-full bg-green-500 transition-all duration-500';
+                    } else if (bmi < 30) {
+                        bmiIndicator.className = 'h-full bg-yellow-500 transition-all duration-500';
+                    } else {
+                        bmiIndicator.className = 'h-full bg-red-500 transition-all duration-500';
+                    }
+
+                    bodyStatus.innerHTML = `<p class="text-sm font-semibold ${color}">${category}</p>`;
                 } else {
                     bmiInput.value = '';
+                    displayBmi.textContent = '--';
+                    bmiCategory.textContent = '-';
+                    bmiIndicator.style.width = '0%';
+                    bodyStatus.innerHTML = '<p class="text-sm font-semibold text-gray-600 dark:text-gray-400">Ingresa peso y altura para ver el análisis</p>';
                 }
             }
 
-            weightInput.addEventListener('input', calculateBMI);
+            function updateBodyFigure(type) {
+                switch(type) {
+                    case 'thin':
+                        // Figura delgada
+                        torso.setAttribute('rx', '20');
+                        torso.setAttribute('ry', '35');
+                        armLeft.setAttribute('stroke-width', '6');
+                        armRight.setAttribute('stroke-width', '6');
+                        legLeft.setAttribute('stroke-width', '10');
+                        legRight.setAttribute('stroke-width', '10');
+                        break;
+                    case 'normal':
+                        // Figura normal
+                        torso.setAttribute('rx', '25');
+                        torso.setAttribute('ry', '40');
+                        armLeft.setAttribute('stroke-width', '8');
+                        armRight.setAttribute('stroke-width', '8');
+                        legLeft.setAttribute('stroke-width', '12');
+                        legRight.setAttribute('stroke-width', '12');
+                        break;
+                    case 'overweight':
+                        // Figura con sobrepeso
+                        torso.setAttribute('rx', '30');
+                        torso.setAttribute('ry', '42');
+                        armLeft.setAttribute('stroke-width', '10');
+                        armRight.setAttribute('stroke-width', '10');
+                        legLeft.setAttribute('stroke-width', '14');
+                        legRight.setAttribute('stroke-width', '14');
+                        break;
+                    case 'obese':
+                        // Figura con obesidad
+                        torso.setAttribute('rx', '35');
+                        torso.setAttribute('ry', '45');
+                        armLeft.setAttribute('stroke-width', '12');
+                        armRight.setAttribute('stroke-width', '12');
+                        legLeft.setAttribute('stroke-width', '16');
+                        legRight.setAttribute('stroke-width', '16');
+                        break;
+                }
+            }
+
+            // Event listeners
+            weightInputDisplay.addEventListener('input', calculateBMI);
+            weightUnit.addEventListener('change', calculateBMI);
             heightInput.addEventListener('input', calculateBMI);
 
             // Calcular IMC inicial si hay valores (por ejemplo, de old())
-            if (weightInput.value && heightInput.value) {
+            if (weightInputDisplay.value && heightInput.value) {
                 calculateBMI();
             }
         });
     </script>
 
+    </div>
     </main>
     @include('layouts.footer')
 </body>

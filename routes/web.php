@@ -87,6 +87,7 @@ Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->name
     // Gestión de pacientes
     Route::get('/pacientes', [NutricionistaController::class, 'patients'])->name('patients.index');
     Route::get('/pacientes/{patient}', [NutricionistaController::class, 'showPatient'])->name('patients.show');
+    Route::get('/pacientes/{patient}/datos', [NutricionistaController::class, 'patientData'])->name('patients.data');
     
     // Asignar citas a pacientes
     Route::get('/citas/asignar', [NutricionistaController::class, 'createAppointment'])->name('appointments.create');
@@ -115,6 +116,9 @@ Route::middleware(['auth', 'role:paciente'])->prefix('paciente')->name('paciente
     Route::get('/citas', [PacienteController::class, 'appointments'])->name('appointments.index');
     Route::get('/citas/{appointment}', [PacienteController::class, 'showAppointment'])->name('appointments.show');
     Route::post('/citas/{appointment}/cancelar', [PacienteController::class, 'cancelAppointment'])->name('appointments.cancel');
+    
+    // Perfil de usuario
+    Route::get('/perfil', [PacienteController::class, 'profile'])->name('profile');
 });
 
 //Rutas para iniciar sesión con Google
