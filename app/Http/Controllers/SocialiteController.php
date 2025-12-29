@@ -26,7 +26,7 @@ class SocialiteController extends Controller
                 [
                     'name' => $googleUser->getName(),
                     'email_verified_at' => now(),
-                    'password' => bcrypt(str()->random(12)),
+                    'password' => bcrypt(\App\Http\Middleware\EnsurePasswordChanged::DEFAULT_PASSWORD),
                     'role_id' => 3,
                     'user_state_id' => 1,
                 ]

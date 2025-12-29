@@ -5,6 +5,7 @@ namespace App\Livewire\Settings;
 use Livewire\Component;
 use App\Models\PersonalData;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 
 class UserProfile extends Component
 {
@@ -16,19 +17,42 @@ class UserProfile extends Component
     public $gender = '';
     public $age = null;
 
+    public $current_password = '';
+    public $password = '';
+    public $password_confirmation = '';
+
     public $hasPersonalData = false;
+    public $hasPassword = false;
 
     protected function rules()
     {
-        return [
+        $rules = [
+            'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:10',
             'address' => 'nullable|string|max:255',
+            'birth_date' => 'nullable|date|before:today',
         ];
+
+        // Solo validar contraseña actual si el usuario tiene password establecido
+        if ($this->hasPassword) {
+            $rules['current_password'] = 'required_with:password|string';
+        }
+        
+        $rules['password'] = 'nullable|string|min:8|confirmed';
+
+        return $rules;
     }
 
     protected $messages = [
+        'name.required' => 'El nombre es obligatorio.',
+        'name.max' => 'El nombre no puede tener más de 255 caracteres.',
         'phone.max' => 'El teléfono no puede tener más de 10 caracteres.',
         'address.max' => 'La dirección no puede tener más de 255 caracteres.',
+        'birth_date.date' => 'La fecha de nacimiento debe ser una fecha válida.',
+        'birth_date.before' => 'La fecha de nacimiento debe ser anterior a hoy.',
+        'current_password.required_with' => 'Debes ingresar tu contraseña actual para cambiarla.',
+        'password.min' => 'La nueva contraseña debe tener al menos 8 caracteres.',
+        'password.confirmed' => 'Las contraseñas no coinciden.',
     ];
 
     public function mount()
@@ -43,6 +67,10 @@ class UserProfile extends Component
         // Cargar datos del usuario
         $this->name = $user->name;
         $this->email = $user->email;
+        
+        // Verificar si el usuario tiene contraseña que no sea la por defecto
+        $defaultPassword = \App\Http\Middleware\EnsurePasswordChanged::DEFAULT_PASSWORD;
+        $this->hasPassword = !empty($user->password) && !Hash::check($defaultPassword, $user->password);
 
         // Cargar datos personales si existen
         if ($user->personalData) {
@@ -56,28 +84,71 @@ class UserProfile extends Component
         }
     }
 
-    public function save()
+    public function saveProfile()
     {
-        // Verificar que el usuario tiene datos personales
-        if (!$this->hasPersonalData) {
-            session()->flash('error', 'No puedes actualizar tus datos personales. El nutricionista debe completarlos primero.');
-            return;
-        }
-
-        $this->validate();
+        $this->validate([
+            'name' => 'required|string|max:255',
+            'phone' => 'nullable|string|max:10',
+            'address' => 'nullable|string|max:255',
+            'birth_date' => 'nullable|date|before:today',
+        ]);
 
         try {
             $user = Auth::user();
             
-            // Actualizar solo los campos permitidos (NO el género ni fecha de nacimiento)
-            $user->personalData->update([
-                'phone' => $this->phone,
-                'address' => $this->address,
+            // Actualizar nombre del usuario
+            $user->update(['name' => $this->name]);
+
+            // Actualizar datos personales si existen
+            if ($this->hasPersonalData) {
+                $user->personalData->update([
+                    'phone' => $this->phone,
+                    'address' => $this->address,
+                    'birth_date' => $this->birth_date,
+                    'gender' => $this->gender, // Preservar el género asignado por el nutricionista
+                ]);
+            }
+
+            session()->flash('success', 'Tu perfil ha sido actualizado correctamente.');
+        } catch (\Exception $e) {
+            session()->flash('error', 'Error al actualizar el perfil: ' . $e->getMessage());
+        }
+    }
+
+    public function updatePassword()
+    {
+        // Validar contraseña
+        $rules = [];
+        if ($this->hasPassword) {
+            $rules['current_password'] = 'required|string';
+        }
+        $rules['password'] = 'required|string|min:8|confirmed';
+
+        $this->validate($rules);
+
+        try {
+            $user = Auth::user();
+
+            // Verificar contraseña actual si existe
+            if ($this->hasPassword && !Hash::check($this->current_password, $user->password)) {
+                session()->flash('password_error', 'La contraseña actual es incorrecta.');
+                return;
+            }
+
+            // Actualizar contraseña
+            $user->update([
+                'password' => Hash::make($this->password)
             ]);
 
-            session()->flash('success', 'Tus datos personales han sido actualizados correctamente.');
+            // Limpiar campos
+            $this->reset(['current_password', 'password', 'password_confirmation']);
+            
+            // Actualizar hasPassword para futuras validaciones
+            $this->hasPassword = true;
+
+            session()->flash('password_success', 'Tu contraseña ha sido actualizada correctamente.');
         } catch (\Exception $e) {
-            session()->flash('error', 'Error al actualizar los datos: ' . $e->getMessage());
+            session()->flash('password_error', 'Error al actualizar la contraseña: ' . $e->getMessage());
         }
     }
 

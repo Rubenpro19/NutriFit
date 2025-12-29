@@ -128,6 +128,54 @@
                             @enderror
                         </div>
 
+                        {{-- Datos personales (solo para pacientes) --}}
+                        @if($user->isPaciente())
+                        <div class="rounded-lg border border-gray-200 p-4 dark:border-gray-700">
+                            <h3 class="mb-4 flex items-center gap-2 text-sm font-semibold text-gray-700 dark:text-gray-300">
+                                <span class="material-symbols-outlined text-base">badge</span>
+                                Datos Personales del Paciente
+                            </h3>
+                            
+                            <div class="grid gap-6 md:grid-cols-2">
+                                {{-- Sexo --}}
+                                <div>
+                                    <label for="gender" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Sexo
+                                    </label>
+                                    @php
+                                        $currentGender = old('gender', optional($user->personalData)->gender);
+                                    @endphp
+                                    <select name="gender" 
+                                            id="gender" 
+                                            class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+                                        <option value="">Seleccionar...</option>
+                                        <option value="male" @selected($currentGender === 'male')>Masculino</option>
+                                        <option value="female" @selected($currentGender === 'female')>Femenino</option>
+                                    </select>
+                                    @error('gender')
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
+                                </div>
+
+                                {{-- Fecha de nacimiento --}}
+                                <div>
+                                    <label for="birth_date" class="block text-sm font-medium text-gray-700 dark:text-gray-300">
+                                        Fecha de nacimiento
+                                    </label>
+                                    <input type="date" 
+                                           name="birth_date" 
+                                           id="birth_date" 
+                                           value="{{ old('birth_date', $user->personalData?->birth_date?->format('Y-m-d')) }}"
+                                           max="{{ now()->format('Y-m-d') }}"
+                                           class="mt-1 block w-full rounded-lg border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 dark:border-gray-600 dark:bg-gray-800 dark:text-white">
+                                    @error('birth_date')
+                                        <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
+                                </div>
+                            </div>
+                        </div>
+                        @endif
+
                         {{-- Botones de acción --}}
                         <div class="flex items-center justify-end gap-3 border-t border-gray-200 pt-6 dark:border-gray-700">
                             <a href="{{ route('admin.users.index') }}" 

@@ -75,6 +75,7 @@ class AdminController extends Controller
      */
     public function editUser(User $user)
     {
+        $user->load('personalData');
         $states = UserState::all();
         return view('admin.users.edit', compact('user', 'states'));
     }
@@ -89,6 +90,8 @@ class AdminController extends Controller
             'email' => ['required', 'string', 'email', 'max:255', Rule::unique('users')->ignore($user->id)],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
             'user_state_id' => ['required', 'exists:user_states,id'],
+            'gender' => ['nullable', 'in:male,female'],
+            'birth_date' => ['nullable', 'date', 'before:today'],
         ]);
 
         if (empty($validated['password'])) {
@@ -97,7 +100,31 @@ class AdminController extends Controller
             $validated['password'] = Hash::make($validated['password']);
         }
 
-        $user->update($validated);
+        $user->update([
+            'name' => $validated['name'],
+            'email' => $validated['email'],
+            'password' => $validated['password'] ?? $user->password,
+            'user_state_id' => $validated['user_state_id'],
+        ]);
+
+        // Actualizar datos personales si es paciente y hay datos de género o fecha de nacimiento
+        if ($user->isPaciente() && ($request->filled('gender') || $request->filled('birth_date'))) {
+            $personalDataUpdate = [];
+            
+            if ($request->filled('gender')) {
+                $personalDataUpdate['gender'] = $validated['gender'];
+            }
+            
+            if ($request->filled('birth_date')) {
+                $personalDataUpdate['birth_date'] = $validated['birth_date'];
+            }
+
+            if ($user->personalData) {
+                $user->personalData->update($personalDataUpdate);
+            } else {
+                $user->personalData()->create($personalDataUpdate);
+            }
+        }
 
         return redirect()->route('admin.users.index')->with('success', 'Usuario actualizado exitosamente');
     }

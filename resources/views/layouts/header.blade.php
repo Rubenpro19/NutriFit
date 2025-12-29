@@ -85,11 +85,11 @@
                                             : 'paciente.dashboard');
                                     @endphp
 
-                                    {{-- Dashboard --}}
+                                    {{-- Inicio --}}
                                     <a href="{{ route($dashboardRoute) }}" 
                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                                        <span class="material-symbols-outlined text-lg">dashboard</span>
-                                        Dashboard
+                                        <span class="material-symbols-outlined text-lg">home</span>
+                                        Inicio
                                     </a>
 
                                     {{-- Mi Perfil (solo para pacientes) --}}
@@ -195,9 +195,18 @@
 
                             <a href="{{ route($dashboardRoute) }}" 
                                class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
-                                <span class="material-symbols-outlined text-lg">dashboard</span>
-                                Dashboard
+                                <span class="material-symbols-outlined text-lg">home</span>
+                                Inicio
                             </a>
+
+                            {{-- Mi Perfil (solo para pacientes) --}}
+                            @if(auth()->user()->isPaciente())
+                            <a href="{{ route('paciente.profile') }}" 
+                               class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                <span class="material-symbols-outlined text-lg">person</span>
+                                Mi Perfil
+                            </a>
+                            @endif
 
                             <a href="{{ route('profile.edit') }}" 
                                class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">

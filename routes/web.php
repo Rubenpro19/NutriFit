@@ -103,8 +103,14 @@ Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->name
     Route::post('/citas/{appointment}/atender', [AttentionController::class, 'store'])->name('attentions.store');
 });
 
-// Panel paciente
+// Panel paciente - Ruta para cambiar contraseña por defecto (sin middleware password.changed)
 Route::middleware(['auth', 'role:paciente'])->prefix('paciente')->name('paciente.')->group(function () {
+    Route::get('/cambiar-contrasena', [App\Http\Controllers\PasswordController::class, 'showChangePassword'])->name('change-default-password');
+    Route::post('/cambiar-contrasena', [App\Http\Controllers\PasswordController::class, 'updatePassword'])->name('change-default-password.update');
+});
+
+// Panel paciente - Rutas protegidas (con middleware password.changed)
+Route::middleware(['auth', 'role:paciente', 'password.changed'])->prefix('paciente')->name('paciente.')->group(function () {
     Route::get('/dashboard', [PacienteController::class, 'index'])->name('dashboard');
     
     // Agendar citas
