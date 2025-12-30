@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use App\Http\Middleware\EnsurePasswordChanged;
+use App\Notifications\PasswordChangedNotification;
 
 class PasswordController extends Controller
 {
@@ -39,6 +40,9 @@ class PasswordController extends Controller
             $user->update([
                 'password' => Hash::make($request->password)
             ]);
+
+            // Enviar notificación de seguridad
+            $user->notify(new PasswordChangedNotification());
 
             return redirect()->route('paciente.dashboard')
                 ->with('success', '¡Contraseña actualizada exitosamente! Ahora puedes acceder con tu nueva contraseña.');

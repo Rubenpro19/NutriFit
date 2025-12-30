@@ -5,6 +5,7 @@ namespace App\Livewire\Settings;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\PersonalData;
+use App\Notifications\PasswordChangedNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Storage;
@@ -167,6 +168,9 @@ class UserProfile extends Component
             $user->update([
                 'password' => Hash::make($this->password)
             ]);
+
+            // Enviar notificación de seguridad
+            $user->notify(new PasswordChangedNotification());
 
             // Limpiar campos
             $this->reset(['current_password', 'password', 'password_confirmation']);

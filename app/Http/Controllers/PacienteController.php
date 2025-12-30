@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Appointment;
 use App\Models\AppointmentState;
 use App\Models\NutricionistaSchedule;
+use App\Notifications\AppointmentCreatedNotification;
+use App\Notifications\AppointmentConfirmedForPatient;
 use Carbon\Carbon;
 
 class PacienteController extends Controller
@@ -206,7 +208,7 @@ class PacienteController extends Controller
         // Crear la cita con estado pendiente
         $pendienteState = AppointmentState::where('name', 'pendiente')->first();
 
-        Appointment::create([
+        $appointment = Appointment::create([
             'paciente_id' => $paciente->id,
             'nutricionista_id' => $nutricionista->id,
             'start_time' => $startTime,
@@ -216,6 +218,12 @@ class PacienteController extends Controller
             'appointment_type' => $request->appointment_type,
             'price' => $request->appointment_type === 'primera_vez' ? 150.00 : ($request->appointment_type === 'seguimiento' ? 120.00 : 100.00),
         ]);
+
+        // Notificar al nutricionista sobre la nueva cita (en cola, inmediato)
+        $nutricionista->notify(new AppointmentCreatedNotification($appointment));
+        
+        // Notificar al paciente con 20 segundos de retraso (solo para desarrollo/Mailtrap)
+        $paciente->notify((new AppointmentConfirmedForPatient($appointment))->delay(now()->addSeconds(20)));
 
         return redirect()->route('paciente.dashboard')
             ->with('success', '¡Cita agendada exitosamente! El nutricionista la confirmará pronto.');
