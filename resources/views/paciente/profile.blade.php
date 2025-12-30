@@ -1,5 +1,5 @@
 @extends('layouts.app')
-
+@section('title', 'NutriFit-Home')
 @section('content')
 <body class="bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 min-h-screen flex flex-col">
     @include('layouts.header')

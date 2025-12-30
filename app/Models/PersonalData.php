@@ -16,6 +16,7 @@ class PersonalData extends Model
         'address',
         'birth_date',
         'gender',
+        'profile_photo',
     ];
 
     protected $casts = [

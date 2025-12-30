@@ -15,8 +15,12 @@
                     <p class="text-amber-800 dark:text-amber-400 mb-3">
                         Tu nutricionista aún no ha completado tus datos personales. Estos datos se completarán durante tu primera consulta.
                     </p>
-                    <p class="text-sm text-amber-700 dark:text-amber-500">
+                    <p class="text-sm text-amber-700 dark:text-amber-500 mb-2">
                         Una vez completados, podrás actualizar algunos campos desde aquí.
+                    </p>
+                    <p class="text-sm text-amber-700 dark:text-amber-500 flex items-center gap-2">
+                        <span class="material-symbols-outlined text-lg">photo_camera</span>
+                        <span>También podrás agregar tu foto de perfil una vez que tus datos personales estén registrados.</span>
                     </p>
                 </div>
             </div>
@@ -29,9 +33,29 @@
             <!-- Card de Avatar -->
             <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
                 <div class="text-center">
-                    <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg mx-auto mb-4">
-                        {{ strtoupper(substr($name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $name)[1] ?? '', 0, 1)) }}
-                    </div>
+                    <!-- Foto de Perfil o Iniciales -->
+                    @if($profile_photo)
+                        <!-- Vista previa temporal de nueva foto -->
+                        <div class="relative inline-block mb-4">
+                            <img src="{{ $profile_photo->temporaryUrl() }}" alt="Vista previa" class="w-24 h-24 rounded-full object-cover shadow-lg mx-auto">
+                            <button wire:click="$set('profile_photo', null)" type="button" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition">
+                                <span class="material-symbols-outlined text-sm">close</span>
+                            </button>
+                        </div>
+                    @elseif($profile_photo_path)
+                        <!-- Foto guardada -->
+                        <div class="relative inline-block mb-4" x-data @click.stop="$dispatch('open-modal', 'photo-modal')">
+                            <img src="{{ asset('storage/' . $profile_photo_path) }}" 
+                                 alt="{{ $name }}" 
+                                 class="w-24 h-24 rounded-full object-cover shadow-lg mx-auto cursor-pointer hover:opacity-90 transition">
+                        </div>
+                    @else
+                        <!-- Iniciales por defecto -->
+                        <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg mx-auto mb-4">
+                            {{ strtoupper(substr($name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $name)[1] ?? '', 0, 1)) }}
+                        </div>
+                    @endif
+                    
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ $name }}</h2>
                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $email }}</p>
                     <span class="inline-block mt-3 px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 text-xs font-semibold rounded-full">
@@ -78,6 +102,34 @@
 
                 <form wire:submit.prevent="saveProfile">
                     <div class="space-y-6">
+                        <!-- Foto de Perfil -->
+                        @if($hasPersonalData)
+                            <div>
+                                <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                                    📷 Foto de Perfil
+                                </label>
+                                <div class="flex items-center gap-4">
+                                    <input 
+                                        type="file" 
+                                        id="profile_photo"
+                                        wire:model="profile_photo"
+                                        accept="image/*"
+                                        class="block w-full text-sm text-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-white dark:bg-gray-800 focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 dark:file:bg-green-900/30 dark:file:text-green-400"
+                                    >
+                                </div>
+                                @error('profile_photo')
+                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                @enderror
+                                <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                                    Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 2MB.
+                                </p>
+                                <div wire:loading wire:target="profile_photo" class="mt-2 text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                                    <span class="material-symbols-outlined animate-spin text-sm">progress_activity</span>
+                                    Cargando imagen...
+                                </div>
+                            </div>
+                        @endif
+
                         <!-- Nombre (Editable) -->
                         <div>
                             <label for="name" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
@@ -302,4 +354,59 @@
             </div>
         </div>
     </div>
+
+    <!-- Modal para ver foto en grande -->
+    @if($profile_photo_path)
+        <div x-data="{ open: false }" 
+             @open-modal.window="if ($event.detail === 'photo-modal') open = true"
+             @close-modal.window="open = false"
+             @keydown.escape.window="open = false"
+             x-show="open"
+             x-cloak
+             class="fixed inset-0 z-50 overflow-y-auto"
+             style="display: none;"
+             @click.self="open = false">
+            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
+                <div x-show="open"
+                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0"
+                     x-transition:enter-end="opacity-100"
+                     x-transition:leave="ease-in duration-200"
+                     x-transition:leave-start="opacity-100"
+                     x-transition:leave-end="opacity-0"
+                     @click="open = false"
+                     class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75"></div>
+
+                <div x-show="open"
+                     @click.stop                 @click.stop                     x-transition:enter="ease-out duration-300"
+                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave="ease-in duration-200"
+                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                     class="inline-block align-bottom bg-white dark:bg-gray-900 rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
+                    
+                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white">📷 Foto de Perfil</h3>
+                        <button @click="open = false" class="text-white hover:text-gray-200 transition">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+
+                    <div class="p-6">
+                        <img src="{{ asset('storage/' . $profile_photo_path) }}" 
+                             alt="{{ $name }}" 
+                             class="w-full h-auto max-h-[70vh] object-contain rounded-lg">
+                    </div>
+
+                    <div class="bg-gray-50 dark:bg-gray-800 px-6 py-4 flex justify-end">
+                        <button @click="open = false" 
+                                class="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endif
 </div>

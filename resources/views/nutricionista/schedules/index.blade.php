@@ -59,6 +59,29 @@
                         </div>
                     </div>
 
+                    <!-- Acciones rápidas -->
+                    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-b border-gray-200 dark:border-gray-600">
+                        <div class="flex flex-wrap items-center gap-4">
+                            <span class="text-sm text-gray-600 dark:text-gray-400">Acciones rápidas:</span>
+                            @foreach($daysOfWeek as $dayNumber => $dayName)
+                                <button 
+                                    type="button" 
+                                    onclick="toggleDay({{ $dayNumber }})"
+                                    class="text-sm px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:border-green-500 dark:hover:border-green-500 hover:text-green-600 dark:hover:text-green-400 transition-colors"
+                                >
+                                    Marcar {{ $dayName }}
+                                </button>
+                            @endforeach
+                            <button 
+                                type="button" 
+                                onclick="document.getElementById('clearAllModal').classList.remove('hidden'); document.getElementById('clearAllModal').style.display='block';"
+                                class="text-sm px-3 py-1 rounded-lg border border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors ml-auto"
+                            >
+                                Limpiar todo
+                            </button>
+                        </div>
+                    </div>
+
                     <!-- Tabla de horarios -->
                     <div class="overflow-x-auto">
                         <table class="w-full">
@@ -134,29 +157,6 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <!-- Footer con acciones rápidas -->
-                    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 border-t border-gray-200 dark:border-gray-600">
-                        <div class="flex flex-wrap items-center gap-4">
-                            <span class="text-sm text-gray-600 dark:text-gray-400">Acciones rápidas:</span>
-                            @foreach($daysOfWeek as $dayNumber => $dayName)
-                                <button 
-                                    type="button" 
-                                    onclick="toggleDay({{ $dayNumber }})"
-                                    class="text-sm px-3 py-1 rounded-lg border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 hover:bg-green-50 dark:hover:bg-green-900/20 hover:border-green-500 dark:hover:border-green-500 hover:text-green-600 dark:hover:text-green-400 transition-colors"
-                                >
-                                    Marcar {{ $dayName }}
-                                </button>
-                            @endforeach
-                            <button 
-                                type="button" 
-                                onclick="clearAll()"
-                                class="text-sm px-3 py-1 rounded-lg border border-red-300 dark:border-red-600 text-red-600 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors ml-auto"
-                            >
-                                Limpiar todo
-                            </button>
-                        </div>
-                    </div>
                 </div>
             </form>
 
@@ -177,6 +177,67 @@
             </div>
         </div>
     </main>
+
+    <!-- Modal de confirmación para limpiar todo -->
+    <div id="clearAllModal" class="hidden fixed inset-0 z-[9999] overflow-y-auto" style="display: none;">
+        <div class="flex items-center justify-center min-h-screen px-4">
+            <!-- Overlay semitransparente -->
+            <div class="fixed inset-0 bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75 transition-opacity" 
+                 onclick="document.getElementById('clearAllModal').classList.add('hidden'); document.getElementById('clearAllModal').style.display='none';"></div>
+            
+            <!-- Modal -->
+            <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-lg w-full z-10">
+                <!-- Header -->
+                <div class="bg-gradient-to-r from-red-600 to-rose-600 px-6 py-4">
+                    <div class="flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined">warning</span>
+                            Confirmar acción
+                        </h3>
+                        <button onclick="document.getElementById('clearAllModal').classList.add('hidden'); document.getElementById('clearAllModal').style.display='none';" class="text-white hover:text-gray-200 transition">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Contenido -->
+                <div class="px-6 py-4">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-full flex items-center justify-center">
+                                <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-2xl">delete_sweep</span>
+                            </div>
+                        </div>
+                        <div>
+                            <h4 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                                ¿Limpiar todos los horarios?
+                            </h4>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                Esta acción desmarcará todos los horarios seleccionados. Tendrás que seleccionarlos nuevamente o guardar el formulario vacío.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Footer -->
+                <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end gap-3">
+                    <button 
+                        onclick="document.getElementById('clearAllModal').classList.add('hidden'); document.getElementById('clearAllModal').style.display='none';" 
+                        class="px-4 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition font-medium"
+                    >
+                        Cancelar
+                    </button>
+                    <button 
+                        onclick="clearAll()" 
+                        class="px-4 py-2 bg-red-600 text-white rounded-lg hover:bg-red-700 transition font-medium flex items-center gap-2"
+                    >
+                        <span class="material-symbols-outlined text-sm">delete_sweep</span>
+                        Limpiar todo
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     @include('layouts.footer')
 
@@ -202,11 +263,11 @@
 
         // Función para limpiar todos los checkboxes
         function clearAll() {
-            if (confirm('¿Estás seguro de que deseas limpiar todos los horarios?')) {
-                document.querySelectorAll('input[type="checkbox"][name="time_slots[]"]').forEach(checkbox => {
-                    checkbox.checked = false;
-                });
-            }
+            document.querySelectorAll('input[type="checkbox"][name="time_slots[]"]').forEach(checkbox => {
+                checkbox.checked = false;
+            });
+            document.getElementById('clearAllModal').classList.add('hidden');
+            document.getElementById('clearAllModal').style.display='none';
         }
     </script>
 </body>

@@ -3,12 +3,16 @@
 namespace App\Livewire\Settings;
 
 use Livewire\Component;
+use Livewire\WithFileUploads;
 use App\Models\PersonalData;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
 
 class UserProfile extends Component
 {
+    use WithFileUploads;
+
     public $name;
     public $email;
     public $phone = '';
@@ -16,6 +20,8 @@ class UserProfile extends Component
     public $birth_date = '';
     public $gender = '';
     public $age = null;
+    public $profile_photo;
+    public $profile_photo_path = '';
 
     public $current_password = '';
     public $password = '';
@@ -31,6 +37,7 @@ class UserProfile extends Component
             'phone' => 'nullable|string|max:10',
             'address' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date|before:today',
+            'profile_photo' => 'nullable|image|max:2048',
         ];
 
         // Solo validar contraseña actual si el usuario tiene password establecido
@@ -81,6 +88,7 @@ class UserProfile extends Component
                 $user->personalData->birth_date->format('Y-m-d') : '';
             $this->gender = $user->personalData->gender ?? '';
             $this->age = $user->personalData->age;
+            $this->profile_photo_path = $user->personalData->profile_photo ?? '';
         }
     }
 
@@ -91,6 +99,7 @@ class UserProfile extends Component
             'phone' => 'nullable|string|max:10',
             'address' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date|before:today',
+            'profile_photo' => 'nullable|image|max:2048',
         ]);
 
         try {
@@ -99,6 +108,18 @@ class UserProfile extends Component
             // Actualizar nombre del usuario
             $user->update(['name' => $this->name]);
 
+            // Manejar la subida de foto de perfil
+            $photoPath = $this->profile_photo_path;
+            if ($this->profile_photo) {
+                // Eliminar foto anterior si existe
+                if ($user->personalData && $user->personalData->profile_photo) {
+                    Storage::disk('public')->delete($user->personalData->profile_photo);
+                }
+                
+                // Guardar nueva foto
+                $photoPath = $this->profile_photo->store('profile-photos', 'public');
+            }
+
             // Actualizar datos personales si existen
             if ($this->hasPersonalData) {
                 $user->personalData->update([
@@ -106,8 +127,15 @@ class UserProfile extends Component
                     'address' => $this->address,
                     'birth_date' => $this->birth_date,
                     'gender' => $this->gender, // Preservar el género asignado por el nutricionista
+                    'profile_photo' => $photoPath,
                 ]);
+                
+                // Actualizar la ruta en el componente
+                $this->profile_photo_path = $photoPath;
             }
+
+            // Limpiar el archivo temporal
+            $this->profile_photo = null;
 
             session()->flash('success', 'Tu perfil ha sido actualizado correctamente.');
         } catch (\Exception $e) {
