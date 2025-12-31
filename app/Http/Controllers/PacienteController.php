@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Models\Appointment;
 use App\Models\AppointmentState;
 use App\Models\NutricionistaSchedule;
+use App\Notifications\AppointmentCancelledByPatient;
 use App\Notifications\AppointmentCreatedNotification;
 use App\Notifications\AppointmentConfirmedForPatient;
 use Carbon\Carbon;
@@ -244,6 +245,16 @@ class PacienteController extends Controller
         $appointment->update([
             'appointment_state_id' => $cancelledState->id
         ]);
+
+        // Obtener nutricionista y paciente
+        $nutricionista = $appointment->nutricionista;
+        $paciente = $appointment->paciente;
+
+        // Notificar al paciente que canceló (en cola, inmediato)
+        $paciente->notify(new AppointmentCancelledByPatient($appointment, 'paciente'));
+        
+        // Notificar al nutricionista con 20 segundos de retraso (solo para desarrollo/Mailtrap)
+        $nutricionista->notify((new AppointmentCancelledByPatient($appointment, 'nutricionista'))->delay(now()->addSeconds(20)));
 
         return back()->with('success', 'Cita cancelada exitosamente.');
     }

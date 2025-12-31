@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Notifications\AppointmentCancelledByNutricionista;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Appointment;
@@ -89,6 +90,16 @@ class NutricionistaController extends Controller
         $appointment->update([
             'appointment_state_id' => $canceledState->id,
         ]);
+
+        // Obtener nutricionista y paciente
+        $nutricionista = $appointment->nutricionista;
+        $paciente = $appointment->paciente;
+
+        // Notificar al nutricionista que canceló (en cola, inmediato)
+        $nutricionista->notify(new AppointmentCancelledByNutricionista($appointment, 'nutricionista'));
+        
+        // Notificar al paciente con 20 segundos de retraso (solo para desarrollo/Mailtrap)
+        $paciente->notify((new AppointmentCancelledByNutricionista($appointment, 'paciente'))->delay(now()->addSeconds(20)));
 
         return redirect()
             ->route('nutricionista.appointments.show', $appointment)
