@@ -168,15 +168,54 @@
                                     <span class="material-symbols-outlined">visibility</span>
                                     Ver Detalles
                                 </a>
-                                <form method="POST" action="{{ route('paciente.appointments.cancel', $nextAppointment) }}"
-                                    class="flex-1" onsubmit="return confirm('¿Estás seguro de cancelar esta cita?')">
-                                    @csrf
-                                    <button type="submit"
+                                <div x-data="{ showModal: false }" class="flex-1">
+                                    <button type="button" @click="showModal = true"
                                         class="w-full rounded-lg bg-red-600 px-4 py-3 text-center font-semibold text-white transition hover:bg-red-700 flex items-center justify-center gap-2">
                                         <span class="material-symbols-outlined">cancel</span>
                                         Cancelar Cita
                                     </button>
-                                </form>
+
+                                    <!-- Modal de Confirmación -->
+                                    <div x-show="showModal" x-cloak
+                                        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
+                                        @click.self="showModal = false">
+                                        <div @click.away="showModal = false"
+                                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all"
+                                            x-transition:enter="transition ease-out duration-300"
+                                            x-transition:enter-start="opacity-0 scale-90"
+                                            x-transition:enter-end="opacity-100 scale-100"
+                                            x-transition:leave="transition ease-in duration-200"
+                                            x-transition:leave-start="opacity-100 scale-100"
+                                            x-transition:leave-end="opacity-0 scale-90">
+                                            
+                                            <div class="text-center mb-6">
+                                                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                                                    <span class="material-symbols-outlined text-4xl text-red-600 dark:text-red-400">warning</span>
+                                                </div>
+                                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                                    ¿Cancelar esta cita?
+                                                </h3>
+                                                <p class="text-gray-600 dark:text-gray-400">
+                                                    Esta acción no se puede deshacer. El nutricionista será notificado de la cancelación.
+                                                </p>
+                                            </div>
+
+                                            <div class="flex gap-3">
+                                                <button type="button" @click="showModal = false"
+                                                    class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                                    No, mantener
+                                                </button>
+                                                <form method="POST" action="{{ route('paciente.appointments.cancel', $nextAppointment) }}" class="flex-1">
+                                                    @csrf
+                                                    <button type="submit"
+                                                        class="w-full px-4 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
+                                                        Sí, cancelar
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     @else

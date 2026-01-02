@@ -101,8 +101,7 @@
                                     </a>
                                     @endif
 
-                                    {{-- Configuración (no para pacientes) --}}
-                                    @if(!auth()->user()->isPaciente())
+                                    @if(auth()->user()->isAdmin())
                                     <a href="{{ route('profile.edit') }}" 
                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
                                         <span class="material-symbols-outlined text-lg">settings</span>
