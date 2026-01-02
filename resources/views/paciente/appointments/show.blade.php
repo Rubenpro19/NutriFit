@@ -10,7 +10,7 @@
         <div class="max-w-6xl mx-auto">
         <!-- Breadcrumb -->
         <nav class="mb-6 flex items-center gap-2 text-sm">
-            <a href="{{ route('paciente.dashboard') }}" class="text-green-600 dark:text-green-400 hover:underline">Dashboard</a>
+            <a href="{{ route('paciente.dashboard') }}" class="text-green-600 dark:text-green-400 hover:underline">Inicio</a>
             <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
             <a href="{{ route('paciente.appointments.index') }}" class="text-green-600 dark:text-green-400 hover:underline">Mis Citas</a>
             <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>

@@ -45,7 +45,7 @@
             <div class="container mx-auto px-4">
                 <div class="grid gap-8 lg:grid-cols-2">
                     <!-- MISIÓN -->
-                    <div class="rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 p-8 shadow-lg border border-green-200 dark:border-green-700">
+                    <div class="rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 p-8 shadow-lg border border-green-200 dark:border-green-700 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                         <div class="mb-4 flex items-center gap-3">
                             <span class="material-symbols-outlined text-4xl text-green-700 dark:text-green-400">flag</span>
                             <h3 class="text-2xl font-bold text-green-900 dark:text-green-400">Nuestra Misión</h3>
@@ -58,7 +58,7 @@
                     </div>
 
                     <!-- VISIÓN -->
-                    <div class="rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-8 shadow-lg border border-blue-200 dark:border-blue-700">
+                    <div class="rounded-2xl bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/30 dark:to-blue-800/30 p-8 shadow-lg border border-blue-200 dark:border-blue-700 transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                         <div class="mb-4 flex items-center gap-3">
                             <span class="material-symbols-outlined text-4xl text-blue-700 dark:text-blue-400">visibility</span>
                             <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-400">Nuestra Visión</h3>
@@ -83,7 +83,7 @@
 
             <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
                 <!-- Valor 1 -->
-                <div class="group rounded-xl bg-white dark:bg-gray-800 p-6 shadow-md transition hover:shadow-xl">
+                <div class="group rounded-xl bg-white dark:bg-gray-800 p-6 shadow-md transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                     <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/30 group-hover:bg-green-200 dark:group-hover:bg-green-800/40">
                         <span class="material-symbols-outlined text-3xl text-green-700 dark:text-green-400">health_and_safety</span>
                     </div>
@@ -94,7 +94,7 @@
                 </div>
 
                 <!-- Valor 2 -->
-                <div class="group rounded-xl bg-white dark:bg-gray-800 p-6 shadow-md transition hover:shadow-xl">
+                <div class="group rounded-xl bg-white dark:bg-gray-800 p-6 shadow-md transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                     <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30 group-hover:bg-blue-200 dark:group-hover:bg-blue-800/40">
                         <span class="material-symbols-outlined text-3xl text-blue-700 dark:text-blue-400">verified</span>
                     </div>
@@ -105,7 +105,7 @@
                 </div>
 
                 <!-- Valor 3 -->
-                <div class="group rounded-xl bg-white dark:bg-gray-800 p-6 shadow-md transition hover:shadow-xl">
+                <div class="group rounded-xl bg-white dark:bg-gray-800 p-6 shadow-md transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                     <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30 group-hover:bg-purple-200 dark:group-hover:bg-purple-800/40">
                         <span class="material-symbols-outlined text-3xl text-purple-700 dark:text-purple-400">lightbulb</span>
                     </div>
@@ -116,7 +116,7 @@
                 </div>
 
                 <!-- Valor 4 -->
-                <div class="group rounded-xl bg-white dark:bg-gray-800 p-6 shadow-md transition hover:shadow-xl">
+                <div class="group rounded-xl bg-white dark:bg-gray-800 p-6 shadow-md transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                     <div class="mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-orange-100 dark:bg-orange-900/30 group-hover:bg-orange-200 dark:group-hover:bg-orange-800/40">
                         <span class="material-symbols-outlined text-3xl text-orange-700 dark:text-orange-400">handshake</span>
                     </div>

@@ -138,7 +138,7 @@
                 <!-- INFORMACIÓN DE CONTACTO -->
                 <div class="space-y-8">
                     <!-- Información de contacto -->
-                    <div class="rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-xl">
+                    <div class="rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                         <h2 class="mb-6 text-2xl font-bold text-green-900 dark:text-green-400">Información de Contacto</h2>
                         
                         <div class="space-y-6">
@@ -199,7 +199,7 @@
                     </div>
 
                     <!-- Horarios de atención -->
-                    <div class="rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 dark:border dark:border-green-700 p-8 shadow-xl">
+                    <div class="rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 dark:border dark:border-green-700 p-8 shadow-xl transition-all duration-300 transform hover:scale-105 hover:-translate-y-2">
                         <div class="mb-4 flex items-center gap-3">
                             <span class="material-symbols-outlined text-3xl text-green-700 dark:text-green-400">schedule</span>
                             <h2 class="text-2xl font-bold text-green-900 dark:text-green-400">Horarios de Atención</h2>
@@ -260,7 +260,7 @@
                 </div>
 
                 <div class="mx-auto max-w-3xl space-y-4">
-                    <details class="group rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm transition hover:shadow-md">
+                    <details class="group rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm transition-all duration-300">
                         <summary class="flex cursor-pointer items-center justify-between font-semibold text-gray-900 dark:text-gray-100">
                             <span>¿Cómo puedo agendar una cita?</span>
                             <span class="material-symbols-outlined transition group-open:rotate-180 text-gray-700 dark:text-gray-300">expand_more</span>
@@ -271,7 +271,7 @@
                         </p>
                     </details>
 
-                    <details class="group rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm transition hover:shadow-md">
+                    <details class="group rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm transition-all duration-300">
                         <summary class="flex cursor-pointer items-center justify-between font-semibold text-gray-900 dark:text-gray-100">
                             <span>¿Las consultas son presenciales o virtuales?</span>
                             <span class="material-symbols-outlined transition group-open:rotate-180 text-gray-700 dark:text-gray-300">expand_more</span>
@@ -282,7 +282,7 @@
                         </p>
                     </details>
 
-                    <details class="group rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm transition hover:shadow-md">
+                    <details class="group rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm transition-all duration-300">
                         <summary class="flex cursor-pointer items-center justify-between font-semibold text-gray-900 dark:text-gray-100">
                             <span>¿Cuál es el costo de las consultas?</span>
                             <span class="material-symbols-outlined transition group-open:rotate-180 text-gray-700 dark:text-gray-300">expand_more</span>
@@ -293,7 +293,7 @@
                         </p>
                     </details>
 
-                    <details class="group rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm transition hover:shadow-md">
+                    <details class="group rounded-lg border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 p-6 shadow-sm transition-all duration-300">
                         <summary class="flex cursor-pointer items-center justify-between font-semibold text-gray-900 dark:text-gray-100">
                             <span>¿Puedo cancelar o reprogramar mi cita?</span>
                             <span class="material-symbols-outlined transition group-open:rotate-180 text-gray-700 dark:text-gray-300">expand_more</span>
@@ -309,6 +309,45 @@
     </section>
 
     @include('layouts.footer')
+
+    <style>
+        /* Animación para las preguntas frecuentes */
+        details summary {
+            list-style: none;
+        }
+        
+        details summary::-webkit-details-marker {
+            display: none;
+        }
+        
+        details > summary {
+            cursor: pointer;
+        }
+        
+        details p {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+        
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        /* Animación suave para la rotación del icono */
+        details summary .material-symbols-outlined {
+            transition: transform 0.3s ease-in-out;
+        }
+        
+        details[open] summary .material-symbols-outlined {
+            transform: rotate(180deg);
+        }
+    </style>
 
 </body>
 @endsection

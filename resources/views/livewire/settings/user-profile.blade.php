@@ -44,10 +44,55 @@
                         </div>
                     @elseif($profile_photo_path)
                         <!-- Foto guardada -->
-                        <div class="relative inline-block mb-4" x-data @click.stop="$dispatch('open-modal', 'photo-modal')">
+                        <div class="relative inline-block mb-4" x-data="{ showModal: false }">
                             <img src="{{ asset('storage/' . $profile_photo_path) }}" 
                                  alt="{{ $name }}" 
+                                 @click="showModal = true"
                                  class="w-24 h-24 rounded-full object-cover shadow-lg mx-auto cursor-pointer hover:opacity-90 transition">
+                            
+                            <!-- Modal inline -->
+                            <div x-show="showModal"
+                                 x-cloak
+                                 @keydown.escape.window="showModal = false"
+                                 class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                                 style="display: none;">
+                                
+                                <!-- Overlay -->
+                                <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showModal = false"></div>
+                                
+                                <!-- Modal Content -->
+                                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                                     @click.stop>
+                                    
+                                    <!-- Header -->
+                                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                                        <h3 class="text-lg font-bold text-white">📷 Foto de Perfil</h3>
+                                        <button @click="showModal = false" class="text-white hover:text-gray-200 transition">
+                                            <span class="material-symbols-outlined">close</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Image -->
+                                    <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                                        <img src="{{ asset('storage/' . $profile_photo_path) }}" 
+                                             alt="{{ $name }}" 
+                                             class="w-full h-auto rounded-lg">
+                                    </div>
+                                    
+                                    <!-- Footer -->
+                                    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-between items-center">
+                                        <button @click="showModal = false; $nextTick(() => document.getElementById('profile_photo').click())" 
+                                                class="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-sm">photo_camera</span>
+                                            Cambiar Foto
+                                        </button>
+                                        <button @click="showModal = false" 
+                                                class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                            Cerrar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     @else
                         <!-- Iniciales por defecto -->
@@ -114,7 +159,7 @@
                                         id="profile_photo"
                                         wire:model="profile_photo"
                                         accept="image/*"
-                                        class="block w-full text-sm text-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-white dark:bg-gray-800 focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 dark:file:bg-green-900/30 dark:file:text-green-400"
+                                        class="block w-full text-sm text-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-white dark:bg-gray-800 focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 dark:file:bg-green-900/30 dark:file:text-green-400 dark:hover:file:bg-green-800/50 file:transition-colors"
                                     >
                                 </div>
                                 @error('profile_photo')
@@ -355,58 +400,5 @@
         </div>
     </div>
 
-    <!-- Modal para ver foto en grande -->
-    @if($profile_photo_path)
-        <div x-data="{ open: false }" 
-             @open-modal.window="if ($event.detail === 'photo-modal') open = true"
-             @close-modal.window="open = false"
-             @keydown.escape.window="open = false"
-             x-show="open"
-             x-cloak
-             class="fixed inset-0 z-50 overflow-y-auto"
-             style="display: none;"
-             @click.self="open = false">
-            <div class="flex items-center justify-center min-h-screen px-4 pt-4 pb-20 text-center sm:block sm:p-0">
-                <div x-show="open"
-                     x-transition:enter="ease-out duration-300"
-                     x-transition:enter-start="opacity-0"
-                     x-transition:enter-end="opacity-100"
-                     x-transition:leave="ease-in duration-200"
-                     x-transition:leave-start="opacity-100"
-                     x-transition:leave-end="opacity-0"
-                     @click="open = false"
-                     class="fixed inset-0 transition-opacity bg-gray-500 bg-opacity-75 dark:bg-gray-900 dark:bg-opacity-75"></div>
 
-                <div x-show="open"
-                     @click.stop                 @click.stop                     x-transition:enter="ease-out duration-300"
-                     x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                     x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
-                     x-transition:leave="ease-in duration-200"
-                     x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
-                     x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
-                     class="inline-block align-bottom bg-white dark:bg-gray-900 rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-2xl sm:w-full">
-                    
-                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
-                        <h3 class="text-lg font-bold text-white">📷 Foto de Perfil</h3>
-                        <button @click="open = false" class="text-white hover:text-gray-200 transition">
-                            <span class="material-symbols-outlined">close</span>
-                        </button>
-                    </div>
-
-                    <div class="p-6">
-                        <img src="{{ asset('storage/' . $profile_photo_path) }}" 
-                             alt="{{ $name }}" 
-                             class="w-full h-auto max-h-[70vh] object-contain rounded-lg">
-                    </div>
-
-                    <div class="bg-gray-50 dark:bg-gray-800 px-6 py-4 flex justify-end">
-                        <button @click="open = false" 
-                                class="px-6 py-2 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition">
-                            Cerrar
-                        </button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
 </div>

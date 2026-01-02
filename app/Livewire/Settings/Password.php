@@ -16,6 +16,19 @@ class Password extends Component
     public string $password_confirmation = '';
 
     /**
+     * Get the validation messages.
+     */
+    protected function messages(): array
+    {
+        return [
+            'current_password.required' => 'La contraseña actual es obligatoria.',
+            'current_password.current_password' => 'La contraseña actual es incorrecta.',
+            'password.required' => 'La nueva contraseña es obligatoria.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+        ];
+    }
+
+    /**
      * Update the password for the currently authenticated user.
      */
     public function updatePassword(): void

@@ -8,7 +8,7 @@
         <div class="max-w-6xl mx-auto">
     <!-- Breadcrumb -->
         <nav class="mb-6 text-sm text-gray-600 dark:text-gray-400">
-            <a href="{{ route('nutricionista.dashboard') }}" class="hover:text-green-600 dark:hover:text-green-400">Dashboard</a>
+            <a href="{{ route('nutricionista.dashboard') }}" class="hover:text-green-600 dark:hover:text-green-400">Inicio</a>
             <span class="mx-2">/</span>
             <a href="{{ route('nutricionista.patients.index') }}" class="hover:text-green-600 dark:hover:text-green-400">Mis Pacientes</a>
             <span class="mx-2">/</span>
