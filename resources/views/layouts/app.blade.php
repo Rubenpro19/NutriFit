@@ -26,10 +26,8 @@
     <!-- Google Material Symbols -->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
     
-    <!-- Alpine.js - Solo si Livewire no está presente -->
-    @if(!class_exists('Livewire\Livewire') || !request()->is('*/profile*', '*/settings*', 'paciente/*', 'nutricionista/*', 'admin/*'))
+    <!-- Alpine.js -->
         <script defer src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js"></script>
-    @endif
     
     <style>
         [x-cloak] { display: none !important; }
