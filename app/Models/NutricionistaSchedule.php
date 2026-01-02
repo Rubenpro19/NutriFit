@@ -79,7 +79,7 @@ class NutricionistaSchedule extends Model
     /**
      * Verificar si un horario específico está disponible
      */
-    public function isTimeSlotAvailable(string $date, string $time): bool
+    public function isTimeSlotAvailable(string $date, string $time, ?int $excludeAppointmentId = null): bool
     {
         // Verificar que el día de la semana coincida
         $requestedDayOfWeek = \Carbon\Carbon::parse($date)->dayOfWeek;
@@ -107,12 +107,18 @@ class NutricionistaSchedule extends Model
 
         // Verificar que no exista una cita ACTIVA (pendiente) en ese horario
         // Las citas canceladas, completadas o vencidas no bloquean el horario
-        $existingAppointment = Appointment::where('nutricionista_id', $this->nutricionista_id)
+        $query = Appointment::where('nutricionista_id', $this->nutricionista_id)
             ->where('start_time', $requestedDateTime)
             ->whereHas('appointmentState', function($query) {
                 $query->where('name', 'pendiente');
-            })
-            ->exists();
+            });
+        
+        // Excluir una cita específica si se proporciona (útil para reagendar)
+        if ($excludeAppointmentId !== null) {
+            $query->where('id', '!=', $excludeAppointmentId);
+        }
+
+        $existingAppointment = $query->exists();
 
         return !$existingAppointment;
     }

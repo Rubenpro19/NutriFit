@@ -227,7 +227,7 @@ class PacienteController extends Controller
         $paciente->notify((new AppointmentConfirmedForPatient($appointment))->delay(now()->addSeconds(20)));
 
         return redirect()->route('paciente.dashboard')
-            ->with('success', '¡Cita agendada exitosamente! El nutricionista la confirmará pronto.');
+            ->with('success', '¡Cita agendada exitosamente!');
     }
 
     /**

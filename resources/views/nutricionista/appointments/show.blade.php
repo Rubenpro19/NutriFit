@@ -256,6 +256,13 @@
                             Iniciar Atención
                         </a>
 
+                        <!-- Botón de Reagendar -->
+                        <a href="{{ route('nutricionista.appointments.reschedule', $appointment) }}" 
+                           class="w-full mb-3 flex items-center justify-center gap-2 bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400 font-semibold py-3 px-4 rounded-xl hover:bg-amber-200 dark:hover:bg-amber-900/50 transition border-2 border-amber-300 dark:border-amber-700">
+                            <span class="material-symbols-outlined">event_repeat</span>
+                            Reagendar Cita
+                        </a>
+
                         <!-- Botón de Cancelar -->
                         <form method="POST" action="{{ route('nutricionista.appointments.cancel', $appointment) }}" onsubmit="return confirm('¿Estás seguro de cancelar esta cita?')">
                             @csrf

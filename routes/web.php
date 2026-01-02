@@ -97,6 +97,8 @@ Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->name
     // Gestión de citas
     Route::get('/appointments/{appointment}', [NutricionistaController::class, 'showAppointment'])->name('appointments.show');
     Route::post('/appointments/{appointment}/cancel', [NutricionistaController::class, 'cancelAppointment'])->name('appointments.cancel');
+    Route::get('/appointments/{appointment}/reschedule', [NutricionistaController::class, 'rescheduleForm'])->name('appointments.reschedule');
+    Route::post('/appointments/{appointment}/reschedule', [NutricionistaController::class, 'rescheduleAppointment'])->name('appointments.reschedule.store');
     
     // Gestión de atenciones
     Route::get('/citas/{appointment}/atender', [AttentionController::class, 'create'])->name('attentions.create');

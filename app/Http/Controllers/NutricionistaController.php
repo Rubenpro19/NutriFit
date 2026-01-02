@@ -107,6 +107,170 @@ class NutricionistaController extends Controller
     }
 
     /**
+     * Mostrar formulario de reagendamiento
+     */
+    public function rescheduleForm(Appointment $appointment)
+    {
+        // Verificar que la cita pertenece al nutricionista autenticado
+        if ($appointment->nutricionista_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para reagendar esta cita.');
+        }
+
+        // Verificar que la cita esté en estado pendiente
+        if ($appointment->appointmentState->name !== 'pendiente') {
+            return redirect()
+                ->route('nutricionista.appointments.show', $appointment)
+                ->with('error', 'Solo se pueden reagendar citas en estado pendiente.');
+        }
+
+        $nutricionista = auth()->user();
+
+        // Obtener horarios del nutricionista
+        $schedules = NutricionistaSchedule::where('nutricionista_id', $nutricionista->id)
+            ->where('is_active', true)
+            ->orderBy('day_of_week')
+            ->get()
+            ->groupBy('day_of_week');
+
+        // Generar 4 semanas desde el inicio de la semana actual (lunes)
+        $weeks = [];
+        $startDate = now()->startOfWeek(); // Empieza el lunes
+        
+        for ($weekIndex = 0; $weekIndex < 4; $weekIndex++) {
+            $weekDays = [];
+            
+            for ($dayIndex = 0; $dayIndex < 7; $dayIndex++) {
+                $date = $startDate->copy()->addDays(($weekIndex * 7) + $dayIndex);
+                $dayOfWeek = $date->dayOfWeek;
+                
+                // Saltar días pasados completamente
+                if ($date->isPast() && !$date->isToday()) {
+                    continue;
+                }
+                
+                $dayData = [
+                    'date' => $date,
+                    'date_formatted' => $date->locale('es')->isoFormat('dddd, D [de] MMMM'),
+                    'day_name' => $date->locale('es')->isoFormat('dddd'),
+                    'day_number' => $date->format('d'),
+                    'is_today' => $date->isToday(),
+                    'slots' => []
+                ];
+                
+                // Si existe horario configurado para este día
+                if (isset($schedules[$dayOfWeek])) {
+                    foreach ($schedules[$dayOfWeek] as $schedule) {
+                        $timeSlots = $schedule->generateTimeSlots();
+                        
+                        foreach ($timeSlots as $slot) {
+                            $slotDateTime = \Carbon\Carbon::parse($date->format('Y-m-d') . ' ' . $slot['start']);
+                            
+                            // Solo incluir si es futuro y está disponible (excluyendo la cita actual)
+                            if ($slotDateTime->isFuture() && $schedule->isTimeSlotAvailable($date->format('Y-m-d'), $slot['start'], $appointment->id)) {
+                                $dayData['slots'][] = [
+                                    'time' => $slot['start'],
+                                    'time_formatted' => \Carbon\Carbon::parse($slot['start'])->format('h:i A'),
+                                    'datetime' => $slotDateTime->toIso8601String(),
+                                ];
+                            }
+                        }
+                    }
+                }
+                
+                // Añadir el día solo si tiene slots disponibles
+                if (!empty($dayData['slots'])) {
+                    $weekDays[] = $dayData;
+                }
+            }
+            
+            // Añadir la semana si tiene al menos un día con slots
+            if (!empty($weekDays)) {
+                $weeks[] = [
+                    'week_number' => $weekIndex + 1,
+                    'start_date' => $weekDays[0]['date']->format('Y-m-d'),
+                    'start_date_formatted' => $weekDays[0]['date']->locale('es')->isoFormat('D MMM'),
+                    'days' => $weekDays
+                ];
+            }
+        }
+
+        $appointment->load(['paciente', 'appointmentState']);
+
+        return view('nutricionista.appointments.reschedule', compact('appointment', 'weeks'));
+    }
+
+    /**
+     * Procesar el reagendamiento de la cita
+     */
+    public function rescheduleAppointment(Request $request, Appointment $appointment)
+    {
+        // Verificar que la cita pertenece al nutricionista autenticado
+        if ($appointment->nutricionista_id !== auth()->id()) {
+            abort(403, 'No tienes permiso para reagendar esta cita.');
+        }
+
+        // Verificar que la cita esté en estado pendiente
+        if ($appointment->appointmentState->name !== 'pendiente') {
+            return redirect()
+                ->route('nutricionista.appointments.show', $appointment)
+                ->with('error', 'Solo se pueden reagendar citas en estado pendiente.');
+        }
+
+        $validated = $request->validate([
+            'date' => 'required|date|after_or_equal:today',
+            'time' => 'required',
+            'reschedule_reason' => 'nullable|string|max:500',
+        ]);
+
+        // Crear la nueva fecha/hora de inicio y fin
+        $newStartTime = \Carbon\Carbon::parse($validated['date'] . ' ' . $validated['time']);
+        $newEndTime = $newStartTime->copy()->addMinutes(45);
+
+        // Verificar que el nuevo horario no esté ocupado
+        $nutricionista = auth()->user();
+        $conflictingAppointment = Appointment::where('nutricionista_id', $nutricionista->id)
+            ->where('id', '!=', $appointment->id) // Excluir la cita actual
+            ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
+            ->where(function($query) use ($newStartTime, $newEndTime) {
+                $query->whereBetween('start_time', [$newStartTime, $newEndTime])
+                      ->orWhereBetween('end_time', [$newStartTime, $newEndTime])
+                      ->orWhere(function($q) use ($newStartTime, $newEndTime) {
+                          $q->where('start_time', '<=', $newStartTime)
+                            ->where('end_time', '>=', $newEndTime);
+                      });
+            })
+            ->first();
+
+        if ($conflictingAppointment) {
+            return redirect()
+                ->back()
+                ->with('error', 'El horario seleccionado ya no está disponible. Por favor, selecciona otro.')
+                ->withInput();
+        }
+
+        // Guardar información antigua para la notificación
+        $oldStartTime = $appointment->start_time;
+
+        // Actualizar la cita
+        $appointment->update([
+            'start_time' => $newStartTime,
+            'end_time' => $newEndTime,
+        ]);
+
+        // Notificar al paciente del reagendamiento
+        $paciente = $appointment->paciente;
+        $paciente->notify(new \App\Notifications\AppointmentRescheduledNotification(
+            $appointment,
+            $oldStartTime,
+            $validated['reschedule_reason'] ?? null
+        ));
+
+        return redirect()
+            ->route('nutricionista.appointments.show', $appointment)
+            ->with('success', 'La cita ha sido reagendada exitosamente. El paciente ha sido notificado.');
+    }
+
+    /**
      * Mostrar el gestor de horarios del nutricionista
      */
     public function schedules()
