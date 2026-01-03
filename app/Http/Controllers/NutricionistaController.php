@@ -33,10 +33,11 @@ class NutricionistaController extends Controller
                 ->count(),
         ];
 
-        // Próxima cita (la más cercana desde ahora y pendiente)
+        // Próxima cita (la más cercana que aún no ha terminado)
+        // Una cita se considera "próxima" si su hora de fin aún no ha pasado
         $nextAppointment = Appointment::where('nutricionista_id', $nutricionista->id)
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
-            ->where('start_time', '>=', now())
+            ->where('end_time', '>=', now())
             ->with(['paciente.personalData', 'appointmentState'])
             ->orderBy('start_time', 'asc')
             ->first();
@@ -50,10 +51,12 @@ class NutricionistaController extends Controller
             ->get();
 
         // Todas las citas pendientes de las próximas 4 semanas organizadas por fecha
+        // Incluye citas que ya comenzaron pero aún no han terminado
         $fourWeeksFromNow = now()->addWeeks(4)->endOfDay();
         $upcomingAppointments = Appointment::where('nutricionista_id', $nutricionista->id)
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
-            ->whereBetween('start_time', [now(), $fourWeeksFromNow])
+            ->where('end_time', '>=', now())
+            ->where('start_time', '<=', $fourWeeksFromNow)
             ->with(['paciente.personalData', 'appointmentState'])
             ->orderBy('start_time', 'asc')
             ->get()

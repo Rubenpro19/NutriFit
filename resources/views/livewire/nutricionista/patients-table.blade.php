@@ -176,26 +176,7 @@
                     </div>
 
                     <!-- Botones de Acción -->
-                    <div class="p-6 pt-0 space-y-3">
-                        <!-- Botón de Datos Personales -->
-                        @if(!$patient->personalData)
-                            <a 
-                                href="{{ route('nutricionista.patients.data', $patient) }}"
-                                class="block w-full text-center px-4 py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-lg hover:from-amber-600 hover:to-orange-600 transition-all duration-200 shadow-md hover:shadow-lg flex items-center justify-center gap-2"
-                            >
-                                <span class="material-symbols-outlined text-xl">edit_note</span>
-                                Completar Datos Personales
-                            </a>
-                        @else
-                            <a 
-                                href="{{ route('nutricionista.patients.data', $patient) }}"
-                                class="block w-full text-center px-4 py-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200 flex items-center justify-center gap-2"
-                            >
-                                <span class="material-symbols-outlined text-lg">visibility</span>
-                                Ver Datos Personales
-                            </a>
-                        @endif
-
+                    <div class="p-6 pt-0">
                         <!-- Botón Ver Historial -->
                         <a 
                             href="{{ route('nutricionista.patients.show', $patient) }}"
