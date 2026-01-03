@@ -17,7 +17,7 @@
             <span class="text-gray-700 dark:text-gray-300 font-medium">Detalle del Paciente</span>
         </nav>
 
-        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-8" x-data="{ showPhotoModal: false }">
             <!-- Columna Principal -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Información del Paciente -->
@@ -30,8 +30,17 @@
                             <h2 class="text-2xl font-bold text-white">Detalle del Paciente</h2>
                         </div>
                         <div class="flex items-center space-x-4">
-                            <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-green-600 text-2xl font-bold shadow-lg">
-                                {{ $patient->initials() }}
+                            <div class="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center shadow-lg {{ $patient->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
+                                 @if($patient->personalData?->profile_photo) @click="showPhotoModal = true" @endif>
+                                @if($patient->personalData?->profile_photo)
+                                    <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
+                                         alt="{{ $patient->name }}" 
+                                         class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-white flex items-center justify-center text-green-600 text-2xl font-bold">
+                                        {{ $patient->initials() }}
+                                    </div>
+                                @endif
                             </div>
                             <div class="flex-1">
                                 <h1 class="text-2xl font-bold text-white mb-1">{{ $patient->name }}</h1>
@@ -272,6 +281,50 @@
                         >
                             Ir al Dashboard
                         </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Foto de Perfil -->
+            <div x-show="showPhotoModal && {{ $patient->personalData?->profile_photo ? 'true' : 'false' }}"
+                 x-cloak
+                 @keydown.escape.window="showPhotoModal = false"
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                 style="display: none;">
+                
+                <!-- Overlay -->
+                <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
+                
+                <!-- Modal Content -->
+                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                     @click.stop>
+                    
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined">photo_camera</span>
+                            Foto de Perfil - {{ $patient->name }}
+                        </h3>
+                        <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Image -->
+                    <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                        @if($patient->personalData?->profile_photo)
+                            <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
+                                 alt="{{ $patient->name }}"
+                                 class="w-full h-auto rounded-lg">
+                        @endif
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
+                        <button type="button" @click="showPhotoModal = false" 
+                                class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                            Cerrar
+                        </button>
                     </div>
                 </div>
             </div>

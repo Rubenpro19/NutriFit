@@ -33,7 +33,7 @@
             </div>
         @endif
 
-        <div class="grid lg:grid-cols-5 gap-8">
+        <div class="grid lg:grid-cols-5 gap-8" x-data="{ showPhotoModal: false }">
             <!-- Panel Izquierdo: Info de la Cita Actual -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Cita Actual -->
@@ -44,8 +44,17 @@
                     </h2>
                     
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-16 h-16 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-2xl font-bold">
-                            {{ substr($appointment->paciente->name, 0, 1) }}
+                        <div class="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 {{ $appointment->paciente->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
+                             @if($appointment->paciente->personalData?->profile_photo) @click="showPhotoModal = true" @endif>
+                            @if($appointment->paciente->personalData?->profile_photo)
+                                <img src="{{ asset('storage/' . $appointment->paciente->personalData->profile_photo) }}" 
+                                     alt="{{ $appointment->paciente->name }}" 
+                                     class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-2xl font-bold">
+                                    {{ substr($appointment->paciente->name, 0, 1) }}
+                                </div>
+                            @endif
                         </div>
                         <div class="flex-1">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -215,6 +224,50 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Modal de Foto de Perfil -->
+            <div x-show="showPhotoModal && {{ $appointment->paciente->personalData?->profile_photo ? 'true' : 'false' }}"
+                 x-cloak
+                 @keydown.escape.window="showPhotoModal = false"
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                 style="display: none;">
+                
+                <!-- Overlay -->
+                <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
+                
+                <!-- Modal Content -->
+                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                     @click.stop>
+                    
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-amber-600 to-orange-600 px-6 py-4 flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined">photo_camera</span>
+                            Foto de Perfil - {{ $appointment->paciente->name }}
+                        </h3>
+                        <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Image -->
+                    <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                        @if($appointment->paciente->personalData?->profile_photo)
+                            <img src="{{ asset('storage/' . $appointment->paciente->personalData->profile_photo) }}" 
+                                 alt="{{ $appointment->paciente->name }}"
+                                 class="w-full h-auto rounded-lg">
+                        @endif
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
+                        <button type="button" @click="showPhotoModal = false" 
+                                class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                            Cerrar
+                        </button>
+                    </div>
+                </div>
+            </div>
         </div>
         </div>
     </main>
@@ -304,8 +357,6 @@
         // Inicializar
         updateNavigationButtons();
     </script>
-        </div>
-    </main>
 
     @include('layouts.footer')
 </body>

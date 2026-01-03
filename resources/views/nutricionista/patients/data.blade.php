@@ -39,6 +39,146 @@
                 </div>
             </div>
         
+            <!-- Información del Paciente -->
+            <div class="mb-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700" x-data="{ showPhotoModal: false }">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-green-600 dark:text-green-400">person</span>
+                    Información del Paciente
+                </h2>
+                
+                <div class="flex items-center gap-6">
+                    <!-- Foto de Perfil -->
+                    <div class="flex-shrink-0">
+                        <div class="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-4 border-green-100 dark:border-green-900 {{ $patient->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
+                             @if($patient->personalData?->profile_photo) @click="showPhotoModal = true" @endif>
+                            @if($patient->personalData?->profile_photo)
+                                <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
+                                     alt="{{ $patient->name }}" 
+                                     class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-3xl font-bold">
+                                    {{ $patient->initials() }}
+                                </div>
+                            @endif
+                        </div>
+                    </div>
+
+                    <!-- Información Básica -->
+                    <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Nombre Completo</p>
+                            <p class="font-semibold text-gray-900 dark:text-white">{{ $patient->name }}</p>
+                        </div>
+                        
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Correo Electrónico</p>
+                            <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm text-green-600">email</span>
+                                {{ $patient->email }}
+                            </p>
+                        </div>
+
+                        @if($patient->personalData)
+                            @if($patient->personalData->phone)
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Teléfono</p>
+                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm text-green-600">phone</span>
+                                        {{ $patient->personalData->phone }}
+                                    </p>
+                                </div>
+                            @endif
+
+                            @if($patient->personalData->date_of_birth)
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Edad</p>
+                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm text-green-600">cake</span>
+                                        {{ \Carbon\Carbon::parse($patient->personalData->date_of_birth)->age }} años
+                                        <span class="text-xs text-gray-500">({{ \Carbon\Carbon::parse($patient->personalData->date_of_birth)->format('d/m/Y') }})</span>
+                                    </p>
+                                </div>
+                            @endif
+
+                            @if($patient->personalData->gender)
+                                <div>
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Género</p>
+                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm text-green-600">
+                                            {{ $patient->personalData->gender === 'male' ? 'male' : ($patient->personalData->gender === 'female' ? 'female' : 'transgender') }}
+                                        </span>
+                                        {{ $patient->personalData->gender === 'male' ? 'Masculino' : ($patient->personalData->gender === 'female' ? 'Femenino' : 'Otro') }}
+                                    </p>
+                                </div>
+                            @endif
+
+                            @if($patient->personalData->address)
+                                <div class="md:col-span-2">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Dirección</p>
+                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm text-green-600">location_on</span>
+                                        {{ $patient->personalData->address }}
+                                    </p>
+                                </div>
+                            @endif
+                        @else
+                            <div class="md:col-span-2">
+                                <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-4">
+                                    <p class="text-sm text-amber-800 dark:text-amber-200 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">info</span>
+                                        El paciente aún no ha completado sus datos personales
+                                    </p>
+                                </div>
+                            </div>
+                        @endif
+                    </div>
+                </div>
+
+                <!-- Modal de Foto de Perfil -->
+                <div x-show="showPhotoModal && {{ $patient->personalData?->profile_photo ? 'true' : 'false' }}"
+                     x-cloak
+                     @keydown.escape.window="showPhotoModal = false"
+                     class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                     style="display: none;">
+                    
+                    <!-- Overlay -->
+                    <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
+                    
+                    <!-- Modal Content -->
+                    <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                         @click.stop>
+                        
+                        <!-- Header -->
+                        <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <span class="material-symbols-outlined">photo_camera</span>
+                                Foto de Perfil - {{ $patient->name }}
+                            </h3>
+                            <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Image -->
+                        <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                            @if($patient->personalData?->profile_photo)
+                                <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
+                                     alt="{{ $patient->name }}"
+                                     class="w-full h-auto rounded-lg">
+                            @endif
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
+                            <button type="button" @click="showPhotoModal = false" 
+                                    class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                Cerrar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <livewire:nutricionista.patient-data-form :patient="$patient" />
         </div>
     </main>

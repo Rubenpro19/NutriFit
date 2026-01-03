@@ -37,7 +37,7 @@ class NutricionistaController extends Controller
         $nextAppointment = Appointment::where('nutricionista_id', $nutricionista->id)
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
             ->where('start_time', '>=', now())
-            ->with(['paciente', 'appointmentState'])
+            ->with(['paciente.personalData', 'appointmentState'])
             ->orderBy('start_time', 'asc')
             ->first();
 
@@ -45,14 +45,27 @@ class NutricionistaController extends Controller
         $todayAppointments = Appointment::where('nutricionista_id', $nutricionista->id)
             ->whereDate('start_time', $today)
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
-            ->with(['paciente', 'appointmentState'])
+            ->with(['paciente.personalData', 'appointmentState'])
             ->orderBy('start_time', 'asc')
             ->get();
+
+        // Todas las citas pendientes de las próximas 4 semanas organizadas por fecha
+        $fourWeeksFromNow = now()->addWeeks(4)->endOfDay();
+        $upcomingAppointments = Appointment::where('nutricionista_id', $nutricionista->id)
+            ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
+            ->whereBetween('start_time', [now(), $fourWeeksFromNow])
+            ->with(['paciente.personalData', 'appointmentState'])
+            ->orderBy('start_time', 'asc')
+            ->get()
+            ->groupBy(function($appointment) {
+                return \Carbon\Carbon::parse($appointment->start_time)->format('Y-m-d');
+            });
 
         return view('nutricionista.dashboard', compact(
             'stats',
             'nextAppointment',
-            'todayAppointments'
+            'todayAppointments',
+            'upcomingAppointments'
         ));
     }
 
@@ -194,7 +207,7 @@ class NutricionistaController extends Controller
             }
         }
 
-        $appointment->load(['paciente', 'appointmentState']);
+        $appointment->load(['paciente.personalData', 'appointmentState']);
 
         return view('nutricionista.appointments.reschedule', compact('appointment', 'weeks'));
     }
@@ -684,6 +697,8 @@ class NutricionistaController extends Controller
         if (!$patient->role || $patient->role->name !== 'paciente') {
             abort(404, 'Paciente no encontrado.');
         }
+
+        $patient->load('personalData');
 
         return view('nutricionista.patients.data', compact('patient'));
     }

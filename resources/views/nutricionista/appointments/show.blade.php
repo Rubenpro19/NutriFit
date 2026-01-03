@@ -50,7 +50,7 @@
             </div>
         @endif
 
-        <div class="grid lg:grid-cols-3 gap-6">
+        <div class="grid lg:grid-cols-3 gap-6" x-data="{ showPhotoModal: false }">
             <!-- Información Principal -->
             <div class="lg:col-span-2 space-y-6">
                 <!-- Información del Paciente -->
@@ -61,8 +61,17 @@
                     </h2>
                     
                     <div class="flex items-center gap-4 mb-6">
-                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-3xl font-bold shadow-lg">
-                            {{ strtoupper(substr($appointment->paciente->name, 0, 1)) }}
+                        <div class="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 shadow-lg {{ $appointment->paciente->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
+                             @if($appointment->paciente->personalData?->profile_photo) @click="showPhotoModal = true" @endif>
+                            @if($appointment->paciente->personalData?->profile_photo)
+                                <img src="{{ asset('storage/' . $appointment->paciente->personalData->profile_photo) }}" 
+                                     alt="{{ $appointment->paciente->name }}" 
+                                     class="w-full h-full object-cover">
+                            @else
+                                <div class="w-full h-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-3xl font-bold">
+                                    {{ strtoupper(substr($appointment->paciente->name, 0, 1)) }}
+                                </div>
+                            @endif
                         </div>
                         <div class="flex-1">
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
@@ -271,14 +280,55 @@
                             Reagendar Cita
                         </a>
 
-                        <!-- Botón de Cancelar -->
-                        <form method="POST" action="{{ route('nutricionista.appointments.cancel', $appointment) }}" onsubmit="return confirm('¿Estás seguro de cancelar esta cita?')">
-                            @csrf
-                            <button type="submit" class="w-full flex items-center justify-center gap-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-semibold py-3 px-4 rounded-xl hover:bg-red-200 dark:hover:bg-red-900/50 transition">
+                        <!-- Botón de Cancelar con Modal -->
+                        <div x-data="{ showModal: false }">
+                            <button type="button" @click="showModal = true"
+                                class="w-full flex items-center justify-center gap-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-semibold py-3 px-4 rounded-xl hover:bg-red-200 dark:hover:bg-red-900/50 transition">
                                 <span class="material-symbols-outlined">cancel</span>
                                 Cancelar Cita
                             </button>
-                        </form>
+
+                            <!-- Modal de Confirmación -->
+                            <div x-show="showModal" x-cloak
+                                class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
+                                @click.self="showModal = false">
+                                <div @click.away="showModal = false"
+                                    class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all"
+                                    x-transition:enter="transition ease-out duration-300"
+                                    x-transition:enter-start="opacity-0 scale-90"
+                                    x-transition:enter-end="opacity-100 scale-100"
+                                    x-transition:leave="transition ease-in duration-200"
+                                    x-transition:leave-start="opacity-100 scale-100"
+                                    x-transition:leave-end="opacity-0 scale-90">
+                                    
+                                    <div class="text-center mb-6">
+                                        <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                                            <span class="material-symbols-outlined text-4xl text-red-600 dark:text-red-400">warning</span>
+                                        </div>
+                                        <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                            ¿Cancelar esta cita?
+                                        </h3>
+                                        <p class="text-gray-600 dark:text-gray-400">
+                                            Esta acción no se puede deshacer. El paciente será notificado de la cancelación.
+                                        </p>
+                                    </div>
+
+                                    <div class="flex gap-3">
+                                        <button type="button" @click="showModal = false"
+                                            class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                            No, mantener
+                                        </button>
+                                        <form method="POST" action="{{ route('nutricionista.appointments.cancel', $appointment) }}" class="flex-1">
+                                            @csrf
+                                            <button type="submit"
+                                                class="w-full px-4 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
+                                                Sí, cancelar
+                                            </button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     @elseif($appointment->appointmentState->name === 'completada')
                         <div class="text-center py-4">
                             <span class="material-symbols-outlined text-6xl text-green-600 dark:text-green-400 mb-2">check_circle</span>
@@ -306,6 +356,50 @@
                                 </div>
                             @endif
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Modal de Foto de Perfil -->
+            <div x-show="showPhotoModal && {{ $appointment->paciente->personalData?->profile_photo ? 'true' : 'false' }}"
+                 x-cloak
+                 @keydown.escape.window="showPhotoModal = false"
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                 style="display: none;">
+                
+                <!-- Overlay -->
+                <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
+                
+                <!-- Modal Content -->
+                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                     @click.stop>
+                    
+                    <!-- Header -->
+                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined">photo_camera</span>
+                            Foto de Perfil - {{ $appointment->paciente->name }}
+                        </h3>
+                        <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    
+                    <!-- Image -->
+                    <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                        @if($appointment->paciente->personalData?->profile_photo)
+                            <img src="{{ asset('storage/' . $appointment->paciente->personalData->profile_photo) }}" 
+                                 alt="{{ $appointment->paciente->name }}"
+                                 class="w-full h-auto rounded-lg">
+                        @endif
+                    </div>
+                    
+                    <!-- Footer -->
+                    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
+                        <button type="button" @click="showPhotoModal = false" 
+                                class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                            Cerrar
+                        </button>
                     </div>
                 </div>
             </div>

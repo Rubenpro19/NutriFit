@@ -147,6 +147,75 @@
 
                         <!-- Mensaje cuando el paciente ya tiene una cita pendiente -->
                         <div x-show="selectedPatientId && !loading && hasError" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 sm:p-12 border border-orange-200 dark:border-orange-800">
+                            <!-- Información del Paciente -->
+                            <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-600/50 rounded-2xl p-6 mb-6 border border-gray-200 dark:border-gray-600" x-data="{ showPhotoModal: false }">
+                                <div class="flex items-center gap-4">
+                                    <div class="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
+                                        <template x-if="selectedPatient?.profile_photo">
+                                            <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
+                                                 :alt="selectedPatient?.name" 
+                                                 @click="showPhotoModal = true"
+                                                 class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition">
+                                        </template>
+                                        <template x-if="!selectedPatient?.profile_photo">
+                                            <div class="w-full h-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center text-white text-2xl font-bold">
+                                                <span x-text="selectedPatient?.name?.charAt(0).toUpperCase()"></span>
+                                            </div>
+                                        </template>
+                                    </div>
+                                    <div class="flex-1 min-w-0">
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Información del paciente:</p>
+                                        <p class="text-2xl font-bold text-gray-900 dark:text-white truncate" x-text="selectedPatient?.name"></p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 truncate flex items-center gap-1 mt-1">
+                                            <span class="material-symbols-outlined text-base">email</span>
+                                            <span x-text="selectedPatient?.email"></span>
+                                        </p>
+                                    </div>
+                                </div>
+
+                                <!-- Modal de Foto de Perfil -->
+                                <div x-show="showPhotoModal && selectedPatient?.profile_photo"
+                                     x-cloak
+                                     @keydown.escape.window="showPhotoModal = false"
+                                     class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                                     style="display: none;">
+                                    
+                                    <!-- Overlay -->
+                                    <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
+                                    
+                                    <!-- Modal Content -->
+                                    <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                                         @click.stop>
+                                        
+                                        <!-- Header -->
+                                        <div class="bg-gradient-to-r from-blue-600 to-cyan-600 px-6 py-4 flex items-center justify-between">
+                                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                                <span class="material-symbols-outlined">photo_camera</span>
+                                                Foto de Perfil
+                                            </h3>
+                                            <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
+                                                <span class="material-symbols-outlined">close</span>
+                                            </button>
+                                        </div>
+                                        
+                                        <!-- Image -->
+                                        <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                                            <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
+                                                 :alt="selectedPatient?.name"
+                                                 class="w-full h-auto rounded-lg">
+                                        </div>
+                                        
+                                        <!-- Footer -->
+                                        <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
+                                            <button type="button" @click="showPhotoModal = false" 
+                                                    class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                                Cerrar
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <div class="text-center mb-6">
                                 <span class="material-symbols-outlined text-5xl sm:text-6xl text-orange-500 dark:text-orange-400 mb-4 inline-block">event_busy</span>
                                 <h3 class="text-lg sm:text-xl font-bold text-gray-900 dark:text-white mb-2">Paciente no disponible</h3>
@@ -598,12 +667,18 @@
                     this.isOwnAppointment = false;
                     this.appointmentData = null;
 
+                    // Buscar el paciente en la lista local
+                    this.selectedPatient = this.allPatients.find(p => p.id === patientId);
+
                     try {
                         const response = await fetch(`/nutricionista/citas/asignar/${patientId}/horarios`);
                         const data = await response.json();
                         
                         if (response.ok && !data.error) {
-                            this.selectedPatient = data.paciente;
+                            // Actualizar con datos del servidor si están disponibles
+                            if (data.paciente) {
+                                this.selectedPatient = data.paciente;
+                            }
                             this.weeks = data.weeks.map(week => ({
                                 label: week.start_date_formatted,
                                 week_number: week.week_number,
@@ -615,6 +690,10 @@
                             this.errorMessage = data.error || 'Error al cargar horarios';
                             this.isOwnAppointment = data.isOwnAppointment || false;
                             this.appointmentData = data.appointment || null;
+                            // Actualizar con datos del servidor si están disponibles
+                            if (data.paciente) {
+                                this.selectedPatient = data.paciente;
+                            }
                         }
                     } catch (error) {
                         console.error('Error:', error);

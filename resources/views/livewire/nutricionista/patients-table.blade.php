@@ -123,8 +123,16 @@
                         <div class="flex items-start justify-between mb-4">
                             <!-- Avatar -->
                             <div class="flex-shrink-0">
-                                <div class="w-16 h-16 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white text-xl font-bold shadow-lg">
-                                    {{ $patient->initials() }}
+                                <div class="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center shadow-lg">
+                                    @if($patient->personalData?->profile_photo)
+                                        <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
+                                             alt="{{ $patient->name }}" 
+                                             class="w-full h-full object-cover">
+                                    @else
+                                        <div class="w-full h-full bg-gradient-to-br from-green-400 to-emerald-500 flex items-center justify-center text-white text-xl font-bold">
+                                            {{ $patient->initials() }}
+                                        </div>
+                                    @endif
                                 </div>
                             </div>
 
