@@ -94,10 +94,14 @@
                                     >
                                         <div class="flex items-center gap-3">
                                             <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
-                                                <img x-show="paciente.profile_photo" :src="paciente.profile_photo ? '/storage/' + paciente.profile_photo : ''" :alt="paciente.name" class="w-full h-full object-cover">
-                                                <div x-show="!paciente.profile_photo" class="w-full h-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-xs sm:text-sm font-bold">
-                                                    <span x-text="paciente.initials"></span>
-                                                </div>
+                                                <template x-if="paciente.profile_photo">
+                                                    <img :src="paciente.profile_photo ? '/storage/' + paciente.profile_photo : 'data:,'" :alt="paciente.name" class="w-full h-full object-cover">
+                                                </template>
+                                                <template x-if="!paciente.profile_photo">
+                                                    <div class="w-full h-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-xs sm:text-sm font-bold">
+                                                        <span x-text="paciente.initials"></span>
+                                                    </div>
+                                                </template>
                                             </div>
                                             <div class="flex-1 min-w-0">
                                                 <p class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white truncate" x-text="paciente.name"></p>
@@ -237,14 +241,17 @@
                                 <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 mb-6 border border-green-200 dark:border-green-800" x-data="{ showPhotoModal: false }">
                                     <div class="flex items-center gap-4 mb-4">
                                         <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
-                                            <img x-show="selectedPatient?.profile_photo" 
-                                                 :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : ''" 
-                                                 :alt="selectedPatient?.name" 
-                                                 @click="showPhotoModal = true"
-                                                 class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition">
-                                            <div x-show="!selectedPatient?.profile_photo" class="w-full h-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-xl font-bold">
-                                                <span x-text="selectedPatient?.name?.charAt(0).toUpperCase()"></span>
-                                            </div>
+                                            <template x-if="selectedPatient?.profile_photo">
+                                                <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
+                                                     :alt="selectedPatient?.name" 
+                                                     @click="showPhotoModal = true"
+                                                     class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition">
+                                            </template>
+                                            <template x-if="!selectedPatient?.profile_photo">
+                                                <div class="w-full h-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-xl font-bold">
+                                                    <span x-text="selectedPatient?.name?.charAt(0).toUpperCase()"></span>
+                                                </div>
+                                            </template>
                                         </div>
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Asignando cita para:</p>
@@ -280,9 +287,7 @@
                                             
                                             <!-- Image -->
                                             <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
-                                                <img :src="'/storage/' + selectedPatient?.profile_photo" 
-                                                     :alt="selectedPatient?.name" 
-                                                     class="w-full h-auto rounded-lg">
+                                        <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
                                             </div>
                                             
                                             <!-- Footer -->

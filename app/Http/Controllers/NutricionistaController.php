@@ -318,9 +318,13 @@ class NutricionistaController extends Controller
             ->orderBy('name')
             ->get()
             ->map(function($paciente) {
-                // Asegurar que profile_photo sea null si no tiene valor válido
+                // Limpiar profile_photo: convertir valores no válidos a null
                 if ($paciente->personalData) {
-                    $paciente->personalData->profile_photo = $paciente->personalData->profile_photo ?: null;
+                    $photo = $paciente->personalData->profile_photo;
+                    // Solo mantener el valor si es una cadena no vacía y no es "null"
+                    if (!$photo || $photo === 'null' || $photo === 'undefined' || trim($photo) === '') {
+                        $paciente->personalData->profile_photo = null;
+                    }
                 }
                 return $paciente;
             });
@@ -423,7 +427,7 @@ class NutricionistaController extends Controller
                             if ($slotDateTime->isFuture() && $schedule->isTimeSlotAvailable($dateStr, $slot['start'])) {
                                 $dayData['slots'][] = [
                                     'time' => $slot['start'],
-                                    'time_formatted' => \Carbon\Carbon::parse($slot['start'])->format('h:i A'),
+                                    'time_formatted' => \Carbon\Carbon::parse($slot['start'])->format('H:i'),
                                     'datetime' => $slotDateTime->toIso8601String(),
                                 ];
                             }
@@ -446,14 +450,21 @@ class NutricionistaController extends Controller
             }
         }
 
+        // Preparar datos del paciente
+        $pacienteData = [
+            'id' => $paciente->id,
+            'name' => $paciente->name,
+            'email' => $paciente->email,
+            'initials' => $paciente->initials(),
+        ];
+        
+        // Solo incluir profile_photo si tiene un valor válido
+        if ($paciente->personalData?->profile_photo) {
+            $pacienteData['profile_photo'] = $paciente->personalData->profile_photo;
+        }
+        
         return response()->json([
-            'paciente' => [
-                'id' => $paciente->id,
-                'name' => $paciente->name,
-                'email' => $paciente->email,
-                'initials' => $paciente->initials(),
-                'profile_photo' => $paciente->personalData?->profile_photo,
-            ],
+            'paciente' => $pacienteData,
             'weeks' => $weeks
         ]);
     }
