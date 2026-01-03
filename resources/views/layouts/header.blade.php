@@ -92,8 +92,42 @@
                                         Inicio
                                     </a>
 
-                                    {{-- Mi Perfil (solo para pacientes) --}}
+                                    {{-- Opciones para Nutricionistas --}}
+                                    @if(auth()->user()->isNutricionista())
+                                    <a href="{{ route('nutricionista.appointments.create') }}" 
+                                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                                        <span class="material-symbols-outlined text-lg">event</span>
+                                        Asignar Citas
+                                    </a>
+                                    <a href="{{ route('nutricionista.patients.index') }}" 
+                                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                                        <span class="material-symbols-outlined text-lg">groups</span>
+                                        Mis Pacientes
+                                    </a>
+                                    <a href="{{ route('nutricionista.schedules.index') }}" 
+                                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                                        <span class="material-symbols-outlined text-lg">calendar_month</span>
+                                        Mi Horario
+                                    </a>
+                                    <a href="{{ route('profile.edit') }}" 
+                                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                                        <span class="material-symbols-outlined text-lg">person</span>
+                                        Mi Perfil
+                                    </a>
+                                    @endif
+
+                                    {{-- Opciones para Pacientes --}}
                                     @if(auth()->user()->isPaciente())
+                                    <a href="{{ route('paciente.appointments.index') }}" 
+                                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                                        <span class="material-symbols-outlined text-lg">event</span>
+                                        Mis Citas
+                                    </a>
+                                    <a href="{{ route('paciente.booking.index') }}" 
+                                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                                        <span class="material-symbols-outlined text-lg">add_circle</span>
+                                        Agendar Cita
+                                    </a>
                                     <a href="{{ route('paciente.profile') }}" 
                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
                                         <span class="material-symbols-outlined text-lg">person</span>
@@ -101,6 +135,7 @@
                                     </a>
                                     @endif
 
+                                    {{-- Opciones para Admin --}}
                                     @if(auth()->user()->isAdmin())
                                     <a href="{{ route('profile.edit') }}" 
                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
@@ -200,8 +235,42 @@
                                 Inicio
                             </a>
 
-                            {{-- Mi Perfil (solo para pacientes) --}}
+                            {{-- Opciones para Nutricionistas --}}
+                            @if(auth()->user()->isNutricionista())
+                            <a href="{{ route('nutricionista.appointments.create') }}" 
+                               class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                <span class="material-symbols-outlined text-lg">event</span>
+                                Asignar Citas
+                            </a>
+                            <a href="{{ route('nutricionista.patients.index') }}" 
+                               class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                <span class="material-symbols-outlined text-lg">groups</span>
+                                Mis Pacientes
+                            </a>
+                            <a href="{{ route('nutricionista.schedules.index') }}" 
+                               class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                <span class="material-symbols-outlined text-lg">calendar_month</span>
+                                Mi Horario
+                            </a>
+                            <a href="{{ route('profile.edit') }}" 
+                               class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                <span class="material-symbols-outlined text-lg">person</span>
+                                Mi Perfil
+                            </a>
+                            @endif
+
+                            {{-- Opciones para Pacientes --}}
                             @if(auth()->user()->isPaciente())
+                            <a href="{{ route('paciente.appointments.index') }}" 
+                               class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                <span class="material-symbols-outlined text-lg">event</span>
+                                Mis Citas
+                            </a>
+                            <a href="{{ route('paciente.booking.index') }}" 
+                               class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                <span class="material-symbols-outlined text-lg">add_circle</span>
+                                Agendar Cita
+                            </a>
                             <a href="{{ route('paciente.profile') }}" 
                                class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                                 <span class="material-symbols-outlined text-lg">person</span>
@@ -209,8 +278,8 @@
                             </a>
                             @endif
 
-                            {{-- Configuración (no para pacientes) --}}
-                            @if(!auth()->user()->isPaciente())
+                            {{-- Opciones para Admin --}}
+                            @if(auth()->user()->isAdmin())
                             <a href="{{ route('profile.edit') }}" 
                                class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                                 <span class="material-symbols-outlined text-lg">settings</span>
