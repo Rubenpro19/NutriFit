@@ -316,7 +316,14 @@ class NutricionistaController extends Controller
         $pacientes = User::whereHas('role', fn($q) => $q->where('name', 'paciente'))
             ->with(['personalData'])
             ->orderBy('name')
-            ->get();
+            ->get()
+            ->map(function($paciente) {
+                // Asegurar que profile_photo sea null si no tiene valor válido
+                if ($paciente->personalData) {
+                    $paciente->personalData->profile_photo = $paciente->personalData->profile_photo ?: null;
+                }
+                return $paciente;
+            });
 
         return view('nutricionista.appointments.create', compact('pacientes'));
     }
@@ -327,6 +334,9 @@ class NutricionistaController extends Controller
     public function getAvailableSchedules(User $paciente)
     {
         $nutricionista = auth()->user();
+        
+        // Cargar relación personalData
+        $paciente->load('personalData');
         
         // Permitir obtener horarios para cualquier paciente con rol 'paciente'.
         // Solo rechazamos si el usuario no es paciente.
@@ -364,7 +374,7 @@ class NutricionistaController extends Controller
                     'reason' => $pendingAppointment->reason,
                     'price' => $pendingAppointment->price,
                 ] : null
-            ], 400);
+            ], 200);
         }
 
         // Obtener horarios del nutricionista
@@ -441,6 +451,8 @@ class NutricionistaController extends Controller
                 'id' => $paciente->id,
                 'name' => $paciente->name,
                 'email' => $paciente->email,
+                'initials' => $paciente->initials(),
+                'profile_photo' => $paciente->personalData?->profile_photo,
             ],
             'weeks' => $weeks
         ]);

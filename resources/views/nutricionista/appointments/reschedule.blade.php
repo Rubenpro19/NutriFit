@@ -15,15 +15,15 @@
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
-    <main class="container mx-auto px-4 py-8 flex-grow">
-        <div class="max-w-7xl mx-auto">
-        <!-- Breadcrumb -->
-        <nav class="mb-6 flex items-center gap-2 text-sm">
-            <a href="{{ route('nutricionista.dashboard') }}" class="text-emerald-600 dark:text-emerald-400 hover:underline">Dashboard</a>
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-6 flex items-center gap-2 text-sm">
+            <a href="{{ route('nutricionista.dashboard') }}" class="text-green-600 dark:text-green-400 hover:underline transition-colors">Inicio</a>
             <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
-            <a href="{{ route('nutricionista.appointments.show', $appointment) }}" class="text-emerald-600 dark:text-emerald-400 hover:underline">Detalle de Cita</a>
+            <a href="{{ route('nutricionista.appointments.show', $appointment) }}" class="text-green-600 dark:text-green-400 hover:underline transition-colors">Detalle de Cita</a>
             <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
-            <span class="text-gray-600 dark:text-gray-400">Reagendar</span>
+            <span class="text-gray-700 dark:text-gray-300 font-medium">Reagendar</span>
         </nav>
 
         @if(session('error'))
@@ -160,23 +160,23 @@
                     <!-- Navegación de Semanas (Pestañas) -->
                     <div class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30">
                         <div class="flex items-center justify-between px-3 sm:px-6 py-3">
-                            <button onclick="changeWeek(-1)" id="prevWeek" class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <button onclick="changeWeek(-1)" id="prevWeek" class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95">
                                 <span class="material-symbols-outlined text-lg sm:text-base">chevron_left</span>
                                 <span class="hidden sm:inline">Anterior</span>
                             </button>
                             
-                            <div class="flex gap-2 overflow-x-auto pb-2 flex-1 mx-2 sm:mx-4 justify-start sm:justify-center scrollbar-hide">
+                            <div class="flex gap-2 overflow-x-auto pb-2 flex-1 mx-2 sm:mx-4 justify-center scrollbar-hide">
                                 @foreach($weeks as $weekIndex => $week)
                                     <button onclick="showWeek({{ $weekIndex }})" 
                                             data-week="{{ $weekIndex }}"
-                                            class="week-tab flex-shrink-0 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all {{ $weekIndex === 0 ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-lg' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700' }}">
+                                            class="week-tab flex-shrink-0 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all duration-200 active:scale-95 {{ $weekIndex === 0 ? 'bg-gradient-to-r from-emerald-600 to-green-600 text-white shadow-lg scale-105' : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700 hover:shadow-md hover:scale-105' }}">
                                         <div class="text-xs opacity-90 mb-1">Sem {{ $weekIndex + 1 }}</div>
                                         <div class="text-xs sm:text-sm font-bold">{{ $week['start_date_formatted'] }}</div>
                                     </button>
                                 @endforeach
                             </div>
 
-                            <button onclick="changeWeek(1)" id="nextWeek" class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                            <button onclick="changeWeek(1)" id="nextWeek" class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95">
                                 <span class="hidden sm:inline">Siguiente</span>
                                 <span class="material-symbols-outlined text-lg sm:text-base">chevron_right</span>
                             </button>
@@ -218,8 +218,6 @@
         </div>
         </div>
     </main>
-
-    @include('layouts.footer')
 
     <script>
         let selectedButton = null;
@@ -277,9 +275,9 @@
             document.querySelectorAll('.week-tab').forEach((tab, index) => {
                 if (index === weekIndex) {
                     tab.classList.remove('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
-                    tab.classList.add('bg-gradient-to-r', 'from-emerald-600', 'to-green-600', 'text-white', 'shadow-lg');
+                    tab.classList.add('bg-gradient-to-r', 'from-emerald-600', 'to-green-600', 'text-white', 'shadow-lg', 'scale-105');
                 } else {
-                    tab.classList.remove('bg-gradient-to-r', 'from-emerald-600', 'to-green-600', 'text-white', 'shadow-lg');
+                    tab.classList.remove('bg-gradient-to-r', 'from-emerald-600', 'to-green-600', 'text-white', 'shadow-lg', 'scale-105');
                     tab.classList.add('bg-white', 'dark:bg-gray-800', 'text-gray-700', 'dark:text-gray-300');
                 }
             });
@@ -306,4 +304,9 @@
         // Inicializar
         updateNavigationButtons();
     </script>
+        </div>
+    </main>
+
+    @include('layouts.footer')
+</body>
 @endsection

@@ -3,31 +3,38 @@
 @section('title', 'Asignar Cita - NutriFit')
 
 @section('content')
-<div class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
-    <main class="container mx-auto px-4 py-8 flex-grow">
-        <div class="max-w-7xl mx-auto">
-        <!-- Breadcrumb -->
-        <nav class="mb-6 text-sm text-gray-600 dark:text-gray-400">
-            <a href="{{ route('nutricionista.dashboard') }}" class="hover:text-green-600 dark:hover:text-green-400">Dashboard</a>
-            <span class="mx-2">/</span>
-            <span class="text-gray-900 dark:text-white">Asignar Cita</span>
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            <!-- Breadcrumb -->
+            <nav class="mb-6 flex items-center gap-2 text-sm">
+            <a href="{{ route('nutricionista.dashboard') }}" class="text-green-600 dark:text-green-400 hover:underline transition-colors">Inicio</a>
+            <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
+            <span class="text-gray-700 dark:text-gray-300 font-medium">Asignar Cita</span>
         </nav>
 
         <!-- Header -->
-        <div class="mb-8">
-            <div class="flex items-center gap-3 mb-2">
-                <a href="{{ route('nutricionista.dashboard') }}" class="text-gray-600 dark:text-gray-400 hover:text-green-600 dark:hover:text-green-400 transition-colors">
-                    <span class="material-symbols-outlined text-2xl">arrow_back</span>
-                </a>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white">
-                    Asignar Cita a Paciente
-                </h1>
+        <div class="mb-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <a href="{{ route('nutricionista.dashboard') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 hover:scale-110 transition-all">
+                        <span class="material-symbols-outlined text-2xl">arrow_back</span>
+                    </a>
+                    <div class="min-w-0 flex-1">
+                        <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                            Asignar Cita a Paciente
+                        </h1>
+                        <p class="text-sm sm:text-base text-gray-700 dark:text-gray-300 mt-1 truncate">
+                            Selecciona un paciente y asigna un horario disponible
+                        </p>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 hidden sm:flex items-center">
+                    <span class="material-symbols-outlined text-3xl sm:text-4xl text-green-600 dark:text-green-400">event_available</span>
+                </div>
             </div>
-            <p class="text-gray-600 dark:text-gray-400 ml-11">
-                Selecciona un paciente y asigna un horario disponible
-            </p>
         </div>
 
         @if(session('success'))
@@ -48,28 +55,28 @@
             <div class="grid lg:grid-cols-3 gap-6">
                     <!-- Columna Izquierda: Selección de Paciente -->
                     <div class="lg:col-span-1">
-                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 lg:sticky lg:top-6">
-                            <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                                <span class="material-symbols-outlined text-green-600">person_search</span>
+                        <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700 lg:sticky lg:top-6">
+                            <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400">person_search</span>
                                 Seleccionar Paciente
                             </h2>
 
                             <!-- Barra de búsqueda -->
                             <div class="mb-4">
                                 <div class="relative">
-                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">search</span>
+                                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 dark:text-gray-500">search</span>
                                     <input 
                                         type="text" 
                                         x-model="searchQuery"
                                         @input="filterPatients"
                                         placeholder="Buscar paciente..."
-                                        class="w-full pl-10 pr-10 py-2.5 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent transition"
+                                        class="w-full pl-10 pr-10 py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                                     >
                                     <button 
                                         x-show="searchQuery.length > 0"
                                         @click="searchQuery = ''; filterPatients()"
                                         type="button"
-                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors"
                                     >
                                         <span class="material-symbols-outlined text-lg">close</span>
                                     </button>
@@ -77,35 +84,38 @@
                             </div>
 
                             <!-- Lista de pacientes -->
-                            <div class="space-y-3 max-h-96 overflow-y-auto">
+                            <div class="space-y-2 sm:space-y-3 max-h-96 overflow-y-auto">
                                 <template x-for="paciente in filteredPatients" :key="paciente.id">
                                     <button
                                         type="button"
                                         @click="selectPatient(paciente.id)"
-                                        :class="selectedPatientId === paciente.id ? 'border-green-500 bg-green-50 dark:bg-green-900/20' : 'border-gray-200 dark:border-gray-700 hover:border-green-300'"
-                                        class="w-full text-left p-4 rounded-lg border-2 transition-all duration-200"
+                                        :class="selectedPatientId === paciente.id ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-md' : 'border-gray-200 dark:border-gray-700 hover:border-green-300 hover:shadow-sm'"
+                                        class="w-full text-left p-3 sm:p-4 rounded-lg border-2 transition-all duration-200"
                                     >
                                         <div class="flex items-center gap-3">
-                                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white text-sm font-bold flex-shrink-0">
-                                                <span x-text="paciente.initials"></span>
+                                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                                <img x-show="paciente.profile_photo" :src="paciente.profile_photo ? '/storage/' + paciente.profile_photo : ''" :alt="paciente.name" class="w-full h-full object-cover">
+                                                <div x-show="!paciente.profile_photo" class="w-full h-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-xs sm:text-sm font-bold">
+                                                    <span x-text="paciente.initials"></span>
+                                                </div>
                                             </div>
                                             <div class="flex-1 min-w-0">
-                                                <p class="font-semibold text-gray-900 dark:text-white truncate" x-text="paciente.name"></p>
+                                                <p class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white truncate" x-text="paciente.name"></p>
                                                 <p class="text-xs text-gray-600 dark:text-gray-400 truncate" x-text="paciente.email"></p>
                                             </div>
-                                            <span x-show="selectedPatientId === paciente.id" class="material-symbols-outlined text-green-600">check_circle</span>
+                                            <span x-show="selectedPatientId === paciente.id" class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
                                         </div>
                                     </button>
                                 </template>
 
                                 <!-- Sin resultados -->
                                 <div x-show="filteredPatients.length === 0" class="text-center py-8">
-                                    <span class="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-600 mb-2">search_off</span>
+                                    <span class="material-symbols-outlined text-4xl text-gray-400 dark:text-gray-600 mb-2 block">search_off</span>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">No se encontraron pacientes</p>
                                     <button 
                                         x-show="searchQuery.length > 0"
                                         @click="searchQuery = ''; filterPatients()"
-                                        class="mt-3 text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 font-medium"
+                                        class="mt-3 text-sm text-green-600 hover:text-green-700 dark:text-green-400 dark:hover:text-green-300 font-semibold hover:underline"
                                     >
                                         Limpiar búsqueda
                                     </button>
@@ -224,15 +234,64 @@
                                 <input type="hidden" name="appointment_time" x-model="selectedTime">
 
                                 <!-- Información del Paciente Seleccionado -->
-                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 mb-6 border border-green-200 dark:border-green-800">
+                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 mb-6 border border-green-200 dark:border-green-800" x-data="{ showPhotoModal: false }">
                                     <div class="flex items-center gap-4 mb-4">
-                                        <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white text-xl font-bold flex-shrink-0">
-                                            <span x-text="selectedPatient?.name?.charAt(0).toUpperCase()"></span>
+                                        <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                            <img x-show="selectedPatient?.profile_photo" 
+                                                 :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : ''" 
+                                                 :alt="selectedPatient?.name" 
+                                                 @click="showPhotoModal = true"
+                                                 class="w-full h-full object-cover cursor-pointer hover:opacity-90 transition">
+                                            <div x-show="!selectedPatient?.profile_photo" class="w-full h-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-xl font-bold">
+                                                <span x-text="selectedPatient?.name?.charAt(0).toUpperCase()"></span>
+                                            </div>
                                         </div>
                                         <div>
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Asignando cita para:</p>
                                             <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="selectedPatient?.name"></p>
                                             <p class="text-sm text-gray-600 dark:text-gray-400" x-text="selectedPatient?.email"></p>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal de Foto de Perfil -->
+                                    <div x-show="showPhotoModal && selectedPatient?.profile_photo"
+                                         x-cloak
+                                         @keydown.escape.window="showPhotoModal = false"
+                                         class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                                         style="display: none;">
+                                        
+                                        <!-- Overlay -->
+                                        <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
+                                        
+                                        <!-- Modal Content -->
+                                        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                                             @click.stop>
+                                            
+                                            <!-- Header -->
+                                            <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                                                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                                    <span class="material-symbols-outlined">photo_camera</span>
+                                                    Foto de Perfil
+                                                </h3>
+                                                <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
+                                                    <span class="material-symbols-outlined">close</span>
+                                                </button>
+                                            </div>
+                                            
+                                            <!-- Image -->
+                                            <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                                                <img :src="'/storage/' + selectedPatient?.profile_photo" 
+                                                     :alt="selectedPatient?.name" 
+                                                     class="w-full h-auto rounded-lg">
+                                            </div>
+                                            
+                                            <!-- Footer -->
+                                            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
+                                                <button type="button" @click="showPhotoModal = false" 
+                                                        class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                                    Cerrar
+                                                </button>
+                                            </div>
                                         </div>
                                     </div>
                                     
@@ -253,7 +312,7 @@
                                 </div>
 
                                 <!-- Detalles de la Cita -->
-                                <div x-show="selectedDate && selectedTime" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700 mb-6">
+                                <div x-show="selectedDate && selectedTime" x-cloak style="display: none;" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700 mb-6">
                                     <h3 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                                         <span class="material-symbols-outlined text-green-600">edit_note</span>
                                         Detalles de la Cita
@@ -262,25 +321,27 @@
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
                                         <!-- Tipo de Consulta -->
                                         <div>
-                                            <label for="appointment_type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <label for="appointment_type" class="flex items-center gap-2 text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                                                <span class="material-symbols-outlined text-lg text-green-600 dark:text-green-400">medical_services</span>
                                                 Tipo de Consulta *
                                             </label>
                                             <select 
                                                 id="appointment_type" 
                                                 name="appointment_type" 
-                                                required
-                                                class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                                x-bind:required="selectedDate && selectedTime"
+                                                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all [&>option]:bg-white [&>option]:dark:bg-gray-700 [&>option]:text-gray-900 [&>option]:dark:text-white"
                                             >
                                                 <option value="">Seleccionar tipo</option>
-                                                <option value="primera_vez">🆕 Primera vez</option>
-                                                <option value="seguimiento">📋 Seguimiento</option>
-                                                <option value="control">🔄 Control</option>
+                                                <option value="primera_vez">Primera vez</option>
+                                                <option value="seguimiento">Seguimiento</option>
+                                                <option value="control">Control</option>
                                             </select>
                                         </div>
 
                                         <!-- Precio -->
                                         <div>
-                                            <label for="price" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <label for="price" class="flex items-center gap-2 text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                                                <span class="material-symbols-outlined text-lg text-green-600 dark:text-green-400">payments</span>
                                                 Precio (USD) *
                                             </label>
                                             <input 
@@ -289,15 +350,16 @@
                                                 name="price" 
                                                 step="0.01" 
                                                 min="0"
-                                                value="50.00"
-                                                required
-                                                class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                                value="20.00"
+                                                x-bind:required="selectedDate && selectedTime"
+                                                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                                             >
                                         </div>
 
                                         <!-- Motivo -->
                                         <div class="sm:col-span-2">
-                                            <label for="reason" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <label for="reason" class="flex items-center gap-2 text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                                                <span class="material-symbols-outlined text-lg text-green-600 dark:text-green-400">description</span>
                                                 Motivo de la Consulta
                                             </label>
                                             <textarea 
@@ -305,13 +367,14 @@
                                                 name="reason" 
                                                 rows="3"
                                                 placeholder="Ej: Control de peso, Evaluación inicial, etc."
-                                                class="w-full px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                                class="w-full px-3 sm:px-4 py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                                             ></textarea>
                                         </div>
 
                                         <!-- Notas -->
                                         <div class="sm:col-span-2">
-                                            <label for="notes" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                            <label for="notes" class="flex items-center gap-2 text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
+                                                <span class="material-symbols-outlined text-lg text-green-600 dark:text-green-400">note_add</span>
                                                 Notas Adicionales
                                             </label>
                                             <textarea 
@@ -319,7 +382,7 @@
                                                 name="notes" 
                                                 rows="3"
                                                 placeholder="Notas internas sobre la cita..."
-                                                class="w-full px-3 sm:px-4 py-2 text-sm sm:text-base rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                                class="w-full px-3 sm:px-4 py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                                             ></textarea>
                                         </div>
                                     </div>
@@ -329,7 +392,7 @@
                                         <button 
                                             type="submit"
                                             :disabled="submitting"
-                                            class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-4 sm:px-6 text-sm sm:text-base rounded-lg hover:from-green-700 hover:to-emerald-700 transition shadow-lg disabled:opacity-50 disabled:cursor-not-allowed"
+                                            class="flex-1 flex items-center justify-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-4 sm:px-6 text-sm sm:text-base rounded-lg hover:from-green-700 hover:to-emerald-700 hover:shadow-lg hover:scale-105 active:scale-95 transition-all duration-200 shadow-md disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                         >
                                             <span x-show="!submitting" class="material-symbols-outlined">check</span>
                                             <svg x-show="submitting" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
@@ -341,7 +404,7 @@
                                         <button 
                                             type="button"
                                             @click="resetSelection"
-                                            class="px-4 sm:px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold text-sm sm:text-base rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 transition"
+                                            class="px-4 sm:px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold text-sm sm:text-base rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 hover:shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
                                         >
                                             Cancelar
                                         </button>
@@ -361,20 +424,20 @@
 
                                     <!-- Navegación de Semanas -->
                                     <div class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30">
-                                        <div class="flex items-center justify-between px-3 sm:px-6 py-3">
+                                        <div class="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4">
                                             <button type="button" @click="changeWeek(-1)" :disabled="currentWeek === 0"
-                                                    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                                    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95">
                                                 <span class="material-symbols-outlined text-lg sm:text-base">chevron_left</span>
                                                 <span class="hidden sm:inline">Anterior</span>
                                             </button>
                                             
-                                            <div class="flex gap-2 overflow-x-auto pb-2 flex-1 mx-2 sm:mx-4 justify-start sm:justify-center scrollbar-hide">
+                                            <div class="flex gap-2 overflow-x-auto pb-2 flex-1 mx-2 sm:mx-4 justify-center scrollbar-hide">
                                                 <template x-for="(week, index) in weeks" :key="index">
                                                     <button type="button" @click="showWeek(index)"
                                                             :class="currentWeek === index 
-                                                                ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg' 
-                                                                : 'bg-white dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-700'"
-                                                            class="flex-shrink-0 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all">
+                                                                ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg scale-105' 
+                                                                : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:shadow-md hover:scale-105'"
+                                                            class="flex-shrink-0 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all duration-200 active:scale-95">
                                                         <div class="text-xs opacity-90 mb-1" x-text="'Sem ' + (index + 1)"></div>
                                                         <div class="text-xs sm:text-sm font-bold" x-text="week.label"></div>
                                                     </button>
@@ -382,7 +445,7 @@
                                             </div>
 
                                             <button type="button" @click="changeWeek(1)" :disabled="currentWeek === weeks.length - 1"
-                                                    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition disabled:opacity-50 disabled:cursor-not-allowed">
+                                                    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95">
                                                 <span class="hidden sm:inline">Siguiente</span>
                                                 <span class="material-symbols-outlined text-lg sm:text-base">chevron_right</span>
                                             </button>
@@ -464,21 +527,23 @@
                 </div>
             </div>
         </div>
-    </main>
-
-    @include('layouts.footer')
 
     <script>
         function appointmentAssignment() {
             return {
                 // Datos de pacientes
                 allPatients: {!! json_encode($pacientes->map(function($p) {
-                    return [
+                    $data = [
                         'id' => $p->id,
                         'name' => $p->name,
                         'email' => $p->email,
-                        'initials' => $p->initials()
+                        'initials' => $p->initials(),
                     ];
+                    // Solo incluir profile_photo si tiene un valor válido
+                    if ($p->personalData?->profile_photo) {
+                        $data['profile_photo'] = $p->personalData->profile_photo;
+                    }
+                    return $data;
                 })) !!},
                 filteredPatients: [],
                 searchQuery: '',
@@ -532,7 +597,7 @@
                         const response = await fetch(`/nutricionista/citas/asignar/${patientId}/horarios`);
                         const data = await response.json();
                         
-                        if (response.ok) {
+                        if (response.ok && !data.error) {
                             this.selectedPatient = data.paciente;
                             this.weeks = data.weeks.map(week => ({
                                 label: week.start_date_formatted,
@@ -586,6 +651,9 @@
             }
         }
     </script>
-</div>
-</div>
+        </div>
+    </main>
+
+    @include('layouts.footer')
+</body>
 @endsection

@@ -3,12 +3,12 @@
 @section('title', 'Dashboard Nutricionista')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+<body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
-    <main class="container mx-auto px-4 py-8">
-        <div class="max-w-7xl mx-auto">
-        {{-- Mensaje de Bienvenida --}}
+    <main class="flex-grow">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+            {{-- Mensaje de Bienvenida --}}
         <div class="mb-8 rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-6 md:p-8 text-white shadow-lg">
             <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
                 <div class="flex-1">
@@ -174,7 +174,6 @@
                     </div>
                 @endif
             </div>
-        </div>
         </div>
     </main>
 
