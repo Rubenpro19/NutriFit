@@ -94,6 +94,11 @@
 
                                     {{-- Opciones para Nutricionistas --}}
                                     @if(auth()->user()->isNutricionista())
+                                    <a href="{{ route('nutricionista.appointments.index') }}" 
+                                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                                        <span class="material-symbols-outlined text-lg">calendar_month</span>
+                                        Mis Citas
+                                    </a>
                                     <a href="{{ route('nutricionista.appointments.create') }}" 
                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
                                         <span class="material-symbols-outlined text-lg">event</span>
@@ -106,7 +111,7 @@
                                     </a>
                                     <a href="{{ route('nutricionista.schedules.index') }}" 
                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
-                                        <span class="material-symbols-outlined text-lg">calendar_month</span>
+                                        <span class="material-symbols-outlined text-lg">schedule</span>
                                         Mi Horario
                                     </a>
                                     <a href="{{ route('profile.edit') }}" 
@@ -237,6 +242,11 @@
 
                             {{-- Opciones para Nutricionistas --}}
                             @if(auth()->user()->isNutricionista())
+                            <a href="{{ route('nutricionista.appointments.index') }}" 
+                               class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                <span class="material-symbols-outlined text-lg">calendar_month</span>
+                                Mis Citas
+                            </a>
                             <a href="{{ route('nutricionista.appointments.create') }}" 
                                class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                                 <span class="material-symbols-outlined text-lg">event</span>
@@ -249,7 +259,7 @@
                             </a>
                             <a href="{{ route('nutricionista.schedules.index') }}" 
                                class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
-                                <span class="material-symbols-outlined text-lg">calendar_month</span>
+                                <span class="material-symbols-outlined text-lg">schedule</span>
                                 Mi Horario
                             </a>
                             <a href="{{ route('profile.edit') }}" 

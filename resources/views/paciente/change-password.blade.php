@@ -3,10 +3,10 @@
 @section('title', 'Cambiar Contraseña - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900">
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
-    <div class="min-h-screen flex items-center justify-center px-4 py-12">
+    <main class="flex-grow flex items-center justify-center px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <div class="w-full max-w-md">
             <!-- Logo y Header -->
             <div class="text-center mb-8">
@@ -151,7 +151,7 @@
                 </form>
             </div>
         </div>
-    </div>
+    </main>
 
     @include('layouts.footer')
 </body>

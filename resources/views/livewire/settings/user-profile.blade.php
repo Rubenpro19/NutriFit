@@ -1,8 +1,24 @@
 <div class="max-w-7xl mx-auto">
     <!-- Header -->
-    <div class="mb-8">
-        <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">👤 Mi Perfil</h1>
-        <p class="text-gray-600 dark:text-gray-400">Gestiona tu información personal y configuración de cuenta</p>
+    <div class="mb-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+        <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <a href="{{ route('paciente.dashboard') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 hover:scale-110 transition-all">
+                    <span class="material-symbols-outlined text-2xl">arrow_back</span>
+                </a>
+                <div class="min-w-0 flex-1">
+                    <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                        Mi Perfil
+                    </h1>
+                    <p class="text-sm sm:text-base text-gray-700 dark:text-gray-300 mt-1 truncate">
+                        Gestiona tu información personal y configuración de cuenta
+                    </p>
+                </div>
+            </div>
+            <div class="flex-shrink-0 hidden sm:flex items-center">
+                <span class="material-symbols-outlined text-3xl sm:text-4xl text-green-600 dark:text-green-400">person</span>
+            </div>
+        </div>
     </div>
 
     @if(!$hasPersonalData)

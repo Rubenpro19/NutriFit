@@ -72,6 +72,62 @@ class NutricionistaController extends Controller
         ));
     }
 
+    public function appointments(Request $request)
+    {
+        $nutricionista = auth()->user();
+        
+        // Marcar citas vencidas
+        Appointment::markExpiredAppointments();
+
+        // Query base
+        $query = Appointment::where('nutricionista_id', $nutricionista->id)
+            ->with(['paciente.personalData', 'appointmentState']);
+
+        // Filtro por estado
+        if ($request->filled('estado') && $request->estado !== 'todos') {
+            $query->whereHas('appointmentState', fn($q) => $q->where('name', $request->estado));
+        }
+
+        // Búsqueda por nombre de paciente
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->whereHas('paciente', function($q) use ($search) {
+                $q->where('name', 'ILIKE', "%{$search}%")
+                  ->orWhere('email', 'ILIKE', "%{$search}%");
+            });
+        }
+
+        // Filtro por rango de fechas
+        if ($request->filled('fecha_desde')) {
+            $query->whereDate('start_time', '>=', $request->fecha_desde);
+        }
+        if ($request->filled('fecha_hasta')) {
+            $query->whereDate('start_time', '<=', $request->fecha_hasta);
+        }
+
+        // Ordenar por fecha más reciente
+        $appointments = $query->orderBy('start_time', 'desc')->paginate(15);
+
+        // Estadísticas rápidas
+        $stats = [
+            'total' => Appointment::where('nutricionista_id', $nutricionista->id)->count(),
+            'pendientes' => Appointment::where('nutricionista_id', $nutricionista->id)
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
+                ->count(),
+            'completadas' => Appointment::where('nutricionista_id', $nutricionista->id)
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'completada'))
+                ->count(),
+            'canceladas' => Appointment::where('nutricionista_id', $nutricionista->id)
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'cancelada'))
+                ->count(),
+            'vencidas' => Appointment::where('nutricionista_id', $nutricionista->id)
+                ->whereHas('appointmentState', fn($q) => $q->where('name', 'vencida'))
+                ->count(),
+        ];
+
+        return view('nutricionista.appointments.index', compact('appointments', 'stats'));
+    }
+
     public function showAppointment(Appointment $appointment)
     {
         // Verificar que la cita pertenece al nutricionista autenticado

@@ -26,8 +26,30 @@
             <span class="text-gray-700 dark:text-gray-300 font-medium">Reagendar</span>
         </nav>
 
+        <!-- Header -->
+        <div class="mb-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+            <div class="flex items-center justify-between gap-3">
+                <div class="flex items-center gap-3 flex-1 min-w-0">
+                    <a href="{{ route('nutricionista.appointments.show', $appointment) }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 hover:scale-110 transition-all">
+                        <span class="material-symbols-outlined text-2xl">arrow_back</span>
+                    </a>
+                    <div class="min-w-0 flex-1">
+                        <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-emerald-600 to-green-600 dark:from-emerald-400 dark:to-green-400 bg-clip-text text-transparent">
+                            Reagendar Cita
+                        </h1>
+                        <p class="text-sm sm:text-base text-gray-700 dark:text-gray-300 mt-1 truncate">
+                            Selecciona una nueva fecha y hora para la cita
+                        </p>
+                    </div>
+                </div>
+                <div class="flex-shrink-0 hidden sm:flex items-center">
+                    <span class="material-symbols-outlined text-3xl sm:text-4xl text-emerald-600 dark:text-emerald-400">event_repeat</span>
+                </div>
+            </div>
+        </div>
+
         @if(session('error'))
-            <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg flex items-center gap-3">
+            <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-xl flex items-center gap-3">
                 <span class="material-symbols-outlined">error</span>
                 <span>{{ session('error') }}</span>
             </div>

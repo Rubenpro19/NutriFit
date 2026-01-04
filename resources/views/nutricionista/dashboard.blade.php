@@ -16,13 +16,18 @@
                         <p class="mt-2 text-blue-100">Aquí está el resumen de su jornada.</p>
                     </div>
                     <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="{{ route('nutricionista.appointments.index') }}" 
+                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-blue-600 font-semibold transition-all duration-200 hover:bg-blue-50 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
+                            <span class="material-symbols-outlined">calendar_month</span>
+                            Mis Citas
+                        </a>
                         <a href="{{ route('nutricionista.appointments.create') }}" 
                            class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-purple-600 font-semibold transition-all duration-200 hover:bg-purple-50 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
                             <span class="material-symbols-outlined">add_circle</span>
                             Asignar Cita
                         </a>
                         <a href="{{ route('nutricionista.patients.index') }}" 
-                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-blue-600 font-semibold transition-all duration-200 hover:bg-blue-50 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
+                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-cyan-600 font-semibold transition-all duration-200 hover:bg-cyan-50 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
                             <span class="material-symbols-outlined">groups</span>
                             Mis Pacientes
                         </a>
