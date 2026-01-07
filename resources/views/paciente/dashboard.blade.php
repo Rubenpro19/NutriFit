@@ -194,34 +194,59 @@
                             </a>
 
                             <div class="mt-8 pt-6 border-t border-green-200 dark:border-green-700">
-                                <div class="flex items-center justify-center gap-2">
-                                    <div class="flex-1 text-center">
-                                        <div class="w-12 h-12 mx-auto rounded-full bg-white dark:bg-gray-700 flex items-center justify-center mb-2 shadow-md">
-                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">search</span>
+                                
+                                <div class="relative">
+                                    <!-- Línea de progreso -->
+                                    <div class="absolute top-6 left-0 right-0 h-0.5 bg-gradient-to-r from-green-300 via-blue-300 to-emerald-300 dark:from-green-700 dark:via-blue-700 dark:to-emerald-700" style="margin: 0 10%;"></div>
+                                    
+                                    <div class="relative flex items-start justify-between px-4">
+                                        <!-- Paso 1 -->
+                                        <div class="flex-1 text-center">
+                                            <div class="relative inline-flex items-center justify-center mb-3">
+                                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 flex items-center justify-center border-4 border-white dark:border-gray-800 relative z-10">
+                                                    <span class="text-2xl font-bold text-white">1</span>
+                                                </div>
+                                            </div>
+                                            <div class="px-2">
+                                                <div class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/30 mb-2">
+                                                    <span class="material-symbols-outlined text-lg text-green-600 dark:text-green-400">search</span>
+                                                </div>
+                                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Elige tu nutricionista</p>
+                                                <p class="text-[10px] text-gray-500 dark:text-gray-500">Explora perfiles</p>
+                                            </div>
                                         </div>
-                                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">Elige tu nutricionista</p>
-                                    </div>
-                                    
-                                    <div class="flex-shrink-0 mt-[-20px]">
-                                        <span class="material-symbols-outlined text-2xl text-green-600 dark:text-green-400">arrow_forward</span>
-                                    </div>
-                                    
-                                    <div class="flex-1 text-center">
-                                        <div class="w-12 h-12 mx-auto rounded-full bg-white dark:bg-gray-700 flex items-center justify-center mb-2 shadow-md">
-                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">event_available</span>
+                                        
+                                        <!-- Paso 2 -->
+                                        <div class="flex-1 text-center">
+                                            <div class="relative inline-flex items-center justify-center mb-3">
+                                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center border-4 border-white dark:border-gray-800 relative z-10">
+                                                    <span class="text-2xl font-bold text-white">2</span>
+                                                </div>
+                                            </div>
+                                            <div class="px-2">
+                                                <div class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 mb-2">
+                                                    <span class="material-symbols-outlined text-lg text-blue-600 dark:text-blue-400">event_available</span>
+                                                </div>
+                                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Selecciona horario</p>
+                                                <p class="text-[10px] text-gray-500 dark:text-gray-500">Elige fecha y hora</p>
+                                            </div>
                                         </div>
-                                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">Selecciona horario</p>
-                                    </div>
-                                    
-                                    <div class="flex-shrink-0 mt-[-20px]">
-                                        <span class="material-symbols-outlined text-2xl text-green-600 dark:text-green-400">arrow_forward</span>
-                                    </div>
-                                    
-                                    <div class="flex-1 text-center">
-                                        <div class="w-12 h-12 mx-auto rounded-full bg-white dark:bg-gray-700 flex items-center justify-center mb-2 shadow-md">
-                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+                                        
+                                        <!-- Paso 3 -->
+                                        <div class="flex-1 text-center">
+                                            <div class="relative inline-flex items-center justify-center mb-3">
+                                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 flex items-center justify-center border-4 border-white dark:border-gray-800 relative z-10">
+                                                    <span class="text-2xl font-bold text-white">3</span>
+                                                </div>
+                                            </div>
+                                            <div class="px-2">
+                                                <div class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 mb-2">
+                                                    <span class="material-symbols-outlined text-lg text-emerald-600 dark:text-emerald-400">check_circle</span>
+                                                </div>
+                                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">¡Listo para tu cita!</p>
+                                                <p class="text-[10px] text-gray-500 dark:text-gray-500">Confirma tu reserva</p>
+                                            </div>
                                         </div>
-                                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">¡Listo para tu cita!</p>
                                     </div>
                                 </div>
                             </div>

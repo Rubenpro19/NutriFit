@@ -613,7 +613,7 @@ class NutricionistaController extends Controller
         ]);
 
         return redirect()
-            ->route('nutricionista.appointments.show', $appointment)
+            ->route('nutricionista.appointments.create')
             ->with('success', 'Cita asignada exitosamente al paciente ' . $paciente->name);
     }
 
