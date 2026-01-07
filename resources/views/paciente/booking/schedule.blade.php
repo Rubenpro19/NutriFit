@@ -99,7 +99,7 @@
                         Detalles de la Cita
                     </h3>
                     
-                    <form method="POST" action="{{ route('paciente.booking.store', $nutricionista) }}" id="bookingForm">
+                    <form method="POST" action="{{ route('paciente.booking.store', $nutricionista) }}" id="bookingForm" x-data="{ submitting: false }" @submit="submitting = true">
                         @csrf
                         
                         <input type="hidden" name="date" id="selectedDate">
@@ -169,10 +169,16 @@
                         </div>
 
                         <!-- Botón de Confirmar -->
-                        <button type="submit" id="submitBtn" disabled
+                        <button type="submit" id="submitBtn" 
+                                :disabled="submitting"
+                                disabled
                                 class="w-full rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 font-bold text-white text-lg transition-all hover:from-green-700 hover:to-emerald-700 hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2 group">
-                            <span class="material-symbols-outlined group-disabled:animate-none">check_circle</span>
-                            <span id="btnText">Selecciona un horario</span>
+                            <span class="material-symbols-outlined group-disabled:animate-none" x-show="!submitting">check_circle</span>
+                            <svg x-show="submitting" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span id="btnText" x-text="submitting ? 'Confirmando...' : (document.getElementById('selectedDate').value ? 'Confirmar Cita' : 'Selecciona un horario')"></span>
                         </button>
                     </form>
                 </div>
@@ -299,7 +305,6 @@
             // Habilitar botón y cambiar texto
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = false;
-            document.getElementById('btnText').textContent = 'Confirmar Cita';
             
             // Scroll suave en móvil
             if (window.innerWidth < 1024) {

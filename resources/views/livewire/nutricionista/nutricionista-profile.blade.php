@@ -184,24 +184,27 @@
 
                     <!-- Foto de Perfil -->
                     <div>
-                        <label for="profile_photo" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            Foto de Perfil
+                        <label for="profile_photo" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
+                            📷 Foto de Perfil
                         </label>
-                        <input 
-                            type="file" 
-                            wire:model="profile_photo" 
-                            id="profile_photo"
-                            accept="image/*"
-                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
-                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">JPG, PNG o GIF (máx. 2MB)</p>
-                        @error('profile_photo') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
-                        
+                        <div class="flex items-center gap-4">
+                            <input 
+                                type="file" 
+                                id="profile_photo"
+                                wire:model="profile_photo"
+                                accept="image/*"
+                                class="block w-full text-sm text-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-white dark:bg-gray-800 focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 dark:file:bg-green-900/30 dark:file:text-green-400 dark:hover:file:bg-green-800/50 file:transition-colors"
+                            >
+                        </div>
+                        @error('profile_photo')
+                            <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                        @enderror
+                        <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                            Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 2MB.
+                        </p>
                         <div wire:loading wire:target="profile_photo" class="mt-2 text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">
-                            <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                            </svg>
-                            <span>Cargando imagen...</span>
+                            <span class="material-symbols-outlined animate-spin text-sm">progress_activity</span>
+                            Cargando imagen...
                         </div>
                     </div>
 

@@ -11,206 +11,158 @@
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
             <!-- Header -->
             <div class="mb-8 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-600 p-6 md:p-8 text-white shadow-lg">
-                <div class="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+                <div class="flex items-center justify-between gap-4">
                     <div>
                         <h1 class="text-3xl font-bold mb-2">¡Hola, {{ auth()->user()->name }}!</h1>
-                        <p class="text-green-100">Gestiona tus citas y encuentra al nutricionista perfecto para ti</p>
+                        <p class="text-green-100">Bienvenido a tu panel de nutrición personalizada</p>
                     </div>
-                    <div>
-                        <a href="{{ route('paciente.profile') }}" 
-                           class="inline-flex items-center gap-2 bg-white/20 backdrop-blur-sm hover:bg-white/30 text-white font-semibold py-3 px-6 rounded-xl transition border border-white/30">
-                            <span class="material-symbols-outlined">person</span>
-                            Mi Perfil
-                        </a>
+                    <div class="hidden sm:block">
+                        <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                            <span class="material-symbols-outlined text-4xl text-white">spa</span>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            {{-- Acceso Rápido al Historial de Citas --}}
-            <div
-                class="mt-8 rounded-2xl border border-gray-200 bg-white p-8 shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                <div class="flex flex-col md:flex-row items-center justify-between gap-6">
-                    <div class="flex items-start gap-4">
-                        <div class="flex-shrink-0">
-                            <div
-                                class="w-16 h-16 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center">
-                                <span class="material-symbols-outlined text-3xl text-white">history</span>
-                            </div>
-                        </div>
-                        <div>
-                            <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                                Historial de Citas
-                            </h2>
-                            <p class="text-gray-600 dark:text-gray-400 mb-1">
-                                Visualiza todas tus citas pasadas y próximas
-                            </p>
-                            <p class="text-sm text-gray-500 dark:text-gray-500">
-                                Revisa detalles de atenciones, diagnósticos y recomendaciones
-                            </p>
-                        </div>
-                    </div>
-                    <div class="flex-shrink-0">
-                        <a href="{{ route('paciente.appointments.index') }}"
-                            class="inline-flex items-center gap-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-green-700 hover:to-emerald-700 transition shadow-lg">
-                            <span class="material-symbols-outlined">calendar_view_month</span>
-                            Ver Todas las Citas
-                        </a>
-                    </div>
-                </div>
-
-                @if ($recentAppointments->count() > 0)
-                    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-                            <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Última cita</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ \Carbon\Carbon::parse($recentAppointments->first()->start_time)->locale('es')->isoFormat('D [de] MMMM') }}
-                                </p>
-                            </div>
-                            <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-4">
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Total registradas</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $recentAppointments->count() }}
-                                    {{ $recentAppointments->count() === 1 ? 'cita' : 'citas' }}
-                                </p>
-                            </div>
-                            <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4">
-                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Atenciones completadas</p>
-                                <p class="text-lg font-semibold text-gray-900 dark:text-white">
-                                    {{ $stats['completadas'] }}
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                @endif
             </div>
 
             @if (session('success'))
-                <div
-                    class="mb-6 mt-8 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg flex items-center gap-3">
+                <div class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg flex items-center gap-3">
                     <span class="material-symbols-outlined">check_circle</span>
                     <span>{{ session('success') }}</span>
                 </div>
             @endif
 
             @if (session('error'))
-                <div
-                    class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg flex items-center gap-3">
+                <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg flex items-center gap-3">
                     <span class="material-symbols-outlined">error</span>
                     <span>{{ session('error') }}</span>
                 </div>
             @endif
 
-            <div class="grid gap-6 lg:grid-cols-3 mt-8">
-                {{-- Próxima Cita --}}
-                <div
-                    class="lg:col-span-2 rounded-2xl border-2 border-green-500 bg-white p-6 shadow-lg dark:border-green-400 dark:bg-gray-800">
-                    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                        <span class="material-symbols-outlined text-green-600 dark:text-green-400">upcoming</span>
-                        Próxima Cita
-                    </h2>
-
+            <div class="grid gap-6 lg:grid-cols-3">
+                {{-- Columna Principal --}}
+                <div class="lg:col-span-2 space-y-6">
                     @if ($nextAppointment)
-                        <div
-                            class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-lg p-6">
-                            <div class="flex items-start gap-4 mb-4">
-                                <div class="flex-shrink-0">
-                                    <div
-                                        class="w-16 h-16 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold text-xl">
-                                        {{ $nextAppointment->nutricionista->initials() }}
-                                    </div>
-                                </div>
-                                <div class="flex-1">
-                                    <h3 class="font-semibold text-xl text-gray-900 dark:text-white">
-                                        {{ $nextAppointment->nutricionista->name }}
-                                    </h3>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Nutricionista</p>
-                                    <p class="text-sm text-gray-500 dark:text-gray-500">
-                                        {{ $nextAppointment->nutricionista->email }}</p>
-                                </div>
+                        {{-- Próxima Cita --}}
+                        <div class="rounded-2xl border-2 border-green-500 bg-white p-6 shadow-lg dark:border-green-400 dark:bg-gray-800">
+                            <div class="flex items-center gap-2 mb-6">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-3xl">upcoming</span>
+                                <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Tu Próxima Cita</h2>
                             </div>
 
-                            <div class="grid md:grid-cols-2 gap-4 mb-4">
-                                <div class="flex items-center gap-3 bg-white dark:bg-gray-700 rounded-lg p-3">
-                                    <span
-                                        class="material-symbols-outlined text-green-600 dark:text-green-400">calendar_today</span>
-                                    <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Fecha</p>
-                                        <p class="font-semibold text-gray-900 dark:text-white">
-                                            {{ \Carbon\Carbon::parse($nextAppointment->start_time)->locale('es')->isoFormat('D [de] MMMM, YYYY') }}
-                                        </p>
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6">
+                                <div class="flex items-start gap-4 mb-6">
+                                    @if($nextAppointment->nutricionista->personalData?->profile_photo)
+                                        <div class="w-20 h-20 rounded-full overflow-hidden shadow-lg flex-shrink-0">
+                                            <img src="{{ asset('storage/' . $nextAppointment->nutricionista->personalData->profile_photo) }}" 
+                                                 alt="{{ $nextAppointment->nutricionista->name }}" 
+                                                 class="w-full h-full object-cover">
+                                        </div>
+                                    @else
+                                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold text-2xl flex-shrink-0 shadow-lg">
+                                            {{ $nextAppointment->nutricionista->initials() }}
+                                        </div>
+                                    @endif
+                                    <div class="flex-1">
+                                        <h3 class="font-bold text-2xl text-gray-900 dark:text-white mb-1">
+                                            {{ $nextAppointment->nutricionista->name }}
+                                        </h3>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Nutricionista Profesional</p>
+                                        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-500">
+                                            <span class="material-symbols-outlined text-lg">email</span>
+                                            {{ $nextAppointment->nutricionista->email }}
+                                        </div>
                                     </div>
                                 </div>
 
-                                <div class="flex items-center gap-3 bg-white dark:bg-gray-700 rounded-lg p-3">
-                                    <span
-                                        class="material-symbols-outlined text-green-600 dark:text-green-400">schedule</span>
-                                    <div>
-                                        <p class="text-xs text-gray-500 dark:text-gray-400">Hora</p>
-                                        <p class="font-semibold text-gray-900 dark:text-white">
+                                <div class="grid sm:grid-cols-2 gap-4 mb-6">
+                                    <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow">
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">calendar_today</span>
+                                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Fecha</p>
+                                        </div>
+                                        <p class="font-bold text-lg text-gray-900 dark:text-white">
+                                            {{ \Carbon\Carbon::parse($nextAppointment->start_time)->locale('es')->isoFormat('dddd, D [de] MMMM') }}
+                                        </p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            {{ \Carbon\Carbon::parse($nextAppointment->start_time)->locale('es')->isoFormat('YYYY') }}
+                                        </p>
+                                    </div>
+
+                                    <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow">
+                                        <div class="flex items-center gap-3 mb-2">
+                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">schedule</span>
+                                            <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Hora</p>
+                                        </div>
+                                        <p class="font-bold text-lg text-gray-900 dark:text-white">
                                             {{ \Carbon\Carbon::parse($nextAppointment->start_time)->format('h:i A') }}
                                         </p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Duración: 45 min</p>
                                     </div>
                                 </div>
-                            </div>
 
-                            @if ($nextAppointment->reason)
-                                <div class="bg-white dark:bg-gray-700 rounded-lg p-3 mb-4">
-                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Motivo</p>
-                                    <p class="text-gray-900 dark:text-white">{{ $nextAppointment->reason }}</p>
-                                </div>
-                            @endif
+                                @if ($nextAppointment->reason)
+                                    <div class="bg-white dark:bg-gray-700 rounded-xl p-4 mb-6 shadow">
+                                        <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">Motivo de consulta</p>
+                                        <p class="text-gray-900 dark:text-white">{{ $nextAppointment->reason }}</p>
+                                    </div>
+                                @endif
 
-                            <div class="flex gap-3">
-                                <a href="{{ route('paciente.appointments.show', $nextAppointment) }}"
-                                    class="flex-1 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-3 text-center font-semibold text-white transition hover:from-green-700 hover:to-emerald-700 flex items-center justify-center gap-2">
-                                    <span class="material-symbols-outlined">visibility</span>
-                                    Ver Detalles
-                                </a>
-                                <div x-data="{ showModal: false }" class="flex-1">
-                                    <button type="button" @click="showModal = true"
-                                        class="w-full rounded-lg bg-red-600 px-4 py-3 text-center font-semibold text-white transition hover:bg-red-700 flex items-center justify-center gap-2">
-                                        <span class="material-symbols-outlined">cancel</span>
-                                        Cancelar Cita
-                                    </button>
+                                <div class="flex flex-col sm:flex-row gap-3">
+                                    <a href="{{ route('paciente.appointments.show', $nextAppointment) }}"
+                                        class="flex-1 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 text-center font-bold text-white transition hover:from-green-700 hover:to-emerald-700 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                                        <span class="material-symbols-outlined">visibility</span>
+                                        Ver Detalles Completos
+                                    </a>
+                                    <div x-data="{ showModal: false }" class="flex-1">
+                                        <button type="button" @click="showModal = true"
+                                            class="w-full rounded-xl bg-red-600 px-6 py-4 text-center font-bold text-white transition hover:bg-red-700 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                                            <span class="material-symbols-outlined">cancel</span>
+                                            Cancelar Cita
+                                        </button>
 
-                                    <!-- Modal de Confirmación -->
-                                    <div x-show="showModal" x-cloak
-                                        class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
-                                        @click.self="showModal = false">
-                                        <div @click.away="showModal = false"
-                                            class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all"
-                                            x-transition:enter="transition ease-out duration-300"
-                                            x-transition:enter-start="opacity-0 scale-90"
-                                            x-transition:enter-end="opacity-100 scale-100"
-                                            x-transition:leave="transition ease-in duration-200"
-                                            x-transition:leave-start="opacity-100 scale-100"
-                                            x-transition:leave-end="opacity-0 scale-90">
-                                            
-                                            <div class="text-center mb-6">
-                                                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
-                                                    <span class="material-symbols-outlined text-4xl text-red-600 dark:text-red-400">warning</span>
+                                        <!-- Modal de Confirmación -->
+                                        <div x-show="showModal" x-cloak
+                                            class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                                            @click.self="showModal = false">
+                                            <div @click.away="showModal = false"
+                                                class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all"
+                                                x-transition:enter="transition ease-out duration-300"
+                                                x-transition:enter-start="opacity-0 scale-90"
+                                                x-transition:enter-end="opacity-100 scale-100"
+                                                x-transition:leave="transition ease-in duration-200"
+                                                x-transition:leave-start="opacity-100 scale-100"
+                                                x-transition:leave-end="opacity-0 scale-90">
+                                                
+                                                <div class="text-center mb-6">
+                                                    <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                                                        <span class="material-symbols-outlined text-4xl text-red-600 dark:text-red-400">warning</span>
+                                                    </div>
+                                                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                                        ¿Cancelar esta cita?
+                                                    </h3>
+                                                    <p class="text-gray-600 dark:text-gray-400">
+                                                        Esta acción no se puede deshacer. El nutricionista será notificado de la cancelación.
+                                                    </p>
                                                 </div>
-                                                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
-                                                    ¿Cancelar esta cita?
-                                                </h3>
-                                                <p class="text-gray-600 dark:text-gray-400">
-                                                    Esta acción no se puede deshacer. El nutricionista será notificado de la cancelación.
-                                                </p>
-                                            </div>
 
-                                            <div class="flex gap-3">
-                                                <button type="button" @click="showModal = false"
-                                                    class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-                                                    No, mantener
-                                                </button>
-                                                <form method="POST" action="{{ route('paciente.appointments.cancel', $nextAppointment) }}" class="flex-1">
-                                                    @csrf
-                                                    <button type="submit"
-                                                        class="w-full px-4 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition">
-                                                        Sí, cancelar
+                                                <div class="flex gap-3">
+                                                    <button type="button" @click="showModal = false"
+                                                        class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                                        No, mantener
                                                     </button>
-                                                </form>
+                                                    <form method="POST" action="{{ route('paciente.appointments.cancel', $nextAppointment) }}" class="flex-1" x-data="{ submitting: false }" @submit="submitting = true">
+                                                        @csrf
+                                                        <button type="submit"
+                                                            :disabled="submitting"
+                                                            class="w-full px-4 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
+                                                            <svg x-show="submitting" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                                            </svg>
+                                                            <span x-text="submitting ? 'Cancelando...' : 'Sí, cancelar'"></span>
+                                                        </button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -218,19 +170,214 @@
                             </div>
                         </div>
                     @else
-                        <div class="py-12 text-center">
-                            <span
-                                class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600">event_busy</span>
-                            <p class="mt-4 text-gray-500 dark:text-gray-400 mb-6">No tienes citas próximas</p>
+                        {{-- Call to Action: Agendar Cita --}}
+                        <div class="rounded-2xl border-2 border-dashed border-green-300 dark:border-green-600 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-8 shadow-lg text-center">
+                            <div class="mb-6">
+                                <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 mb-4 shadow-lg">
+                                    <span class="material-symbols-outlined text-5xl text-white">calendar_add_on</span>
+                                </div>
+                                <h2 class="text-3xl font-bold text-gray-900 dark:text-white mb-3">
+                                    ¡Agenda tu próxima consulta!
+                                </h2>
+                                <p class="text-lg text-gray-600 dark:text-gray-400 mb-2">
+                                    Continúa tu seguimiento nutricional con un profesional
+                                </p>
+                                <p class="text-sm text-gray-500 dark:text-gray-500">
+                                    Selecciona el mejor horario para tu próxima cita
+                                </p>
+                            </div>
+
                             <a href="{{ route('paciente.booking.index') }}"
-                                class="inline-flex items-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 font-semibold text-white transition hover:from-green-700 hover:to-emerald-700">
-                                <span class="material-symbols-outlined">add_circle</span>
+                                class="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-4 text-lg font-bold text-white transition hover:from-green-700 hover:to-emerald-700 shadow-xl hover:shadow-2xl hover:scale-105">
+                                <span class="material-symbols-outlined text-2xl">add_circle</span>
                                 Agendar Nueva Cita
                             </a>
+
+                            <div class="mt-8 pt-6 border-t border-green-200 dark:border-green-700">
+                                <div class="flex items-center justify-center gap-2">
+                                    <div class="flex-1 text-center">
+                                        <div class="w-12 h-12 mx-auto rounded-full bg-white dark:bg-gray-700 flex items-center justify-center mb-2 shadow-md">
+                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">search</span>
+                                        </div>
+                                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">Elige tu nutricionista</p>
+                                    </div>
+                                    
+                                    <div class="flex-shrink-0 mt-[-20px]">
+                                        <span class="material-symbols-outlined text-2xl text-green-600 dark:text-green-400">arrow_forward</span>
+                                    </div>
+                                    
+                                    <div class="flex-1 text-center">
+                                        <div class="w-12 h-12 mx-auto rounded-full bg-white dark:bg-gray-700 flex items-center justify-center mb-2 shadow-md">
+                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">event_available</span>
+                                        </div>
+                                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">Selecciona horario</p>
+                                    </div>
+                                    
+                                    <div class="flex-shrink-0 mt-[-20px]">
+                                        <span class="material-symbols-outlined text-2xl text-green-600 dark:text-green-400">arrow_forward</span>
+                                    </div>
+                                    
+                                    <div class="flex-1 text-center">
+                                        <div class="w-12 h-12 mx-auto rounded-full bg-white dark:bg-gray-700 flex items-center justify-center mb-2 shadow-md">
+                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+                                        </div>
+                                        <p class="text-xs font-semibold text-gray-600 dark:text-gray-400">¡Listo para tu cita!</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Últimas Citas --}}
+                    @if ($recentAppointments->count() > 0)
+                        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                            <div class="flex items-center justify-between mb-4">
+                                <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400">history</span>
+                                    Citas Recientes
+                                </h3>
+                                <a href="{{ route('paciente.appointments.index') }}" 
+                                   class="text-sm text-green-600 dark:text-green-400 hover:underline font-semibold">
+                                    Ver todas →
+                                </a>
+                            </div>
+
+                            <div class="space-y-3">
+                                @foreach($recentAppointments->take(3) as $appointment)
+                                    <div class="flex items-center gap-4 p-4 bg-gray-50 dark:bg-gray-700/50 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                                        @if($appointment->nutricionista->personalData?->profile_photo)
+                                            <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                                                <img src="{{ asset('storage/' . $appointment->nutricionista->personalData->profile_photo) }}" 
+                                                     alt="{{ $appointment->nutricionista->name }}" 
+                                                     class="w-full h-full object-cover">
+                                            </div>
+                                        @else
+                                            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold flex-shrink-0">
+                                                {{ $appointment->nutricionista->initials() }}
+                                            </div>
+                                        @endif
+                                        <div class="flex-1 min-w-0">
+                                            <p class="font-semibold text-gray-900 dark:text-white truncate">
+                                                {{ $appointment->nutricionista->name }}
+                                            </p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                {{ \Carbon\Carbon::parse($appointment->start_time)->locale('es')->isoFormat('D MMM, h:mm A') }}
+                                            </p>
+                                        </div>
+                                        <span class="px-3 py-1 rounded-full text-xs font-semibold
+                                            @if($appointment->appointmentState->name === 'completada') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
+                                            @elseif($appointment->appointmentState->name === 'cancelada') bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-400
+                                            @elseif($appointment->appointmentState->name === 'vencida') bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-400
+                                            @else bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400
+                                            @endif">
+                                            {{ ucfirst($appointment->appointmentState->name) }}
+                                        </span>
+                                    </div>
+                                @endforeach
+                            </div>
                         </div>
                     @endif
                 </div>
 
+                {{-- Columna Lateral --}}
+                <div class="space-y-6">
+                    {{-- Accesos Rápidos --}}
+                    <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                        <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">bolt</span>
+                            Accesos Rápidos
+                        </h3>
+                        
+                        <div class="space-y-3">
+                            <a href="{{ route('paciente.profile') }}"
+                               class="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 hover:from-green-100 hover:to-emerald-100 dark:hover:from-green-900/30 dark:hover:to-emerald-900/30 transition group">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center group-hover:scale-110 transition">
+                                    <span class="material-symbols-outlined text-white">person</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-900 dark:text-white">Mi Perfil</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Editar información personal</p>
+                                </div>
+                                <span class="material-symbols-outlined text-gray-400 group-hover:text-green-600 dark:group-hover:text-green-400">chevron_right</span>
+                            </a>
+
+                            <a href="{{ route('paciente.appointments.index') }}"
+                               class="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 hover:from-blue-100 hover:to-cyan-100 dark:hover:from-blue-900/30 dark:hover:to-cyan-900/30 transition group">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center group-hover:scale-110 transition">
+                                    <span class="material-symbols-outlined text-white">calendar_month</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-900 dark:text-white">Historial Completo</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Ver todas tus citas</p>
+                                </div>
+                                <span class="material-symbols-outlined text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400">chevron_right</span>
+                            </a>
+
+                            @if(!$nextAppointment)
+                                <a href="{{ route('paciente.booking.index') }}"
+                                   class="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 hover:from-purple-100 hover:to-pink-100 dark:hover:from-purple-900/30 dark:hover:to-pink-900/30 transition group">
+                                    <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-pink-600 flex items-center justify-center group-hover:scale-110 transition">
+                                        <span class="material-symbols-outlined text-white">add_circle</span>
+                                    </div>
+                                    <div class="flex-1">
+                                        <p class="font-semibold text-gray-900 dark:text-white">Agendar Cita</p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Nueva consulta</p>
+                                    </div>
+                                    <span class="material-symbols-outlined text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400">chevron_right</span>
+                                </a>
+                            @endif
+                        </div>
+                    </div>
+
+                    {{-- Estadísticas --}}
+                    @if($stats['total'] > 0)
+                        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                            <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400">analytics</span>
+                                Tus Estadísticas
+                            </h3>
+                            
+                            <div class="space-y-4">
+                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">Total de Citas</p>
+                                        <span class="material-symbols-outlined text-green-600 dark:text-green-400">event</span>
+                                    </div>
+                                    <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ $stats['total'] }}</p>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">Completadas</p>
+                                        <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+                                    </div>
+                                    <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ $stats['completadas'] }}</p>
+                                </div>
+
+                                <div class="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-4">
+                                    <div class="flex items-center justify-between mb-1">
+                                        <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">Pendientes</p>
+                                        <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">pending</span>
+                                    </div>
+                                    <p class="text-3xl font-bold text-gray-900 dark:text-white">{{ $stats['pendientes'] }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    @endif
+
+                    {{-- Info Card --}}
+                    <div class="rounded-2xl border border-gray-200 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-6 shadow-lg dark:border-gray-700">
+                        <div class="flex items-start gap-3 mb-3">
+                            <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-2xl">info</span>
+                            <div>
+                                <h4 class="font-bold text-gray-900 dark:text-white mb-1">¿Sabías que?</h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">
+                                    Solo puedes tener una cita activa a la vez. Esto asegura que recibas la atención personalizada que mereces.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
             </div>
             </div>
         </main>
