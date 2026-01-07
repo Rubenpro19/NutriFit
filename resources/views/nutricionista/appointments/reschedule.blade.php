@@ -55,6 +55,60 @@
             </div>
         @endif
 
+        <!-- Modal de Éxito -->
+        @if(session('success'))
+        <div x-data="{ show: true }" 
+             x-show="show"
+             x-cloak
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+             style="display: none;">
+            <div @click.away="show = false"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 scale-90"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-90"
+                 class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center transform">
+                
+                <!-- Ícono de éxito animado -->
+                <div class="mb-6 flex justify-center">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-75"></div>
+                        <div class="relative bg-gradient-to-br from-emerald-500 to-green-600 rounded-full p-4 shadow-lg">
+                            <span class="material-symbols-outlined text-white text-5xl">event_repeat</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Título -->
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                    ¡Cita Reagendada con Éxito!
+                </h3>
+                
+                <!-- Mensaje -->
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    {{ session('success') }}
+                </p>
+                
+                <!-- Botones -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    @if(session('appointment_id'))
+                        <a href="{{ route('nutricionista.appointments.show', session('appointment_id')) }}"
+                           class="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold rounded-lg hover:from-emerald-700 hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">visibility</span>
+                            Ver Detalle de Cita
+                        </a>
+                    @endif
+                    <button @click="show = false"
+                            class="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+        @endif
+
         <div class="grid lg:grid-cols-5 gap-8" x-data="{ showPhotoModal: false }">
             <!-- Panel Izquierdo: Info de la Cita Actual -->
             <div class="lg:col-span-2 space-y-6">
@@ -109,7 +163,7 @@
                         Nuevo Horario
                     </h3>
                     
-                    <form method="POST" action="{{ route('nutricionista.appointments.reschedule.store', $appointment) }}" id="rescheduleForm">
+                    <form method="POST" action="{{ route('nutricionista.appointments.reschedule.store', $appointment) }}" id="rescheduleForm" x-data="{ submitting: false }" @submit="submitting = true">
                         @csrf
                         
                         <input type="hidden" name="date" id="selectedDate">
@@ -154,13 +208,20 @@
 
                         <!-- Botones de Acción -->
                         <div class="space-y-3">
-                            <button type="submit" id="submitBtn" disabled
+                            <button type="submit" id="submitBtn" 
+                                    :disabled="submitting"
+                                    disabled
                                     class="w-full rounded-xl bg-gradient-to-r from-emerald-600 to-green-600 px-6 py-4 font-bold text-white text-lg transition-all hover:from-emerald-700 hover:to-green-700 hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2 group">
-                                <span class="material-symbols-outlined group-disabled:animate-none">check_circle</span>
-                                <span id="btnText">Selecciona un horario</span>
+                                <span class="material-symbols-outlined group-disabled:animate-none" x-show="!submitting">check_circle</span>
+                                <svg x-show="submitting" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                                </svg>
+                                <span id="btnText" x-text="submitting ? 'Confirmando...' : (document.getElementById('selectedDate').value ? 'Confirmar Reagendamiento' : 'Selecciona un horario')"></span>
                             </button>
                             
                             <a href="{{ route('nutricionista.appointments.show', $appointment) }}" 
+                               :class="submitting ? 'pointer-events-none opacity-50' : ''"
                                class="w-full block text-center rounded-xl bg-gray-100 dark:bg-gray-700 px-6 py-3 font-semibold text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                                 Cancelar
                             </a>
@@ -329,7 +390,6 @@
             // Habilitar botón y cambiar texto
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = false;
-            document.getElementById('btnText').textContent = 'Confirmar Reagendamiento';
             
             // Scroll suave en móvil
             if (window.innerWidth < 1024) {

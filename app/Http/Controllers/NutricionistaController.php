@@ -338,8 +338,9 @@ class NutricionistaController extends Controller
         ));
 
         return redirect()
-            ->route('nutricionista.appointments.show', $appointment)
-            ->with('success', 'La cita ha sido reagendada exitosamente. El paciente ha sido notificado.');
+            ->route('nutricionista.appointments.reschedule', $appointment)
+            ->with('success', 'La cita ha sido reagendada exitosamente. El paciente ha sido notificado.')
+            ->with('appointment_id', $appointment->id);
     }
 
     /**
@@ -614,7 +615,8 @@ class NutricionistaController extends Controller
 
         return redirect()
             ->route('nutricionista.appointments.create')
-            ->with('success', 'Cita asignada exitosamente al paciente ' . $paciente->name);
+            ->with('success', 'Cita asignada exitosamente al paciente ' . $paciente->name)
+            ->with('appointment_id', $appointment->id);
     }
 
     /**

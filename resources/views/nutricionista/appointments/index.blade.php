@@ -16,22 +16,31 @@
             </nav>
 
             {{-- Header --}}
-            <div class="mb-6 rounded-xl bg-white p-4 sm:p-6 shadow-sm dark:bg-gray-800">
+            <div class="mb-6 rounded-2xl bg-white p-4 sm:p-6 shadow-lg dark:bg-gray-800 border border-gray-200 dark:border-gray-700">
                 <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
-                    <div class="flex items-center gap-3">
-                        <div class="flex h-12 w-12 items-center justify-center rounded-lg bg-gradient-to-br from-green-600 to-emerald-600 text-white shadow-lg">
-                            <span class="material-symbols-outlined text-2xl">calendar_month</span>
-                        </div>
-                        <div>
-                            <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Mis Citas</h1>
-                            <p class="text-sm text-gray-500 dark:text-gray-400">Gestiona todas tus citas médicas</p>
+                    <div class="flex items-center gap-3 flex-1 min-w-0">
+                        <a href="{{ route('nutricionista.dashboard') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 hover:scale-110 transition-all">
+                            <span class="material-symbols-outlined text-2xl">arrow_back</span>
+                        </a>
+                        <div class="min-w-0 flex-1">
+                            <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                                Mis Citas
+                            </h1>
+                            <p class="text-sm sm:text-base text-gray-700 dark:text-gray-300 mt-1">
+                                Gestiona todas tus citas médicas
+                            </p>
                         </div>
                     </div>
-                    <a href="{{ route('nutricionista.appointments.create') }}" 
-                       class="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-white font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
-                        <span class="material-symbols-outlined">add_circle</span>
-                        Asignar Nueva Cita
-                    </a>
+                    <div class="flex items-center gap-3">
+                        <div class="flex-shrink-0 hidden sm:flex items-center">
+                            <span class="material-symbols-outlined text-3xl sm:text-4xl text-green-600 dark:text-green-400">calendar_month</span>
+                        </div>
+                        <a href="{{ route('nutricionista.appointments.create') }}" 
+                           class="flex items-center justify-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-3 text-white font-semibold transition-all duration-200 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
+                            <span class="material-symbols-outlined">add_circle</span>
+                            Asignar Nueva Cita
+                        </a>
+                    </div>
                 </div>
             </div>
 

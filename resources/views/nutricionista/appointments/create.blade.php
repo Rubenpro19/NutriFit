@@ -37,18 +37,65 @@
             </div>
         </div>
 
-        @if(session('success'))
-            <div class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg flex items-center gap-3">
-                <span class="material-symbols-outlined">check_circle</span>
-                <span>{{ session('success') }}</span>
-            </div>
-        @endif
-
         @if(session('error'))
             <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg flex items-center gap-3">
                 <span class="material-symbols-outlined">error</span>
                 <span>{{ session('error') }}</span>
             </div>
+        @endif
+
+        <!-- Modal de Éxito -->
+        @if(session('success'))
+        <div x-data="{ show: true }" 
+             x-show="show"
+             x-cloak
+             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+             style="display: none;">
+            <div @click.away="show = false"
+                 x-transition:enter="transition ease-out duration-300"
+                 x-transition:enter-start="opacity-0 scale-90"
+                 x-transition:enter-end="opacity-100 scale-100"
+                 x-transition:leave="transition ease-in duration-200"
+                 x-transition:leave-start="opacity-100 scale-100"
+                 x-transition:leave-end="opacity-0 scale-90"
+                 class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center transform">
+                
+                <!-- Ícono de éxito animado -->
+                <div class="mb-6 flex justify-center">
+                    <div class="relative">
+                        <div class="absolute inset-0 bg-green-400 rounded-full animate-ping opacity-75"></div>
+                        <div class="relative bg-gradient-to-br from-green-500 to-emerald-600 rounded-full p-4 shadow-lg">
+                            <span class="material-symbols-outlined text-white text-5xl">check_circle</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Título -->
+                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                    ¡Cita Asignada con Éxito!
+                </h3>
+                
+                <!-- Mensaje -->
+                <p class="text-gray-600 dark:text-gray-400 mb-6">
+                    {{ session('success') }}
+                </p>
+                
+                <!-- Botones -->
+                <div class="flex flex-col sm:flex-row gap-3">
+                    @if(session('appointment_id'))
+                        <a href="{{ route('nutricionista.appointments.show', session('appointment_id')) }}"
+                           class="flex-1 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">visibility</span>
+                            Ver Cita
+                        </a>
+                    @endif
+                    <button @click="show = false"
+                            class="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200">
+                        Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
         @endif
 
         <div x-data="appointmentAssignment()" x-init="init()">
@@ -307,8 +354,8 @@
                                 <input type="hidden" name="appointment_time" x-model="selectedTime">
 
                                 <!-- Información del Paciente Seleccionado -->
-                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 mb-6 border border-green-200 dark:border-green-800" x-data="{ showPhotoModal: false }">
-                                    <div class="flex items-center gap-4 mb-4">
+                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 mb-6 border border-green-200 dark:border-green-800">
+                                    <div class="flex items-center gap-4 mb-4" x-data="{ showPhotoModal: false }">
                                         <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                                             <template x-if="selectedPatient?.profile_photo">
                                                 <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
@@ -327,59 +374,74 @@
                                             <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="selectedPatient?.name"></p>
                                             <p class="text-sm text-gray-600 dark:text-gray-400" x-text="selectedPatient?.email"></p>
                                         </div>
-                                    </div>
 
-                                    <!-- Modal de Foto de Perfil -->
-                                    <div x-show="showPhotoModal && selectedPatient?.profile_photo"
-                                         x-cloak
-                                         @keydown.escape.window="showPhotoModal = false"
-                                         class="fixed inset-0 z-50 flex items-center justify-center p-4"
-                                         style="display: none;">
-                                        
-                                        <!-- Overlay -->
-                                        <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
-                                        
-                                        <!-- Modal Content -->
-                                        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
-                                             @click.stop>
+                                        <!-- Modal de Foto de Perfil -->
+                                        <div x-show="showPhotoModal && selectedPatient?.profile_photo"
+                                             x-cloak
+                                             @keydown.escape.window="showPhotoModal = false"
+                                             class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                                             style="display: none;">
                                             
-                                            <!-- Header -->
-                                            <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
-                                                <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                                    <span class="material-symbols-outlined">photo_camera</span>
-                                                    Foto de Perfil
-                                                </h3>
-                                                <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
-                                                    <span class="material-symbols-outlined">close</span>
-                                                </button>
-                                            </div>
+                                            <!-- Overlay -->
+                                            <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
                                             
-                                            <!-- Image -->
-                                            <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
-                                        <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
-                                            </div>
-                                            
-                                            <!-- Footer -->
-                                            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
-                                                <button type="button" @click="showPhotoModal = false" 
-                                                        class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
-                                                    Cerrar
-                                                </button>
+                                            <!-- Modal Content -->
+                                            <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                                                 @click.stop>
+                                                
+                                                <!-- Header -->
+                                                <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                                                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                                        <span class="material-symbols-outlined">photo_camera</span>
+                                                        Foto de Perfil
+                                                    </h3>
+                                                    <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
+                                                        <span class="material-symbols-outlined">close</span>
+                                                    </button>
+                                                </div>
+                                                
+                                                <!-- Image -->
+                                                <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                                            <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
+                                                </div>
+                                                
+                                                <!-- Footer -->
+                                                <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
+                                                    <button type="button" @click="showPhotoModal = false" 
+                                                            class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                                        Cerrar
+                                                    </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     
                                     <!-- Resumen de Selección -->
-                                    <div x-show="selectedDate && selectedTime" class="mt-4 pt-4 border-t border-green-200 dark:border-green-700">
-                                        <p class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Horario seleccionado:</p>
-                                        <div class="flex flex-wrap gap-3">
-                                            <div class="flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg">
-                                                <span class="material-symbols-outlined text-green-600 text-sm">calendar_today</span>
-                                                <span class="text-sm font-medium text-gray-900 dark:text-white" x-text="selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : ''"></span>
-                                            </div>
-                                            <div class="flex items-center gap-2 bg-white dark:bg-gray-800 px-4 py-2 rounded-lg">
-                                                <span class="material-symbols-outlined text-green-600 text-sm">schedule</span>
-                                                <span class="text-sm font-medium text-gray-900 dark:text-white" x-text="selectedTime"></span>
+                                    <div x-show="selectedDate && selectedTime" 
+                                         x-transition:enter="transition ease-out duration-300"
+                                         x-transition:enter-start="opacity-0 transform scale-95"
+                                         x-transition:enter-end="opacity-100 transform scale-100"
+                                         class="mt-4">
+                                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-3 sm:p-4 border-2 border-dashed border-green-300 dark:border-green-600">
+                                            <p class="text-sm font-semibold text-green-900 dark:text-green-200 mb-3 flex items-center gap-2">
+                                                <span class="material-symbols-outlined text-base">check_circle</span>
+                                                Horario seleccionado
+                                            </p>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                                                <div class="flex items-center gap-2 sm:gap-3 bg-white dark:bg-gray-700 px-3 py-2 sm:py-3 rounded-lg shadow-sm">
+                                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-lg sm:text-xl">calendar_today</span>
+                                                    <div class="flex-1 min-w-0">
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">Fecha</p>
+                                                        <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : ''"></p>
+                                                    </div>
+                                                </div>
+                                                <div class="flex items-center gap-2 sm:gap-3 bg-white dark:bg-gray-700 px-3 py-2 sm:py-3 rounded-lg shadow-sm">
+                                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-lg sm:text-xl">schedule</span>
+                                                    <div class="flex-1 min-w-0">
+                                                        <p class="text-xs text-gray-500 dark:text-gray-400">Hora</p>
+                                                        <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="selectedTime"></p>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -478,7 +540,8 @@
                                         <button 
                                             type="button"
                                             @click="resetSelection"
-                                            class="px-4 sm:px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold text-sm sm:text-base rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 hover:shadow-md hover:scale-105 active:scale-95 transition-all duration-200"
+                                            :disabled="submitting"
+                                            class="px-4 sm:px-6 py-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 font-semibold text-sm sm:text-base rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 hover:shadow-md hover:scale-105 active:scale-95 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
                                         >
                                             Cancelar
                                         </button>

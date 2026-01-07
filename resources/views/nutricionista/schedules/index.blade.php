@@ -37,11 +37,56 @@
                 </div>
             </div>
 
+            <!-- Modal de Éxito -->
             @if(session('success'))
-                <div class="mb-6 bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 px-4 py-3 rounded-lg flex items-center gap-3">
-                    <span class="material-symbols-outlined">check_circle</span>
-                    <span>{{ session('success') }}</span>
+            <div x-data="{ show: true }" 
+                 x-show="show"
+                 x-cloak
+                 class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                 style="display: none;">
+                <div @click.away="show = false"
+                     x-transition:enter="transition ease-out duration-300"
+                     x-transition:enter-start="opacity-0 scale-90"
+                     x-transition:enter-end="opacity-100 scale-100"
+                     x-transition:leave="transition ease-in duration-200"
+                     x-transition:leave-start="opacity-100 scale-100"
+                     x-transition:leave-end="opacity-0 scale-90"
+                     class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center transform">
+                    
+                    <!-- Ícono de éxito animado -->
+                    <div class="mb-6 flex justify-center">
+                        <div class="relative">
+                            <div class="absolute inset-0 bg-green-400 rounded-full animate-ping opacity-75"></div>
+                            <div class="relative bg-gradient-to-br from-green-500 to-emerald-600 rounded-full p-4 shadow-lg">
+                                <span class="material-symbols-outlined text-white text-5xl">check_circle</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Título -->
+                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
+                        ¡Horarios Guardados con Éxito!
+                    </h3>
+                    
+                    <!-- Mensaje -->
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">
+                        {{ session('success') }}
+                    </p>
+                    
+                    <!-- Botones -->
+                    <div class="flex flex-col sm:flex-row gap-3">
+                        <a href="{{ route('nutricionista.appointments.create') }}"
+                           class="flex-1 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">event_available</span>
+                            Asignar Cita
+                        </a>
+                        <button @click="show = false"
+                                class="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200">
+                            Cerrar
+                        </button>
+                    </div>
                 </div>
+            </div>
             @endif
 
             <!-- Formulario -->
