@@ -104,6 +104,11 @@ Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->name
     // Gestión de atenciones
     Route::get('/citas/{appointment}/atender', [AttentionController::class, 'create'])->name('attentions.create');
     Route::post('/citas/{appointment}/atender', [AttentionController::class, 'store'])->name('attentions.store');
+    
+    // Perfil
+    Route::get('/perfil', function() {
+        return view('nutricionista.profile');
+    })->name('profile');
 });
 
 // Panel paciente - Ruta para cambiar contraseña por defecto (sin middleware password.changed)

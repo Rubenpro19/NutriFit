@@ -47,9 +47,17 @@
                     @foreach($nutricionistas as $nutricionista)
                         <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800 transition hover:shadow-xl hover:border-green-300 dark:hover:border-green-600">
                             <div class="text-center mb-6">
-                                <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold text-3xl mb-4 shadow-lg">
-                                    {{ $nutricionista->initials() }}
-                                </div>
+                                @if($nutricionista->personalData?->profile_photo)
+                                    <div class="w-24 h-24 mx-auto rounded-full overflow-hidden mb-4 shadow-lg">
+                                        <img src="{{ asset('storage/' . $nutricionista->personalData->profile_photo) }}" 
+                                             alt="{{ $nutricionista->name }}" 
+                                             class="w-full h-full object-cover">
+                                    </div>
+                                @else
+                                    <div class="w-24 h-24 mx-auto rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold text-3xl mb-4 shadow-lg">
+                                        {{ $nutricionista->initials() }}
+                                    </div>
+                                @endif
                                 <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
                                     {{ $nutricionista->name }}
                                 </h3>

@@ -1,0 +1,302 @@
+<div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="mb-8 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700">
+        <div class="flex items-center justify-between gap-3">
+            <div class="flex items-center gap-3 flex-1 min-w-0">
+                <a href="{{ route('nutricionista.dashboard') }}" class="text-gray-700 dark:text-gray-300 hover:text-green-600 dark:hover:text-green-400 hover:scale-110 transition-all">
+                    <span class="material-symbols-outlined text-2xl">arrow_back</span>
+                </a>
+                <div class="min-w-0 flex-1">
+                    <h1 class="text-2xl sm:text-3xl font-bold bg-gradient-to-r from-green-600 to-emerald-600 dark:from-green-400 dark:to-emerald-400 bg-clip-text text-transparent">
+                        Mi Perfil Profesional
+                    </h1>
+                    <p class="text-sm sm:text-base text-gray-700 dark:text-gray-300 mt-1 truncate">
+                        Gestiona tu información profesional y configuración de cuenta
+                    </p>
+                </div>
+            </div>
+            <div class="flex-shrink-0 hidden sm:flex items-center">
+                <span class="material-symbols-outlined text-3xl sm:text-4xl text-green-600 dark:text-green-400">person</span>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <!-- Columna Izquierda: Avatar e Información de Cuenta -->
+        <div class="lg:col-span-1 space-y-6">
+            <!-- Card de Avatar -->
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
+                <div class="text-center">
+                    <!-- Foto de Perfil o Iniciales -->
+                    @if($profile_photo)
+                        <!-- Vista previa temporal de nueva foto -->
+                        <div class="relative inline-block mb-4">
+                            <img src="{{ $profile_photo->temporaryUrl() }}" alt="Vista previa" class="w-24 h-24 rounded-full object-cover shadow-lg mx-auto">
+                            <button wire:click="$set('profile_photo', null)" type="button" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition">
+                                <span class="material-symbols-outlined text-sm">close</span>
+                            </button>
+                        </div>
+                    @elseif($profile_photo_path)
+                        <!-- Foto guardada -->
+                        <div class="relative inline-block mb-4" x-data="{ showModal: false }">
+                            <img src="{{ asset('storage/' . $profile_photo_path) }}" 
+                                 alt="{{ $name }}" 
+                                 @click="showModal = true"
+                                 class="w-24 h-24 rounded-full object-cover shadow-lg mx-auto cursor-pointer hover:opacity-90 transition">
+                            
+                            <!-- Modal inline -->
+                            <div x-show="showModal"
+                                 x-cloak
+                                 @keydown.escape.window="showModal = false"
+                                 class="fixed inset-0 z-50 flex items-center justify-center p-4"
+                                 style="display: none;">
+                                
+                                <!-- Overlay -->
+                                <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showModal = false"></div>
+                                
+                                <!-- Modal Content -->
+                                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                                     @click.stop>
+                                    
+                                    <!-- Header -->
+                                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                                        <h3 class="text-lg font-bold text-white">📷 Foto de Perfil</h3>
+                                        <button @click="showModal = false" class="text-white hover:text-gray-200 transition">
+                                            <span class="material-symbols-outlined">close</span>
+                                        </button>
+                                    </div>
+                                    
+                                    <!-- Image -->
+                                    <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                                        <img src="{{ asset('storage/' . $profile_photo_path) }}" 
+                                             alt="{{ $name }}" 
+                                             class="w-full h-auto rounded-lg">
+                                    </div>
+                                    
+                                    <!-- Footer -->
+                                    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-between items-center">
+                                        <button @click="showModal = false; $nextTick(() => document.getElementById('profile_photo').click())" 
+                                                class="px-6 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white rounded-lg hover:from-green-700 hover:to-emerald-700 transition flex items-center gap-2">
+                                            <span class="material-symbols-outlined text-sm">photo_camera</span>
+                                            Cambiar Foto
+                                        </button>
+                                        <button @click="showModal = false" 
+                                                class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                            Cerrar
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @else
+                        <!-- Iniciales por defecto -->
+                        <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg mx-auto mb-4">
+                            {{ strtoupper(substr($name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $name)[1] ?? '', 0, 1)) }}
+                        </div>
+                    @endif
+                    
+                    <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ $name }}</h2>
+                    <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $email }}</p>
+                    <span class="inline-block mt-3 px-3 py-1 bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 text-xs font-semibold rounded-full">
+                        Nutricionista
+                    </span>
+                </div>
+
+                <div class="border-t dark:border-gray-700 mt-6 pt-6 space-y-4">
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold mb-1">Rol</p>
+                        <p class="text-gray-900 dark:text-white font-medium">Nutricionista</p>
+                    </div>
+                    <div>
+                        <p class="text-xs text-gray-500 dark:text-gray-400 uppercase font-semibold mb-1">Cuenta Creada</p>
+                        <p class="text-gray-900 dark:text-white font-medium">{{ auth()->user()->created_at->format('d/m/Y') }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Formularios -->
+        <div class="lg:col-span-2 space-y-6">
+            <!-- Información de Perfil -->
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">📋 Información Profesional</h2>
+
+                @if(session('success'))
+                    <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 dark:bg-green-900/20 dark:border-green-800">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+                            <p class="text-green-900 dark:text-green-300 font-semibold">{{ session('success') }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                @if(session('error'))
+                    <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 dark:bg-red-900/20 dark:border-red-800">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-red-600 dark:text-red-400">error</span>
+                            <p class="text-red-900 dark:text-red-300 font-semibold">{{ session('error') }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                <form wire:submit.prevent="saveProfile" class="space-y-6">
+                    <!-- Nombre -->
+                    <div>
+                        <label for="name" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            Nombre Completo *
+                        </label>
+                        <input 
+                            type="text" 
+                            wire:model="name" 
+                            id="name"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition"
+                            placeholder="Tu nombre completo">
+                        @error('name') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Email (solo lectura) -->
+                    <div>
+                        <label for="email" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            Correo Electrónico
+                        </label>
+                        <input 
+                            type="email" 
+                            value="{{ $email }}" 
+                            disabled
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-gray-100 dark:bg-gray-700 dark:text-gray-400 cursor-not-allowed">
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">El correo electrónico no puede ser modificado</p>
+                    </div>
+
+                    <!-- Teléfono -->
+                    <div>
+                        <label for="phone" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            Teléfono de Contacto
+                        </label>
+                        <input 
+                            type="text" 
+                            wire:model="phone" 
+                            id="phone"
+                            maxlength="10"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition"
+                            placeholder="10 dígitos">
+                        @error('phone') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                    </div>
+
+                    <!-- Foto de Perfil -->
+                    <div>
+                        <label for="profile_photo" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            Foto de Perfil
+                        </label>
+                        <input 
+                            type="file" 
+                            wire:model="profile_photo" 
+                            id="profile_photo"
+                            accept="image/*"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">JPG, PNG o GIF (máx. 2MB)</p>
+                        @error('profile_photo') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        
+                        <div wire:loading wire:target="profile_photo" class="mt-2 text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">
+                            <svg class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span>Cargando imagen...</span>
+                        </div>
+                    </div>
+
+                    <!-- Botones de Acción -->
+                    <div class="flex gap-4">
+                        <button 
+                            type="submit"
+                            wire:loading.attr="disabled"
+                            class="flex-1 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                            <span wire:loading.remove wire:target="saveProfile" class="material-symbols-outlined">save</span>
+                            <svg wire:loading wire:target="saveProfile" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                            </svg>
+                            <span wire:loading.remove wire:target="saveProfile">Guardar Cambios</span>
+                            <span wire:loading wire:target="saveProfile">Guardando...</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Cambiar Contraseña -->
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">🔒 Cambiar Contraseña</h2>
+
+                @if(session('password_success'))
+                    <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 dark:bg-green-900/20 dark:border-green-800">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+                            <p class="text-green-900 dark:text-green-300 font-semibold">{{ session('password_success') }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                @if(session('password_error'))
+                    <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 dark:bg-red-900/20 dark:border-red-800">
+                        <div class="flex items-center gap-3">
+                            <span class="material-symbols-outlined text-red-600 dark:text-red-400">error</span>
+                            <p class="text-red-900 dark:text-red-300 font-semibold">{{ session('password_error') }}</p>
+                        </div>
+                    </div>
+                @endif
+
+                <form wire:submit.prevent="updatePassword" class="space-y-6">
+                    @if($hasPassword)
+                        <div>
+                            <label for="current_password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                Contraseña Actual *
+                            </label>
+                            <input 
+                                type="password" 
+                                wire:model="current_password" 
+                                id="current_password"
+                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                            @error('current_password') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        </div>
+                    @endif
+
+                    <div>
+                        <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            Nueva Contraseña *
+                        </label>
+                        <input 
+                            type="password" 
+                            wire:model="password" 
+                            id="password"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                        @error('password') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                    </div>
+
+                    <div>
+                        <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                            Confirmar Nueva Contraseña *
+                        </label>
+                        <input 
+                            type="password" 
+                            wire:model="password_confirmation" 
+                            id="password_confirmation"
+                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                    </div>
+
+                    <button 
+                        type="submit"
+                        wire:loading.attr="disabled"
+                        class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+                        <span wire:loading.remove wire:target="updatePassword" class="material-symbols-outlined">lock_reset</span>
+                        <svg wire:loading wire:target="updatePassword" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                        </svg>
+                        <span wire:loading.remove wire:target="updatePassword">Actualizar Contraseña</span>
+                        <span wire:loading wire:target="updatePassword">Actualizando...</span>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
