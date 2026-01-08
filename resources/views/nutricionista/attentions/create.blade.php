@@ -256,13 +256,15 @@
             <!-- Botones de Acción -->
             <div class="flex gap-4">
                 <a href="{{ route('nutricionista.appointments.show', $appointment) }}" 
+                   id="cancel-btn"
                    class="flex-1 text-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-6 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                     Cancelar
                 </a>
                 <button type="submit" 
+                        id="submit-btn"
                         class="flex-1 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-700 hover:to-emerald-700 transition shadow-lg flex items-center justify-center gap-2">
-                    <span class="material-symbols-outlined">save</span>
-                    Guardar Atención
+                    <span class="material-symbols-outlined" id="submit-icon">save</span>
+                    <span id="submit-text">Guardar Atención</span>
                 </button>
             </div>
         </form>
@@ -477,6 +479,41 @@
             if (weightInputDisplay.value && heightInput.value) {
                 calculateBMI();
             }
+        });
+
+        // Protección contra múltiples envíos del formulario
+        const form = document.getElementById('attention-form');
+        const submitBtn = document.getElementById('submit-btn');
+        const cancelBtn = document.getElementById('cancel-btn');
+        const submitIcon = document.getElementById('submit-icon');
+        const submitText = document.getElementById('submit-text');
+        let isSubmitting = false;
+
+        form.addEventListener('submit', function(e) {
+            // Si ya se está enviando, prevenir el envío
+            if (isSubmitting) {
+                e.preventDefault();
+                return false;
+            }
+
+            // Marcar como enviando
+            isSubmitting = true;
+
+            // Deshabilitar el botón de enviar
+            submitBtn.disabled = true;
+            submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
+            submitBtn.classList.remove('hover:from-blue-700', 'hover:to-emerald-700');
+
+            // Deshabilitar el botón de cancelar
+            cancelBtn.classList.add('opacity-50', 'cursor-not-allowed', 'pointer-events-none');
+            cancelBtn.classList.remove('hover:bg-gray-200', 'dark:hover:bg-gray-600');
+
+            // Cambiar el contenido del botón de enviar
+            submitIcon.classList.add('animate-spin');
+            submitIcon.textContent = 'hourglass_empty';
+            submitText.textContent = 'Guardando...';
+
+            // El formulario se enviará normalmente
         });
     </script>
 

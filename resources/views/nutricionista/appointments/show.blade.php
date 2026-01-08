@@ -38,10 +38,69 @@
         
         </div>
 
+        <!-- Toast de Éxito -->
         @if(session('success'))
-            <div class="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 text-green-800 dark:text-green-200 rounded-xl p-4 mb-6">
-                {{ session('success') }}
+        <div x-data="{ show: true }" 
+             x-init="setTimeout(() => show = false, 5000)"
+             x-show="show"
+             x-cloak
+             class="fixed top-20 right-4 z-50 max-w-md w-full sm:w-96"
+             style="display: none;">
+            <div x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="translate-x-full opacity-0"
+                 x-transition:enter-end="translate-x-0 opacity-100"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="translate-x-0 opacity-100"
+                 x-transition:leave-end="translate-x-full opacity-0"
+                 class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-l-4 border-green-500 overflow-hidden">
+                
+                <div class="p-4">
+                    <div class="flex items-start gap-3">
+                        <!-- Icono -->
+                        <div class="flex-shrink-0">
+                            <div class="bg-green-100 dark:bg-green-900/30 rounded-full p-2">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-2xl">check_circle</span>
+                            </div>
+                        </div>
+                        
+                        <!-- Contenido -->
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                                ¡Atención Registrada con Éxito!
+                            </h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                {{ session('success') }}
+                            </p>
+                            
+                            <!-- Botón Ver Historial -->
+                            <a href="{{ route('nutricionista.patients.show', $appointment->paciente) }}"
+                               class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-all duration-200 shadow-sm hover:shadow-md">
+                                <span class="material-symbols-outlined text-base">medical_information</span>
+                                Ver Historial del Paciente
+                            </a>
+                        </div>
+                        
+                        <!-- Botón Cerrar -->
+                        <button @click="show = false"
+                                class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Barra de progreso horizontal -->
+                <div class="h-1 bg-gray-200 dark:bg-gray-700">
+                    <div class="h-full bg-green-500 transition-all duration-100" style="width: 100%; animation: shrink 5s linear forwards;"></div>
+                </div>
             </div>
+        </div>
+
+        <style>
+            @keyframes shrink {
+                from { width: 100%; }
+                to { width: 0%; }
+            }
+        </style>
         @endif
 
         @if(session('error'))
