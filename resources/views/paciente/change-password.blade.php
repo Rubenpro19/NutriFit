@@ -13,7 +13,10 @@
                 <div class="inline-flex items-center justify-center w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-600 rounded-2xl shadow-lg mb-4">
                     <span class="material-symbols-outlined text-white text-4xl">lock_reset</span>
                 </div>
-                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">🔒 Cambiar Contraseña</h1>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-4xl">lock</span>
+                    Cambiar Contraseña
+                </h1>
                 <p class="text-gray-600 dark:text-gray-400">Paso obligatorio de seguridad</p>
             </div>
 
@@ -78,8 +81,9 @@
                     <div class="space-y-6">
                         <!-- Nueva Contraseña -->
                         <div>
-                            <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                🔐 Nueva Contraseña
+                            <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">key</span>
+                                Nueva Contraseña
                             </label>
                             <input 
                                 type="password" 
@@ -102,8 +106,9 @@
 
                         <!-- Confirmar Contraseña -->
                         <div>
-                            <label for="password_confirmation" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                                🔐 Confirmar Nueva Contraseña
+                            <label for="password_confirmation" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-lg">key</span>
+                                Confirmar Nueva Contraseña
                             </label>
                             <input 
                                 type="password" 

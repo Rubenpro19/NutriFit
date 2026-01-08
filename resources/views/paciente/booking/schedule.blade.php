@@ -139,9 +139,9 @@
                             <select name="appointment_type" required
                                     class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-4 py-3 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
                                 <option value="">Selecciona el tipo de consulta</option>
-                                <option value="primera_vez">🆕 Primera vez</option>
-                                <option value="seguimiento">📊 Seguimiento</option>
-                                <option value="control">✅ Control</option>
+                                <option value="primera_vez">Primera vez</option>
+                                <option value="seguimiento">Seguimiento</option>
+                                <option value="control">Control</option>
                             </select>
                             @error('appointment_type')
                                 <p class="mt-2 text-sm text-red-600 flex items-center gap-1">

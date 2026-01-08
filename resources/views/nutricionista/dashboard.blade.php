@@ -311,8 +311,8 @@
 
                                                     @if($appointment->price)
                                                         <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                                                            <span class="material-symbols-oriented text-base text-green-600 dark:text-green-400">payments</span>
-                                                            <span class="font-semibold">${{ number_format($appointment->price, 2) }}</span>
+                                                            <span class="material-symbols-outlined text-base text-green-600 dark:text-green-400">payments</span>
+                                                            <span class="font-semibold">Pago: ${{ number_format($appointment->price, 2) }}</span>
                                                         </div>
                                                     @endif
                                                 </div>

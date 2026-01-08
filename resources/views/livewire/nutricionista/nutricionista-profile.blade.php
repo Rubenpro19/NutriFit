@@ -60,7 +60,10 @@
                                     
                                     <!-- Header -->
                                     <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
-                                        <h3 class="text-lg font-bold text-white">📷 Foto de Perfil</h3>
+                                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                            <span class="material-symbols-outlined">photo_camera</span>
+                                            Foto de Perfil
+                                        </h3>
                                         <button @click="showModal = false" class="text-white hover:text-gray-200 transition">
                                             <span class="material-symbols-outlined">close</span>
                                         </button>
@@ -119,7 +122,10 @@
         <div class="lg:col-span-2 space-y-6">
             <!-- Información de Perfil -->
             <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">📋 Información Profesional</h2>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-3xl">assignment</span>
+                    Información Profesional
+                </h2>
 
                 @if(session('success'))
                     <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 dark:bg-green-900/20 dark:border-green-800">
@@ -184,8 +190,9 @@
 
                     <!-- Foto de Perfil -->
                     <div>
-                        <label for="profile_photo" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2">
-                            📷 Foto de Perfil
+                        <label for="profile_photo" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">photo_camera</span>
+                            Foto de Perfil
                         </label>
                         <div class="flex items-center gap-4">
                             <input 
@@ -228,7 +235,10 @@
 
             <!-- Cambiar Contraseña -->
             <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
-                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6">🔒 Cambiar Contraseña</h2>
+                <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                    <span class="material-symbols-outlined text-3xl">lock</span>
+                    Cambiar Contraseña
+                </h2>
 
                 @if(session('password_success'))
                     <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 dark:bg-green-900/20 dark:border-green-800">

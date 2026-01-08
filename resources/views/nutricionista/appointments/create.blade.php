@@ -455,20 +455,20 @@
                                     </h3>
 
                                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 sm:gap-6">
-                                        <!-- Tipo de Consulta -->
+                                        <!-- Tipo de Cita -->
                                         <div>
                                             <label for="appointment_type" class="flex items-center gap-2 text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
                                                 <span class="material-symbols-outlined text-lg text-green-600 dark:text-green-400">medical_services</span>
-                                                Tipo de Consulta *
+                                                Tipo de Cita *
                                             </label>
                                             <select 
                                                 id="appointment_type" 
                                                 name="appointment_type" 
-                                                x-bind:required="selectedDate && selectedTime"
-                                                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all [&>option]:bg-white [&>option]:dark:bg-gray-700 [&>option]:text-gray-900 [&>option]:dark:text-white"
+                                                required
+                                                class="w-full px-3 sm:px-4 py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                                             >
-                                                <option value="">Seleccionar tipo</option>
-                                                <option value="primera_vez">Primera vez</option>
+                                                <option value="">Seleccionar tipo...</option>
+                                                <option value="primera_vez">Primera Vez</option>
                                                 <option value="seguimiento">Seguimiento</option>
                                                 <option value="control">Control</option>
                                             </select>
@@ -478,18 +478,21 @@
                                         <div>
                                             <label for="price" class="flex items-center gap-2 text-sm font-semibold text-gray-800 dark:text-gray-200 mb-2">
                                                 <span class="material-symbols-outlined text-lg text-green-600 dark:text-green-400">payments</span>
-                                                Precio (USD) *
+                                                Precio *
                                             </label>
-                                            <input 
-                                                type="number" 
-                                                id="price" 
-                                                name="price" 
-                                                step="0.01" 
-                                                min="0"
-                                                value="20.00"
-                                                x-bind:required="selectedDate && selectedTime"
-                                                class="w-full px-4 py-2.5 rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
-                                            >
+                                            <div class="relative">
+                                                <span class="absolute left-3 sm:left-4 top-1/2 -translate-y-1/2 text-gray-600 dark:text-gray-400 font-semibold">$</span>
+                                                <input 
+                                                    type="number" 
+                                                    id="price" 
+                                                    name="price" 
+                                                    step="0.01"
+                                                    min="0"
+                                                    required
+                                                    placeholder="0.00"
+                                                    class="w-full pl-7 sm:pl-8 pr-3 sm:pr-4 py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
+                                                >
+                                            </div>
                                         </div>
 
                                         <!-- Motivo -->

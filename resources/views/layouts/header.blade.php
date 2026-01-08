@@ -26,19 +26,19 @@
 
             {{-- Navigation Desktop - Centrado --}}
             @if (!auth()->check() || auth()->user()->isAdmin())
-                <nav class="absolute left-1/2 hidden -translate-x-1/2 transform items-center gap-1 md:flex">
+                <nav class="absolute left-1/2 hidden -translate-x-1/2 transform items-center gap-1 lg:flex">
                     <a href="{{ route('home') }}" 
-                       class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('home') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
+                       class="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('home') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
                         <span class="material-symbols-outlined text-lg">home</span>
                         Inicio
                     </a>
                     <a href="{{ route('about') }}" 
-                       class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('about') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
+                       class="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('about') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
                         <span class="material-symbols-outlined text-lg">group</span>
                         Sobre Nosotros
                     </a>
                     <a href="{{ route('contact') }}" 
-                       class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('contact') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
+                       class="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('contact') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
                         <span class="material-symbols-outlined text-lg">mail</span>
                         Contacto
                     </a>
@@ -46,7 +46,7 @@
             @endif
 
             {{-- Auth Buttons --}}
-            <div class="hidden items-center gap-3 md:flex">
+            <div class="hidden items-center gap-2 lg:flex">
                 @if (Route::has('login'))
                     @auth
                         {{-- Usuario autenticado - Menú desplegable --}}
@@ -171,14 +171,14 @@
                     @else
                         @if (!request()->routeIs('login'))
                             <a href="{{ route('login') }}" 
-                               class="flex items-center gap-2 rounded-lg px-4 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
+                               class="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800">
                                 <span class="material-symbols-outlined text-lg">login</span>
                                 Iniciar sesión
                             </a>
                         @endif
                         @if (Route::has('register') && !request()->routeIs('register'))
                             <a href="{{ route('register') }}" 
-                               class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:from-green-700 hover:to-emerald-700 hover:shadow-lg">
+                               class="flex items-center gap-1.5 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-3 py-2 text-sm font-semibold text-white shadow-md transition hover:from-green-700 hover:to-emerald-700 hover:shadow-lg">
                                 <span class="material-symbols-outlined text-lg">person_add</span>
                                 Registrarse
                             </a>
@@ -188,13 +188,13 @@
             </div>
 
             {{-- Mobile Menu Button --}}
-            <button id="mobile-menu-btn" class="rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 md:hidden">
+            <button id="mobile-menu-btn" class="rounded-lg p-2 text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 lg:hidden">
                 <span class="material-symbols-outlined text-2xl">menu</span>
             </button>
         </div>
 
         {{-- Mobile Navigation --}}
-        <div id="mobile-menu" class="hidden border-t border-gray-200 py-4 dark:border-gray-800 md:hidden">
+        <div id="mobile-menu" class="hidden border-t border-gray-200 py-4 dark:border-gray-800 lg:hidden">
             <nav class="flex flex-col gap-2">
                 @if (!auth()->check() || auth()->user()->isAdmin())
                     <a href="{{ route('home') }}" 

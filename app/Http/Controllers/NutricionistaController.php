@@ -237,6 +237,11 @@ class NutricionistaController extends Controller
                         foreach ($timeSlots as $slot) {
                             $slotDateTime = \Carbon\Carbon::parse($date->format('Y-m-d') . ' ' . $slot['start']);
                             
+                            // Saltar el horario actual de la cita que se está reagendando
+                            if ($slotDateTime->equalTo($appointment->start_time)) {
+                                continue;
+                            }
+                            
                             // Solo incluir si es futuro y está disponible (excluyendo la cita actual)
                             if ($slotDateTime->isFuture() && $schedule->isTimeSlotAvailable($date->format('Y-m-d'), $slot['start'], $appointment->id)) {
                                 $dayData['slots'][] = [
@@ -304,12 +309,15 @@ class NutricionistaController extends Controller
             ->where('id', '!=', $appointment->id) // Excluir la cita actual
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
             ->where(function($query) use ($newStartTime, $newEndTime) {
-                $query->whereBetween('start_time', [$newStartTime, $newEndTime])
-                      ->orWhereBetween('end_time', [$newStartTime, $newEndTime])
-                      ->orWhere(function($q) use ($newStartTime, $newEndTime) {
-                          $q->where('start_time', '<=', $newStartTime)
-                            ->where('end_time', '>=', $newEndTime);
-                      });
+                // Verificar si hay superposición de horarios
+                // Hay conflicto si:
+                // 1. La nueva cita empieza durante una cita existente
+                // 2. La nueva cita termina durante una cita existente  
+                // 3. La nueva cita envuelve completamente una cita existente
+                $query->where(function($q) use ($newStartTime, $newEndTime) {
+                    $q->where('start_time', '<', $newEndTime)
+                      ->where('end_time', '>', $newStartTime);
+                });
             })
             ->first();
 
@@ -612,6 +620,9 @@ class NutricionistaController extends Controller
             'notes' => $validated['notes'],
             'price' => $validated['price'],
         ]);
+
+        // Enviar notificación al paciente
+        $paciente->notify(new \App\Notifications\AppointmentCreatedNotification($appointment));
 
         return redirect()
             ->route('nutricionista.appointments.create')
