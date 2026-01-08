@@ -8,47 +8,146 @@
 
     <main class="flex-grow">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-            {{-- Mensaje de Bienvenida --}}
-            <div class="mb-8 rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-6 md:p-8 text-white shadow-lg">
-                <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6">
-                    <div class="flex-1">
-                        <h1 class="text-2xl md:text-3xl font-bold">¡Buen día, {{ auth()->user()->name }}!</h1>
-                        <p class="mt-2 text-blue-100">Aquí está el resumen de su jornada.</p>
+            
+            {{-- Banner informativo cuando no hay horarios configurados --}}
+            @if(!$hasSchedules)
+                <div class="mb-6 rounded-xl bg-gradient-to-r from-blue-500 to-cyan-500 p-5 shadow-lg animate-pulse-slow">
+                    <div class="flex items-start gap-4">
+                        <div class="flex-shrink-0">
+                            <div class="w-12 h-12 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                                <span class="material-symbols-outlined text-white text-3xl">schedule</span>
+                            </div>
+                        </div>
+                        <div class="flex-1">
+                            <h3 class="text-lg font-bold text-white mb-1 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-xl">info</span>
+                                ¡Configura tus horarios para empezar!
+                            </h3>
+                            <p class="text-blue-50 text-sm mb-3">
+                                Para que los pacientes puedan agendar citas contigo, primero debes establecer tu disponibilidad semanal.
+                            </p>
+                            <a href="{{ route('nutricionista.schedules.index') }}" 
+                               class="inline-flex items-center gap-2 rounded-lg bg-white px-5 py-2.5 text-sm font-semibold text-blue-600 transition-all duration-200 hover:bg-blue-50 hover:shadow-lg hover:scale-105 active:scale-95">
+                                <span class="material-symbols-outlined">settings</span>
+                                Configurar Horarios Ahora
+                                <span class="material-symbols-outlined">arrow_forward</span>
+                            </a>
+                        </div>
+                        <button onclick="this.parentElement.parentElement.style.display='none'" 
+                                class="flex-shrink-0 text-white/70 hover:text-white transition-colors">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
                     </div>
-                    <div class="flex flex-col sm:flex-row gap-3">
+                </div>
+            @endif
+
+            {{-- Mensaje de Bienvenida --}}
+            <div class="mb-8 rounded-2xl bg-gradient-to-r from-blue-600 to-green-600 p-4 sm:p-6 md:p-8 text-white shadow-lg">
+                <div class="flex flex-col gap-4 sm:gap-5 lg:gap-6">
+                    <div class="flex-1">
+                        <h1 class="text-xl sm:text-2xl md:text-3xl font-bold">¡Buen día, {{ auth()->user()->name }}!</h1>
+                        <p class="mt-2 text-sm sm:text-base text-blue-100">Aquí está el resumen de su jornada.</p>
+                    </div>
+                    {{-- Grid responsive de botones: 1 col en móvil, 2 cols en tablet, 4 cols en desktop grande --}}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-2 sm:gap-3">
                         <a href="{{ route('nutricionista.appointments.index') }}" 
-                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-blue-600 font-semibold transition-all duration-200 hover:bg-blue-50 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
-                            <span class="material-symbols-outlined">calendar_month</span>
-                            Mis Citas
+                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-3 sm:px-4 py-2.5 sm:py-3 text-blue-600 text-sm sm:text-base font-semibold transition-all duration-200 hover:bg-blue-50 hover:shadow-lg hover:scale-105 active:scale-95">
+                            <span class="material-symbols-outlined text-xl sm:text-2xl">calendar_month</span>
+                            <span class="truncate">Mis Citas</span>
                         </a>
                         <a href="{{ route('nutricionista.appointments.create') }}" 
-                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-purple-600 font-semibold transition-all duration-200 hover:bg-purple-50 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
-                            <span class="material-symbols-outlined">add_circle</span>
-                            Asignar Cita
+                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-3 sm:px-4 py-2.5 sm:py-3 text-purple-600 text-sm sm:text-base font-semibold transition-all duration-200 hover:bg-purple-50 hover:shadow-lg hover:scale-105 active:scale-95">
+                            <span class="material-symbols-outlined text-xl sm:text-2xl">add_circle</span>
+                            <span class="truncate">Asignar Cita</span>
                         </a>
                         <a href="{{ route('nutricionista.patients.index') }}" 
-                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-cyan-600 font-semibold transition-all duration-200 hover:bg-cyan-50 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
-                            <span class="material-symbols-outlined">groups</span>
-                            Mis Pacientes
+                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-3 sm:px-4 py-2.5 sm:py-3 text-cyan-600 text-sm sm:text-base font-semibold transition-all duration-200 hover:bg-cyan-50 hover:shadow-lg hover:scale-105 active:scale-95">
+                            <span class="material-symbols-outlined text-xl sm:text-2xl">groups</span>
+                            <span class="truncate">Mis Pacientes</span>
                         </a>
                         <a href="{{ route('nutricionista.schedules.index') }}" 
-                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-4 md:px-6 py-3 text-green-600 font-semibold transition-all duration-200 hover:bg-green-50 hover:shadow-lg hover:scale-105 active:scale-95 whitespace-nowrap">
-                            <span class="material-symbols-outlined">schedule</span>
-                            Gestionar Horarios
+                           class="flex items-center justify-center gap-2 rounded-lg bg-white px-3 sm:px-4 py-2.5 sm:py-3 text-green-600 text-sm sm:text-base font-semibold transition-all duration-200 hover:bg-green-50 hover:shadow-lg hover:scale-105 active:scale-95 relative">
+                            @if(!$hasSchedules)
+                                <span class="absolute -top-1 -right-1 flex h-3 w-3">
+                                    <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-red-400 opacity-75"></span>
+                                    <span class="relative inline-flex rounded-full h-3 w-3 bg-red-500"></span>
+                                </span>
+                            @endif
+                            <span class="material-symbols-outlined text-xl sm:text-2xl">schedule</span>
+                            <span class="truncate">Gestionar Horarios</span>
                         </a>
                     </div>
                 </div>
             </div>
 
             <div class="grid gap-6 lg:grid-cols-3">
-                {{-- Próxima Cita --}}
-                <div class="rounded-2xl border-2 border-blue-500 bg-white p-6 shadow-lg dark:border-blue-400 dark:bg-gray-800">
-                    <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
-                        <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">upcoming</span>
-                        Próxima Cita
-                    </h2>
-                    
-                    @if($nextAppointment)
+                {{-- Próxima Cita o Configuración Requerida --}}
+                @if(!$hasSchedules)
+                    {{-- Card de Configuración Requerida --}}
+                    <div class="rounded-2xl border-2 border-orange-500 bg-gradient-to-br from-orange-50 to-red-50 p-4 sm:p-6 shadow-xl dark:border-orange-400 dark:from-orange-900/20 dark:to-red-900/20">
+                        <div class="text-center">
+                            {{-- Icono animado --}}
+                            <div class="mb-3 sm:mb-4 flex justify-center">
+                                <div class="relative">
+                                    <div class="absolute inset-0 rounded-full bg-orange-500/20 animate-ping"></div>
+                                    <div class="relative w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-orange-500 to-red-500 flex items-center justify-center shadow-lg">
+                                        <span class="material-symbols-outlined text-white text-4xl sm:text-5xl">settings_alert</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {{-- Título y descripción --}}
+                            <h2 class="mb-2 sm:mb-3 text-xl sm:text-2xl font-bold text-gray-900 dark:text-white">
+                                Configuración Pendiente
+                            </h2>
+                            <p class="mb-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300 font-medium">
+                                Para empezar a trabajar, necesitas:
+                            </p>
+
+                            {{-- Checklist --}}
+                            <div class="mb-4 sm:mb-6 space-y-2">
+                                <div class="flex items-center gap-2 sm:gap-3 bg-white/60 dark:bg-gray-800/60 rounded-lg p-2.5 sm:p-3 backdrop-blur-sm">
+                                    <div class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-orange-500 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-white text-xs sm:text-sm">priority_high</span>
+                                    </div>
+                                    <span class="text-xs sm:text-sm font-medium text-gray-800 dark:text-gray-200 text-left">
+                                        Configurar tus horarios de disponibilidad
+                                    </span>
+                                </div>
+                                <div class="flex items-center gap-2 sm:gap-3 bg-white/40 dark:bg-gray-800/40 rounded-lg p-2.5 sm:p-3">
+                                    <div class="flex-shrink-0 w-5 h-5 sm:w-6 sm:h-6 rounded-full bg-gray-300 dark:bg-gray-600 flex items-center justify-center">
+                                        <span class="material-symbols-outlined text-gray-600 dark:text-gray-400 text-xs sm:text-sm">schedule</span>
+                                    </div>
+                                    <span class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 text-left">
+                                        Luego podrás asignar citas a tus pacientes
+                                    </span>
+                                </div>
+                            </div>
+
+                            {{-- Botón de acción principal --}}
+                            <a href="{{ route('nutricionista.schedules.index') }}" 
+                               class="block w-full rounded-lg sm:rounded-xl bg-gradient-to-r from-orange-500 to-red-500 px-4 sm:px-6 py-2.5 sm:py-4 text-center font-bold text-white transition-all duration-200 hover:from-orange-600 hover:to-red-600 hover:shadow-2xl hover:scale-105 active:scale-95 flex items-center justify-center gap-1.5 sm:gap-2 text-sm sm:text-lg">
+                                <span class="material-symbols-outlined text-lg sm:text-2xl">schedule</span>
+                                <span class="truncate">Configurar Mis Horarios</span>
+                                <span class="material-symbols-outlined text-lg sm:text-2xl">arrow_forward</span>
+                            </a>
+
+                            {{-- Mensaje motivacional --}}
+                            <p class="mt-3 sm:mt-4 text-xs text-gray-600 dark:text-gray-400">
+                                <span class="material-symbols-outlined text-xs sm:text-sm align-middle">timer</span>
+                                Solo te tomará unos minutos
+                            </p>
+                        </div>
+                    </div>
+                @else
+                    {{-- Card de Próxima Cita (existente) --}}
+                    <div class="rounded-2xl border-2 border-blue-500 bg-white p-6 shadow-lg dark:border-blue-400 dark:bg-gray-800">
+                        <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">upcoming</span>
+                            Próxima Cita
+                        </h2>
+                        
+                        @if($nextAppointment)
                         <div class="space-y-4">
                             {{-- Card del paciente --}}
                             <div class="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-lg p-4">
@@ -132,13 +231,14 @@
                                 Gestionar Cita
                             </a>
                         </div>
-                    @else
-                        <div class="py-8 text-center">
-                            <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600">event_busy</span>
-                            <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">No hay citas próximas</p>
-                        </div>
-                    @endif
-                </div>
+                        @else
+                            <div class="py-8 text-center">
+                                <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600">event_busy</span>
+                                <p class="mt-4 text-sm text-gray-500 dark:text-gray-400">No hay citas próximas</p>
+                            </div>
+                        @endif
+                    </div>
+                @endif
 
                 {{-- Agenda para Hoy --}}
                 <div class="lg:col-span-2 rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">

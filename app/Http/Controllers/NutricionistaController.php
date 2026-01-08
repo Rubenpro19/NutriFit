@@ -18,6 +18,11 @@ class NutricionistaController extends Controller
         // Marcar citas vencidas
         Appointment::markExpiredAppointments();
 
+        // Verificar si el nutricionista tiene horarios configurados
+        $hasSchedules = NutricionistaSchedule::where('nutricionista_id', $nutricionista->id)
+            ->where('is_active', true)
+            ->exists();
+
         // Estadísticas del nutricionista - solo citas pendientes
         $stats = [
             // Citas de hoy (solo pendientes)
@@ -68,7 +73,8 @@ class NutricionistaController extends Controller
             'stats',
             'nextAppointment',
             'todayAppointments',
-            'upcomingAppointments'
+            'upcomingAppointments',
+            'hasSchedules'
         ));
     }
 
