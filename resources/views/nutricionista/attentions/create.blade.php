@@ -48,7 +48,7 @@
         <!-- Grid principal: Formulario + Panel de Resultados -->
         <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <!-- Columna Izquierda: Formulario (2/3) -->
-            <div class="lg:col-span-2">
+            <div class="lg:col-span-2 order-1">
                 <form method="POST" action="{{ route('nutricionista.attentions.store', $appointment) }}" id="attention-form">
                     @csrf
 
@@ -110,27 +110,6 @@
                         @enderror
                     </div>
 
-                    <!-- IMC (auto-calculado) -->
-                    <div>
-                        <label for="bmi" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            IMC <span class="text-red-500">*</span>
-                        </label>
-                        <input 
-                            type="number" 
-                            step="0.01" 
-                            id="bmi" 
-                            name="bmi" 
-                            value="{{ old('bmi') }}"
-                            class="w-full px-4 py-3 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-300 dark:border-emerald-700 rounded-xl text-gray-900 dark:text-white font-semibold @error('bmi') border-red-500 @enderror"
-                            readonly
-                            required
-                        >
-                        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Se calcula automáticamente</p>
-                        @error('bmi')
-                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
-                        @enderror
-                    </div>
-
                     <!-- Cintura -->
                     <div>
                         <label for="waist" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
@@ -169,48 +148,268 @@
                         @enderror
                     </div>
 
-                    <!-- Grasa Corporal -->
+                    <!-- Cuello -->
                     <div>
-                        <label for="body_fat" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Grasa Corporal (%)
+                        <label for="neck" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Cuello (cm)
                         </label>
                         <input 
                             type="number" 
                             step="0.01" 
-                            id="body_fat" 
-                            name="body_fat" 
-                            value="{{ old('body_fat') }}"
-                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('body_fat') border-red-500 @enderror"
-                            placeholder="20.5"
+                            id="neck" 
+                            name="neck" 
+                            value="{{ old('neck') }}"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('neck') border-red-500 @enderror"
+                            placeholder="35"
                         >
-                        @error('body_fat')
+                        @error('neck')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
 
-                    <!-- Presión Arterial -->
+                    <!-- Muñeca -->
                     <div>
-                        <label for="blood_pressure" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
-                            Presión Arterial
+                        <label for="wrist" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Muñeca (cm)
                         </label>
                         <input 
-                            type="text" 
-                            id="blood_pressure" 
-                            name="blood_pressure" 
-                            value="{{ old('blood_pressure') }}"
-                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('blood_pressure') border-red-500 @enderror"
-                            placeholder="120/80"
-                            maxlength="20"
+                            type="number" 
+                            step="0.01" 
+                            id="wrist" 
+                            name="wrist" 
+                            value="{{ old('wrist') }}"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('wrist') border-red-500 @enderror"
+                            placeholder="16"
                         >
-                        @error('blood_pressure')
+                        @error('wrist')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Brazo Contraído -->
+                    <div>
+                        <label for="arm_contracted" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Brazo Contraído (cm)
+                        </label>
+                        <input 
+                            type="number" 
+                            step="0.01" 
+                            id="arm_contracted" 
+                            name="arm_contracted" 
+                            value="{{ old('arm_contracted') }}"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('arm_contracted') border-red-500 @enderror"
+                            placeholder="35"
+                        >
+                        @error('arm_contracted')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Brazo Relajado -->
+                    <div>
+                        <label for="arm_relaxed" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Brazo Relajado (cm)
+                        </label>
+                        <input 
+                            type="number" 
+                            step="0.01" 
+                            id="arm_relaxed" 
+                            name="arm_relaxed" 
+                            value="{{ old('arm_relaxed') }}"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('arm_relaxed') border-red-500 @enderror"
+                            placeholder="30"
+                        >
+                        @error('arm_relaxed')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Pierna -->
+                    <div>
+                        <label for="thigh" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Pierna (cm)
+                        </label>
+                        <input 
+                            type="number" 
+                            step="0.01" 
+                            id="thigh" 
+                            name="thigh" 
+                            value="{{ old('thigh') }}"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('thigh') border-red-500 @enderror"
+                            placeholder="55"
+                        >
+                        @error('thigh')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Pantorrilla -->
+                    <div>
+                        <label for="calf" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Pantorrilla (cm)
+                        </label>
+                        <input 
+                            type="number" 
+                            step="0.01" 
+                            id="calf" 
+                            name="calf" 
+                            value="{{ old('calf') }}"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('calf') border-red-500 @enderror"
+                            placeholder="38"
+                        >
+                        @error('calf')
+                            <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
+                        @enderror
+                    </div>
+
+                    <!-- Nivel de Actividad Física -->
+                    <div>
+                        <label for="activity_level" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Nivel de Actividad Física
+                        </label>
+                        <select 
+                            id="activity_level" 
+                            name="activity_level"
+                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('activity_level') border-red-500 @enderror"
+                        >
+                            <option value="sedentary">Sedentario (poco o ningún ejercicio)</option>
+                            <option value="light">Ligero (ejercicio 1-3 días/semana)</option>
+                            <option value="moderate" selected>Moderado (ejercicio 3-5 días/semana)</option>
+                            <option value="active">Activo (ejercicio 6-7 días/semana)</option>
+                            <option value="very_active">Muy activo (ejercicio intenso diario)</option>
+                        </select>
+                        @error('activity_level')
                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
                         @enderror
                     </div>
                 </div>
-            </div>
 
-            <!-- Notas Clínicas -->
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 mb-6">
+                <!-- Campos ocultos para valores calculados -->
+                <input type="hidden" id="bmi" name="bmi" value="{{ old('bmi') }}">
+                <input type="hidden" id="body_fat" name="body_fat" value="{{ old('body_fat') }}">
+                <input type="hidden" id="tmb" name="tmb" value="{{ old('tmb') }}">
+                <input type="hidden" id="tdee" name="tdee" value="{{ old('tdee') }}">
+                <input type="hidden" id="whr" name="whr" value="{{ old('whr') }}">
+                <input type="hidden" id="wht" name="wht" value="{{ old('wht') }}">
+                <input type="hidden" id="frame_index" name="frame_index" value="{{ old('frame_index') }}">
+            </div>
+        </div>
+
+        <!-- Columna Derecha: Panel de Resultados (1/3) -->
+        <div class="lg:col-span-1 order-2">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 lg:sticky lg:top-8">
+                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined text-blue-600">analytics</span>
+                    Análisis Antropométrico Completo
+                </h2>
+                
+                <!-- Muñeco IMC -->
+                <div class="flex justify-center mb-6">
+                    <svg id="bmi-avatar" width="80" height="120" viewBox="0 0 100 150" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Cabeza -->
+                        <circle cx="50" cy="25" r="15" fill="#FDB8B8" stroke="#333" stroke-width="1.5"/>
+                        
+                        <!-- Torso -->
+                        <ellipse id="torso" cx="50" cy="65" rx="18" ry="25" fill="#4A90E2" stroke="#333" stroke-width="1.5"/>
+                        
+                        <!-- Brazos -->
+                        <line id="arm-left" x1="32" y1="55" x2="20" y2="75" stroke="#FDB8B8" stroke-width="6" stroke-linecap="round"/>
+                        <line id="arm-right" x1="68" y1="55" x2="80" y2="75" stroke="#FDB8B8" stroke-width="6" stroke-linecap="round"/>
+                        
+                        <!-- Piernas -->
+                        <line id="leg-left" x1="43" y1="90" x2="40" y2="120" stroke="#4A90E2" stroke-width="8" stroke-linecap="round"/>
+                        <line id="leg-right" x1="57" y1="90" x2="60" y2="120" stroke="#4A90E2" stroke-width="8" stroke-linecap="round"/>
+                        
+                        <!-- Pies -->
+                        <ellipse cx="40" cy="125" rx="8" ry="4" fill="#333"/>
+                        <ellipse cx="60" cy="125" rx="8" ry="4" fill="#333"/>
+                        
+                        <!-- Ojos -->
+                        <circle cx="45" cy="23" r="2" fill="#333"/>
+                        <circle cx="55" cy="23" r="2" fill="#333"/>
+                        
+                        <!-- Boca (sonrisa por defecto) -->
+                        <path id="mouth" d="M 43 29 Q 50 32 57 29" stroke="#333" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- IMC -->
+                    <div class="bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">IMC</span>
+                            <span id="display-bmi" class="text-2xl font-bold text-blue-600 dark:text-blue-400">--</span>
+                        </div>
+                        <div class="h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden mb-2">
+                            <div id="bmi-indicator" class="h-full bg-blue-500 transition-all duration-500" style="width: 0%"></div>
+                        </div>
+                        <p id="bmi-category" class="text-xs font-medium text-gray-600 dark:text-gray-400">-</p>
+                    </div>
+
+                    <!-- TMB -->
+                    <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 border border-green-200 dark:border-green-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">TMB</span>
+                            <span id="display-tmb" class="text-xl font-bold text-green-600 dark:text-green-400">--</span>
+                        </div>
+                        <p class="text-xs font-medium text-gray-600 dark:text-gray-400">Tasa Metabólica Basal (kcal/día)</p>
+                    </div>
+
+                    <!-- Gasto Energético -->
+                    <div class="bg-gradient-to-br from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20 rounded-xl p-4 border border-purple-200 dark:border-purple-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Gasto Energético</span>
+                            <span id="display-tdee" class="text-xl font-bold text-purple-600 dark:text-purple-400">--</span>
+                        </div>
+                        <p class="text-xs font-medium text-gray-600 dark:text-gray-400" id="tdee-description">Calorías diarias requeridas</p>
+                    </div>
+
+                    <!-- Índice Cintura-Cadera -->
+                    <div class="bg-gradient-to-br from-orange-50 to-red-50 dark:from-orange-900/20 dark:to-red-900/20 rounded-xl p-4 border border-orange-200 dark:border-orange-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Índice Cintura-Cadera</span>
+                            <span id="display-whr" class="text-xl font-bold text-orange-600 dark:text-orange-400">--</span>
+                        </div>
+                        <p id="whr-category" class="text-xs font-medium text-gray-600 dark:text-gray-400">-</p>
+                    </div>
+
+                    <!-- Índice Cintura-Altura -->
+                    <div class="bg-gradient-to-br from-yellow-50 to-amber-50 dark:from-yellow-900/20 dark:to-amber-900/20 rounded-xl p-4 border border-yellow-200 dark:border-yellow-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Índice Cintura-Altura</span>
+                            <span id="display-wht" class="text-xl font-bold text-yellow-600 dark:text-yellow-400">--</span>
+                        </div>
+                        <p id="wht-category" class="text-xs font-medium text-gray-600 dark:text-gray-400">-</p>
+                    </div>
+
+                    <!-- Complexión Ósea -->
+                    <div class="bg-gradient-to-br from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20 rounded-xl p-4 border border-indigo-200 dark:border-indigo-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">Complexión Ósea</span>
+                            <span id="display-frame" class="text-xl font-bold text-indigo-600 dark:text-indigo-400">--</span>
+                        </div>
+                        <p id="frame-category" class="text-xs font-medium text-gray-600 dark:text-gray-400">-</p>
+                    </div>
+
+                    <!-- Porcentaje de Grasa -->
+                    <div class="bg-gradient-to-br from-rose-50 to-pink-50 dark:from-rose-900/20 dark:to-pink-900/20 rounded-xl p-4 border border-rose-200 dark:border-rose-700">
+                        <div class="flex justify-between items-center mb-2">
+                            <span class="text-sm font-semibold text-gray-700 dark:text-gray-300">% Grasa Corporal</span>
+                            <span id="display-bodyfat" class="text-xl font-bold text-rose-600 dark:text-rose-400">--</span>
+                        </div>
+                        <p id="bodyfat-category" class="text-xs font-medium text-gray-600 dark:text-gray-400">-</p>
+                    </div>
+
+                    <!-- Info del Paciente (para cálculos) -->
+                    <input type="hidden" id="patient-gender" value="{{ $appointment->paciente->personalData->gender ?? 'male' }}">
+                    <input type="hidden" id="patient-age" value="{{ $appointment->paciente->personalData->age ?? 30 }}">
+                </div>
+            </div>
+        </div>
+
+        <!-- Notas Clínicas -->
+        <div class="lg:col-span-2 order-3">
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
                     <span class="material-symbols-outlined text-emerald-600">clinical_notes</span>
                     Notas Clínicas
@@ -224,6 +423,7 @@
                     <textarea 
                         id="diagnosis" 
                         name="diagnosis" 
+                        form="attention-form"
                         rows="6"
                         class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('diagnosis') border-red-500 @enderror"
                         placeholder="Describe el diagnóstico del paciente..."
@@ -242,6 +442,7 @@
                     <textarea 
                         id="recommendations" 
                         name="recommendations" 
+                        form="attention-form"
                         rows="8"
                         class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('recommendations') border-red-500 @enderror"
                         placeholder="Plan nutricional, ejercicios recomendados, cambios de hábitos..."
@@ -252,8 +453,10 @@
                     @enderror
                 </div>
             </div>
+        </div>
 
-            <!-- Botones de Acción -->
+        <!-- Botones de Acción -->
+        <div class="lg:col-span-2 order-4">
             <div class="flex gap-4">
                 <a href="{{ route('nutricionista.appointments.show', $appointment) }}" 
                    id="cancel-btn"
@@ -261,223 +464,432 @@
                     Cancelar
                 </a>
                 <button type="submit" 
+                        form="attention-form"
                         id="submit-btn"
                         class="flex-1 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-700 hover:to-emerald-700 transition shadow-lg flex items-center justify-center gap-2">
                     <span class="material-symbols-outlined" id="submit-icon">save</span>
                     <span id="submit-text">Guardar Atención</span>
                 </button>
             </div>
-        </form>
         </div>
-
-        <!-- Columna Derecha: Panel de Resultados (1/3) -->
-        <div class="lg:col-span-1">
-            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 sticky top-8">
-                <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
-                    <span class="material-symbols-outlined text-blue-600">query_stats</span>
-                    Análisis Corporal
-                </h2>
-
-                <!-- Visualización de la Figura -->
-                <div class="mb-6">
-                    <div class="flex justify-center items-end h-64 bg-gradient-to-b from-blue-50 to-transparent dark:from-gray-700 rounded-xl p-4">
-                        <!-- Figura SVG que cambia según el IMC -->
-                        <svg id="body-figure" class="transition-all duration-500" width="120" height="220" viewBox="0 0 120 220">
-                            <!-- Cabeza -->
-                            <circle cx="60" cy="20" r="15" fill="#FDB44B" stroke="#333" stroke-width="2"/>
-                            
-                            <!-- Torso -->
-                            <ellipse id="torso" cx="60" cy="80" rx="25" ry="40" fill="#4A90E2" stroke="#333" stroke-width="2"/>
-                            
-                            <!-- Brazos -->
-                            <line id="arm-left" x1="35" y1="60" x2="20" y2="100" stroke="#FDB44B" stroke-width="8" stroke-linecap="round"/>
-                            <line id="arm-right" x1="85" y1="60" x2="100" y2="100" stroke="#FDB44B" stroke-width="8" stroke-linecap="round"/>
-                            
-                            <!-- Piernas -->
-                            <line id="leg-left" x1="50" y1="120" x2="45" y2="200" stroke="#4A90E2" stroke-width="12" stroke-linecap="round"/>
-                            <line id="leg-right" x1="70" y1="120" x2="75" y2="200" stroke="#4A90E2" stroke-width="12" stroke-linecap="round"/>
-                        </svg>
-                    </div>
-                    
-                    <!-- Indicador de Estado -->
-                    <div id="body-status" class="text-center mt-4">
-                        <p class="text-sm font-semibold text-gray-600 dark:text-gray-400">
-                            Ingresa peso y altura para ver el análisis
-                        </p>
-                    </div>
-                </div>
-
-                <!-- Métricas Calculadas -->
-                <div class="space-y-4">
-                    <!-- IMC -->
-                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4">
-                        <div class="flex justify-between items-center mb-2">
-                            <span class="text-sm font-medium text-gray-600 dark:text-gray-400">IMC</span>
-                            <span id="display-bmi" class="text-2xl font-bold text-gray-900 dark:text-white">--</span>
-                        </div>
-                        <div id="bmi-bar" class="h-2 bg-gray-200 dark:bg-gray-600 rounded-full overflow-hidden">
-                            <div id="bmi-indicator" class="h-full bg-blue-500 transition-all duration-500" style="width: 0%"></div>
-                        </div>
-                        <p id="bmi-category" class="text-xs text-gray-500 dark:text-gray-400 mt-2 text-center">-</p>
-                    </div>
-
-                    <!-- Espacio para más cálculos futuros -->
-                    <div class="border-t border-gray-200 dark:border-gray-600 pt-4">
-                        <p class="text-xs text-gray-500 dark:text-gray-400 text-center italic">
-                            Más métricas se mostrarán aquí próximamente
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
+        
         </div>
     </div>
 
-    <!-- Script para cálculo automático del IMC -->
+    <!-- Script para cálculos antropométricos completos -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Inputs
             const weightInputDisplay = document.getElementById('weight-input');
             const weightUnit = document.getElementById('weight-unit');
-            const weightInput = document.getElementById('weight'); // Campo oculto que se envía
+            const weightInput = document.getElementById('weight');
             const heightInput = document.getElementById('height');
+            const waistInput = document.getElementById('waist');
+            const hipInput = document.getElementById('hip');
+            const neckInput = document.getElementById('neck');
+            const wristInput = document.getElementById('wrist');
+            const activityLevel = document.getElementById('activity_level');
             const bmiInput = document.getElementById('bmi');
+            const bodyFatInput = document.getElementById('body_fat');
 
-            // Elementos del panel derecho
+            // Datos del paciente
+            const gender = document.getElementById('patient-gender').value;
+            const age = parseInt(document.getElementById('patient-age').value);
+
+            // Displays
             const displayBmi = document.getElementById('display-bmi');
             const bmiIndicator = document.getElementById('bmi-indicator');
             const bmiCategory = document.getElementById('bmi-category');
-            const bodyStatus = document.getElementById('body-status');
-            const torso = document.getElementById('torso');
-            const armLeft = document.getElementById('arm-left');
-            const armRight = document.getElementById('arm-right');
-            const legLeft = document.getElementById('leg-left');
-            const legRight = document.getElementById('leg-right');
+            const displayTmb = document.getElementById('display-tmb');
+            const displayTdee = document.getElementById('display-tdee');
+            const tdeeDescription = document.getElementById('tdee-description');
+            const displayWhr = document.getElementById('display-whr');
+            const whrCategory = document.getElementById('whr-category');
+            const displayWht = document.getElementById('display-wht');
+            const whtCategory = document.getElementById('wht-category');
+            const displayFrame = document.getElementById('display-frame');
+            const frameCategory = document.getElementById('frame-category');
+            const displayBodyfat = document.getElementById('display-bodyfat');
+            const bodyfatCategory = document.getElementById('bodyfat-category');
 
-            function calculateBMI() {
+            function calculateAll() {
                 const weightDisplay = parseFloat(weightInputDisplay.value);
                 const unit = weightUnit.value;
                 const height = parseFloat(heightInput.value);
+                const waist = parseFloat(waistInput.value);
+                const hip = parseFloat(hipInput.value);
+                const neck = parseFloat(neckInput.value);
+                const wrist = parseFloat(wristInput.value);
 
-                if (weightDisplay > 0 && height > 0) {
-                    // Convertir peso a kg si está en libras
-                    let weightInKg = weightDisplay;
-                    if (unit === 'lb') {
-                        weightInKg = weightDisplay * 0.453592; // 1 lb = 0.453592 kg
-                    }
+                // Convertir peso a kg
+                let weight = weightDisplay;
+                if (unit === 'lb') {
+                    weight = weightDisplay * 0.453592;
+                }
+                weightInput.value = weight.toFixed(2);
 
-                    // Guardar el peso en kg en el campo oculto
-                    weightInput.value = weightInKg.toFixed(2);
+                if (weight > 0 && height > 0) {
+                    const heightM = height / 100;
 
-                    // IMC = peso (kg) / (altura (m))^2
-                    const heightInMeters = height / 100;
-                    const bmi = weightInKg / (heightInMeters * heightInMeters);
+                    // 1. IMC
+                    const bmi = weight / (heightM * heightM);
                     const bmiValue = bmi.toFixed(2);
                     bmiInput.value = bmiValue;
-
-                    // Actualizar display del IMC
                     displayBmi.textContent = bmiValue;
-
-                    // Determinar categoría y color
-                    let category = '';
-                    let color = '';
-                    let percentage = 0;
                     
+                    let bmiCat, bmiColor, bmiPercentage;
                     if (bmi < 18.5) {
-                        category = 'Bajo peso';
-                        color = 'text-blue-600';
-                        percentage = (bmi / 18.5) * 25;
-                        updateBodyFigure('thin');
+                        bmiCat = 'Bajo peso - Riesgo de desnutrición';
+                        bmiColor = 'text-blue-600';
+                        bmiPercentage = (bmi / 18.5) * 25;
                     } else if (bmi < 25) {
-                        category = 'Peso normal';
-                        color = 'text-green-600';
-                        percentage = 25 + ((bmi - 18.5) / (25 - 18.5)) * 25;
-                        updateBodyFigure('normal');
+                        bmiCat = 'Peso normal - Saludable';
+                        bmiColor = 'text-green-600';
+                        bmiPercentage = 25 + ((bmi - 18.5) / 6.5) * 25;
                     } else if (bmi < 30) {
-                        category = 'Sobrepeso';
-                        color = 'text-yellow-600';
-                        percentage = 50 + ((bmi - 25) / (30 - 25)) * 25;
-                        updateBodyFigure('overweight');
+                        bmiCat = 'Sobrepeso - Riesgo aumentado';
+                        bmiColor = 'text-yellow-600';
+                        bmiPercentage = 50 + ((bmi - 25) / 5) * 25;
+                    } else if (bmi < 35) {
+                        bmiCat = 'Obesidad I - Riesgo moderado';
+                        bmiColor = 'text-orange-600';
+                        bmiPercentage = 75 + ((bmi - 30) / 5) * 12.5;
                     } else {
-                        category = 'Obesidad';
-                        color = 'text-red-600';
-                        percentage = Math.min(75 + ((bmi - 30) / 10) * 25, 100);
-                        updateBodyFigure('obese');
+                        bmiCat = 'Obesidad II/III - Riesgo alto';
+                        bmiColor = 'text-red-600';
+                        bmiPercentage = Math.min(87.5 + ((bmi - 35) / 10) * 12.5, 100);
+                    }
+                    
+                    bmiCategory.textContent = bmiCat;
+                    bmiCategory.className = `text-xs font-medium ${bmiColor}`;
+                    bmiIndicator.style.width = bmiPercentage + '%';
+
+                    // Actualizar muñeco según IMC
+                    updateBMIAvatar(bmi);
+
+                    // 2. TMB (Fórmula Mifflin-St Jeor)
+                    let tmb;
+                    if (gender === 'male') {
+                        tmb = (10 * weight) + (6.25 * height) - (5 * age) + 5;
+                    } else {
+                        tmb = (10 * weight) + (6.25 * height) - (5 * age) - 161;
+                    }
+                    const tmbValue = Math.round(tmb);
+                    document.getElementById('tmb').value = tmbValue;
+                    displayTmb.textContent = tmbValue + ' kcal';
+
+                    // 3. Gasto Energético Total (TDEE)
+                    const activityMultipliers = {
+                        'sedentary': 1.2,
+                        'light': 1.375,
+                        'moderate': 1.55,
+                        'active': 1.725,
+                        'very_active': 1.9
+                    };
+                    const tdee = tmb * activityMultipliers[activityLevel.value];
+                    const tdeeValue = Math.round(tdee);
+                    document.getElementById('tdee').value = tdeeValue;
+                    displayTdee.textContent = tdeeValue + ' kcal';
+                    
+                    const activityLabels = {
+                        'sedentary': 'Sedentario',
+                        'light': 'Actividad ligera',
+                        'moderate': 'Actividad moderada',
+                        'active': 'Muy activo',
+                        'very_active': 'Extremadamente activo'
+                    };
+                    tdeeDescription.textContent = activityLabels[activityLevel.value];
+
+                    // 4. Índice Cintura-Cadera
+                    if (waist > 0 && hip > 0) {
+                        const whr = waist / hip;
+                        const whrValue = whr.toFixed(3);
+                        document.getElementById('whr').value = whrValue;
+                        displayWhr.textContent = whrValue;
+                        
+                        let whrCat, whrColor;
+                        if (gender === 'male') {
+                            if (whr < 0.95) {
+                                whrCat = 'Bajo riesgo cardiovascular';
+                                whrColor = 'text-green-600';
+                            } else if (whr < 1.0) {
+                                whrCat = 'Riesgo cardiovascular moderado';
+                                whrColor = 'text-yellow-600';
+                            } else {
+                                whrCat = 'Riesgo cardiovascular alto';
+                                whrColor = 'text-red-600';
+                            }
+                        } else {
+                            if (whr < 0.80) {
+                                whrCat = 'Bajo riesgo cardiovascular';
+                                whrColor = 'text-green-600';
+                            } else if (whr < 0.85) {
+                                whrCat = 'Riesgo cardiovascular moderado';
+                                whrColor = 'text-yellow-600';
+                            } else {
+                                whrCat = 'Riesgo cardiovascular alto';
+                                whrColor = 'text-red-600';
+                            }
+                        }
+                        whrCategory.textContent = whrCat;
+                        whrCategory.className = `text-xs font-medium ${whrColor}`;
+                    } else {
+                        document.getElementById('whr').value = '';
+                        displayWhr.textContent = '--';
+                        whrCategory.textContent = 'Ingresa cintura y cadera';
                     }
 
-                    bmiCategory.textContent = category;
-                    bmiCategory.className = `text-sm font-semibold mt-2 text-center ${color}`;
-                    bmiIndicator.style.width = percentage + '%';
-                    
-                    // Actualizar color del indicador
-                    if (bmi < 18.5) {
-                        bmiIndicator.className = 'h-full bg-blue-500 transition-all duration-500';
-                    } else if (bmi < 25) {
-                        bmiIndicator.className = 'h-full bg-green-500 transition-all duration-500';
-                    } else if (bmi < 30) {
-                        bmiIndicator.className = 'h-full bg-yellow-500 transition-all duration-500';
+                    // 5. Índice Cintura-Altura
+                    if (waist > 0) {
+                        const wht = waist / height;
+                        const whtValue = wht.toFixed(3);
+                        document.getElementById('wht').value = whtValue;
+                        displayWht.textContent = whtValue;
+                        
+                        let whtCat, whtColor;
+                        if (wht < 0.40) {
+                            whtCat = 'Extremadamente delgado';
+                            whtColor = 'text-blue-600';
+                        } else if (wht < 0.50) {
+                            whtCat = 'Saludable - Bajo riesgo';
+                            whtColor = 'text-green-600';
+                        } else if (wht < 0.60) {
+                            whtCat = 'Sobrepeso - Riesgo aumentado';
+                            whtColor = 'text-yellow-600';
+                        } else {
+                            whtCat = 'Obesidad - Riesgo alto';
+                            whtColor = 'text-red-600';
+                        }
+                        whtCategory.textContent = whtCat;
+                        whtCategory.className = `text-xs font-medium ${whtColor}`;
                     } else {
-                        bmiIndicator.className = 'h-full bg-red-500 transition-all duration-500';
+                        document.getElementById('wht').value = '';
+                        displayWht.textContent = '--';
+                        whtCategory.textContent = 'Ingresa cintura';
                     }
 
-                    bodyStatus.innerHTML = `<p class="text-sm font-semibold ${color}">${category}</p>`;
+                    // 6. Complexión Ósea (Índice de Frisancho)
+                    if (wrist > 0) {
+                        const frameIndex = height / wrist;
+                        const frameValue = frameIndex.toFixed(2);
+                        document.getElementById('frame_index').value = frameValue;
+                        displayFrame.textContent = frameValue;
+                        
+                        let frameCat, frameColor;
+                        if (gender === 'male') {
+                            if (frameIndex > 10.4) {
+                                frameCat = 'Complexión pequeña';
+                                frameColor = 'text-blue-600';
+                            } else if (frameIndex > 9.6) {
+                                frameCat = 'Complexión mediana';
+                                frameColor = 'text-green-600';
+                            } else {
+                                frameCat = 'Complexión grande';
+                                frameColor = 'text-indigo-600';
+                            }
+                        } else {
+                            if (frameIndex > 11.0) {
+                                frameCat = 'Complexión pequeña';
+                                frameColor = 'text-blue-600';
+                            } else if (frameIndex > 10.1) {
+                                frameCat = 'Complexión mediana';
+                                frameColor = 'text-green-600';
+                            } else {
+                                frameCat = 'Complexión grande';
+                                frameColor = 'text-indigo-600';
+                            }
+                        }
+                        frameCategory.textContent = frameCat;
+                        frameCategory.className = `text-xs font-medium ${frameColor}`;
+                    } else {
+                        document.getElementById('frame_index').value = '';
+                        displayFrame.textContent = '--';
+                        frameCategory.textContent = 'Ingresa muñeca';
+                    }
+
+                    // 7. Porcentaje de Grasa Corporal (Fórmula U.S. Navy)
+                    if (waist > 0 && neck > 0) {
+                        let bodyFatPercentage;
+                        if (gender === 'male') {
+                            if (hip > 0) {
+                                bodyFatPercentage = 495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(height)) - 450;
+                            } else {
+                                bodyFatPercentage = 495 / (1.0324 - 0.19077 * Math.log10(waist - neck) + 0.15456 * Math.log10(height)) - 450;
+                            }
+                        } else {
+                            if (hip > 0) {
+                                bodyFatPercentage = 495 / (1.29579 - 0.35004 * Math.log10(waist + hip - neck) + 0.22100 * Math.log10(height)) - 450;
+                            } else {
+                                displayBodyfat.textContent = '--';
+                                bodyfatCategory.textContent = 'Ingresa cadera para cálculo preciso';
+                                bodyFatInput.value = '';
+                                return;
+                            }
+                        }
+
+                        const bfValue = bodyFatPercentage.toFixed(2);
+                        bodyFatInput.value = bfValue;
+                        displayBodyfat.textContent = bfValue + '%';
+
+                        // Clasificación según edad y género
+                        let bfCat, bfColor;
+                        if (gender === 'male') {
+                            if (age <= 39) {
+                                if (bodyFatPercentage < 8) {
+                                    bfCat = 'Atleta de élite';
+                                    bfColor = 'text-blue-600';
+                                } else if (bodyFatPercentage < 20) {
+                                    bfCat = 'Saludable';
+                                    bfColor = 'text-green-600';
+                                } else if (bodyFatPercentage < 25) {
+                                    bfCat = 'Aceptable';
+                                    bfColor = 'text-yellow-600';
+                                } else {
+                                    bfCat = 'Alto - Riesgo para la salud';
+                                    bfColor = 'text-red-600';
+                                }
+                            } else {
+                                if (bodyFatPercentage < 11) {
+                                    bfCat = 'Atleta de élite';
+                                    bfColor = 'text-blue-600';
+                                } else if (bodyFatPercentage < 22) {
+                                    bfCat = 'Saludable';
+                                    bfColor = 'text-green-600';
+                                } else if (bodyFatPercentage < 28) {
+                                    bfCat = 'Aceptable';
+                                    bfColor = 'text-yellow-600';
+                                } else {
+                                    bfCat = 'Alto - Riesgo para la salud';
+                                    bfColor = 'text-red-600';
+                                }
+                            }
+                        } else {
+                            if (age <= 39) {
+                                if (bodyFatPercentage < 21) {
+                                    bfCat = 'Atleta de élite';
+                                    bfColor = 'text-blue-600';
+                                } else if (bodyFatPercentage < 33) {
+                                    bfCat = 'Saludable';
+                                    bfColor = 'text-green-600';
+                                } else if (bodyFatPercentage < 39) {
+                                    bfCat = 'Aceptable';
+                                    bfColor = 'text-yellow-600';
+                                } else {
+                                    bfCat = 'Alto - Riesgo para la salud';
+                                    bfColor = 'text-red-600';
+                                }
+                            } else {
+                                if (bodyFatPercentage < 23) {
+                                    bfCat = 'Atleta de élite';
+                                    bfColor = 'text-blue-600';
+                                } else if (bodyFatPercentage < 34) {
+                                    bfCat = 'Saludable';
+                                    bfColor = 'text-green-600';
+                                } else if (bodyFatPercentage < 40) {
+                                    bfCat = 'Aceptable';
+                                    bfColor = 'text-yellow-600';
+                                } else {
+                                    bfCat = 'Alto - Riesgo para la salud';
+                                    bfColor = 'text-red-600';
+                                }
+                            }
+                        }
+                        bodyfatCategory.textContent = bfCat + ' (' + (gender === 'male' ? 'Hombre' : 'Mujer') + ', ' + age + ' años)';
+                        bodyfatCategory.className = `text-xs font-medium ${bfColor}`;
+                    } else {
+                        displayBodyfat.textContent = '--';
+                        bodyfatCategory.textContent = 'Ingresa cintura, cuello' + (gender === 'female' ? ' y cadera' : '');
+                        bodyFatInput.value = '';
+                    }
                 } else {
+                    // Reset all displays
                     bmiInput.value = '';
+                    document.getElementById('tmb').value = '';
+                    document.getElementById('tdee').value = '';
+                    document.getElementById('whr').value = '';
+                    document.getElementById('wht').value = '';
+                    document.getElementById('frame_index').value = '';
+                    bodyFatInput.value = '';
                     displayBmi.textContent = '--';
-                    bmiCategory.textContent = '-';
+                    bmiCategory.textContent = 'Ingresa peso y altura';
                     bmiIndicator.style.width = '0%';
-                    bodyStatus.innerHTML = '<p class="text-sm font-semibold text-gray-600 dark:text-gray-400">Ingresa peso y altura para ver el análisis</p>';
+                    displayTmb.textContent = '--';
+                    displayTdee.textContent = '--';
+                    tdeeDescription.textContent = 'Calorías diarias requeridas';
+                    displayWhr.textContent = '--';
+                    whrCategory.textContent = '-';
+                    displayWht.textContent = '--';
+                    whtCategory.textContent = '-';
+                    displayFrame.textContent = '--';
+                    frameCategory.textContent = '-';
+                    displayBodyfat.textContent = '--';
+                    bodyfatCategory.textContent = '-';
                 }
             }
 
-            function updateBodyFigure(type) {
-                switch(type) {
-                    case 'thin':
-                        // Figura delgada
-                        torso.setAttribute('rx', '20');
-                        torso.setAttribute('ry', '35');
-                        armLeft.setAttribute('stroke-width', '6');
-                        armRight.setAttribute('stroke-width', '6');
-                        legLeft.setAttribute('stroke-width', '10');
-                        legRight.setAttribute('stroke-width', '10');
-                        break;
-                    case 'normal':
-                        // Figura normal
-                        torso.setAttribute('rx', '25');
-                        torso.setAttribute('ry', '40');
-                        armLeft.setAttribute('stroke-width', '8');
-                        armRight.setAttribute('stroke-width', '8');
-                        legLeft.setAttribute('stroke-width', '12');
-                        legRight.setAttribute('stroke-width', '12');
-                        break;
-                    case 'overweight':
-                        // Figura con sobrepeso
-                        torso.setAttribute('rx', '30');
-                        torso.setAttribute('ry', '42');
-                        armLeft.setAttribute('stroke-width', '10');
-                        armRight.setAttribute('stroke-width', '10');
-                        legLeft.setAttribute('stroke-width', '14');
-                        legRight.setAttribute('stroke-width', '14');
-                        break;
-                    case 'obese':
-                        // Figura con obesidad
-                        torso.setAttribute('rx', '35');
-                        torso.setAttribute('ry', '45');
-                        armLeft.setAttribute('stroke-width', '12');
-                        armRight.setAttribute('stroke-width', '12');
-                        legLeft.setAttribute('stroke-width', '16');
-                        legRight.setAttribute('stroke-width', '16');
-                        break;
+            // Función para actualizar el muñeco según el IMC
+            function updateBMIAvatar(bmi) {
+                const torso = document.getElementById('torso');
+                const armLeft = document.getElementById('arm-left');
+                const armRight = document.getElementById('arm-right');
+                const legLeft = document.getElementById('leg-left');
+                const legRight = document.getElementById('leg-right');
+                const mouth = document.getElementById('mouth');
+                
+                if (!torso) return;
+
+                if (bmi < 18.5) {
+                    // Bajo peso - muy delgado
+                    torso.setAttribute('rx', '12');
+                    torso.setAttribute('ry', '22');
+                    armLeft.setAttribute('stroke-width', '4');
+                    armRight.setAttribute('stroke-width', '4');
+                    legLeft.setAttribute('stroke-width', '5');
+                    legRight.setAttribute('stroke-width', '5');
+                    mouth.setAttribute('d', 'M 43 31 Q 50 28 57 31'); // Boca triste
+                } else if (bmi < 25) {
+                    // Normal - proporcionado
+                    torso.setAttribute('rx', '18');
+                    torso.setAttribute('ry', '25');
+                    armLeft.setAttribute('stroke-width', '6');
+                    armRight.setAttribute('stroke-width', '6');
+                    legLeft.setAttribute('stroke-width', '8');
+                    legRight.setAttribute('stroke-width', '8');
+                    mouth.setAttribute('d', 'M 43 29 Q 50 32 57 29'); // Sonrisa
+                } else if (bmi < 30) {
+                    // Sobrepeso - más ancho
+                    torso.setAttribute('rx', '23');
+                    torso.setAttribute('ry', '28');
+                    armLeft.setAttribute('stroke-width', '7');
+                    armRight.setAttribute('stroke-width', '7');
+                    legLeft.setAttribute('stroke-width', '10');
+                    legRight.setAttribute('stroke-width', '10');
+                    mouth.setAttribute('d', 'M 43 30 L 57 30'); // Boca neutral
+                } else {
+                    // Obesidad - más redondo
+                    torso.setAttribute('rx', '28');
+                    torso.setAttribute('ry', '30');
+                    armLeft.setAttribute('stroke-width', '8');
+                    armRight.setAttribute('stroke-width', '8');
+                    legLeft.setAttribute('stroke-width', '12');
+                    legRight.setAttribute('stroke-width', '12');
+                    mouth.setAttribute('d', 'M 43 31 Q 50 28 57 31'); // Boca triste
                 }
             }
 
             // Event listeners
-            weightInputDisplay.addEventListener('input', calculateBMI);
-            weightUnit.addEventListener('change', calculateBMI);
-            heightInput.addEventListener('input', calculateBMI);
+            weightInputDisplay.addEventListener('input', calculateAll);
+            weightUnit.addEventListener('change', calculateAll);
+            heightInput.addEventListener('input', calculateAll);
+            waistInput.addEventListener('input', calculateAll);
+            hipInput.addEventListener('input', calculateAll);
+            neckInput.addEventListener('input', calculateAll);
+            wristInput.addEventListener('input', calculateAll);
+            activityLevel.addEventListener('change', calculateAll);
 
-            // Calcular IMC inicial si hay valores (por ejemplo, de old())
+            // Calcular inicial si hay valores
             if (weightInputDisplay.value && heightInput.value) {
-                calculateBMI();
+                calculateAll();
             }
         });
 

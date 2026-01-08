@@ -11,22 +11,48 @@ class AttentionData extends Model
 
     protected $fillable = [
         'attention_id',
+        // Medidas básicas
         'weight',
         'height',
-        'bmi',
+        // Medidas corporales
         'waist',
         'hip',
+        'neck',
+        'wrist',
+        'arm_contracted',
+        'arm_relaxed',
+        'thigh',
+        'calf',
+        // Nivel de actividad
+        'activity_level',
+        // Valores calculados
+        'bmi',
         'body_fat',
-        'blood_pressure',
+        'tmb',
+        'tdee',
+        'whr',
+        'wht',
+        'frame_index',
     ];
 
     protected $casts = [
         'weight' => 'decimal:2',
         'height' => 'decimal:2',
-        'bmi' => 'decimal:2',
         'waist' => 'decimal:2',
         'hip' => 'decimal:2',
+        'neck' => 'decimal:2',
+        'wrist' => 'decimal:2',
+        'arm_contracted' => 'decimal:2',
+        'arm_relaxed' => 'decimal:2',
+        'thigh' => 'decimal:2',
+        'calf' => 'decimal:2',
+        'bmi' => 'decimal:2',
         'body_fat' => 'decimal:2',
+        'tmb' => 'decimal:2',
+        'tdee' => 'decimal:2',
+        'whr' => 'decimal:3',
+        'wht' => 'decimal:3',
+        'frame_index' => 'decimal:2',
     ];
 
     public function attention(): BelongsTo

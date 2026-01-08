@@ -228,15 +228,18 @@
                 <!-- Registro de Atención (solo si existe) -->
                 @if($appointment->attention && $appointment->attention->attentionData)
                     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
                             <span class="material-symbols-outlined text-emerald-600">clinical_notes</span>
                             Registro de Atención
                         </h2>
 
-                        <!-- Datos Antropométricos -->
+                        <!-- Medidas Básicas -->
                         <div class="mb-6">
-                            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3">Medidas Antropométricas</h3>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">straighten</span>
+                                Medidas Básicas
+                            </h3>
+                            <div class="grid grid-cols-2 md:grid-cols-3 gap-3">
                                 <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-lg p-3 border border-emerald-200 dark:border-emerald-800">
                                     <p class="text-xs text-emerald-600 dark:text-emerald-400 mb-1">Peso</p>
                                     <p class="text-lg font-bold text-emerald-700 dark:text-emerald-300">
@@ -250,19 +253,30 @@
                                     </p>
                                 </div>
                                 <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 border border-purple-200 dark:border-purple-800">
-                                    <p class="text-xs text-purple-600 dark:text-purple-400 mb-1">IMC</p>
-                                    <p class="text-lg font-bold text-purple-700 dark:text-purple-300">
-                                        {{ number_format($appointment->attention->attentionData->bmi, 2) }}
+                                    <p class="text-xs text-purple-600 dark:text-purple-400 mb-1">Nivel de Actividad</p>
+                                    <p class="text-sm font-bold text-purple-700 dark:text-purple-300">
+                                        @php
+                                            $activityLabels = [
+                                                'sedentary' => 'Sedentario',
+                                                'light' => 'Ligero',
+                                                'moderate' => 'Moderado',
+                                                'active' => 'Activo',
+                                                'very_active' => 'Muy activo'
+                                            ];
+                                        @endphp
+                                        {{ $activityLabels[$appointment->attention->attentionData->activity_level] ?? 'N/A' }}
                                     </p>
                                 </div>
-                                @if($appointment->attention->attentionData->body_fat)
-                                    <div class="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3 border border-orange-200 dark:border-orange-800">
-                                        <p class="text-xs text-orange-600 dark:text-orange-400 mb-1">Grasa Corporal</p>
-                                        <p class="text-lg font-bold text-orange-700 dark:text-orange-300">
-                                            {{ $appointment->attention->attentionData->body_fat }}%
-                                        </p>
-                                    </div>
-                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Medidas Corporales -->
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">accessibility</span>
+                                Medidas Corporales
+                            </h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
                                 @if($appointment->attention->attentionData->waist)
                                     <div class="bg-pink-50 dark:bg-pink-900/20 rounded-lg p-3 border border-pink-200 dark:border-pink-800">
                                         <p class="text-xs text-pink-600 dark:text-pink-400 mb-1">Cintura</p>
@@ -279,11 +293,115 @@
                                         </p>
                                     </div>
                                 @endif
-                                @if($appointment->attention->attentionData->blood_pressure)
-                                    <div class="bg-red-50 dark:bg-red-900/20 rounded-lg p-3 border border-red-200 dark:border-red-800">
-                                        <p class="text-xs text-red-600 dark:text-red-400 mb-1">Presión Arterial</p>
-                                        <p class="text-lg font-bold text-red-700 dark:text-red-300">
-                                            {{ $appointment->attention->attentionData->blood_pressure }}
+                                @if($appointment->attention->attentionData->neck)
+                                    <div class="bg-cyan-50 dark:bg-cyan-900/20 rounded-lg p-3 border border-cyan-200 dark:border-cyan-800">
+                                        <p class="text-xs text-cyan-600 dark:text-cyan-400 mb-1">Cuello</p>
+                                        <p class="text-lg font-bold text-cyan-700 dark:text-cyan-300">
+                                            {{ $appointment->attention->attentionData->neck }} cm
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->wrist)
+                                    <div class="bg-teal-50 dark:bg-teal-900/20 rounded-lg p-3 border border-teal-200 dark:border-teal-800">
+                                        <p class="text-xs text-teal-600 dark:text-teal-400 mb-1">Muñeca</p>
+                                        <p class="text-lg font-bold text-teal-700 dark:text-teal-300">
+                                            {{ $appointment->attention->attentionData->wrist }} cm
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->arm_contracted)
+                                    <div class="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
+                                        <p class="text-xs text-amber-600 dark:text-amber-400 mb-1">Brazo Contraído</p>
+                                        <p class="text-lg font-bold text-amber-700 dark:text-amber-300">
+                                            {{ $appointment->attention->attentionData->arm_contracted }} cm
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->arm_relaxed)
+                                    <div class="bg-lime-50 dark:bg-lime-900/20 rounded-lg p-3 border border-lime-200 dark:border-lime-800">
+                                        <p class="text-xs text-lime-600 dark:text-lime-400 mb-1">Brazo Relajado</p>
+                                        <p class="text-lg font-bold text-lime-700 dark:text-lime-300">
+                                            {{ $appointment->attention->attentionData->arm_relaxed }} cm
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->thigh)
+                                    <div class="bg-sky-50 dark:bg-sky-900/20 rounded-lg p-3 border border-sky-200 dark:border-sky-800">
+                                        <p class="text-xs text-sky-600 dark:text-sky-400 mb-1">Pierna</p>
+                                        <p class="text-lg font-bold text-sky-700 dark:text-sky-300">
+                                            {{ $appointment->attention->attentionData->thigh }} cm
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->calf)
+                                    <div class="bg-violet-50 dark:bg-violet-900/20 rounded-lg p-3 border border-violet-200 dark:border-violet-800">
+                                        <p class="text-xs text-violet-600 dark:text-violet-400 mb-1">Pantorrilla</p>
+                                        <p class="text-lg font-bold text-violet-700 dark:text-violet-300">
+                                            {{ $appointment->attention->attentionData->calf }} cm
+                                        </p>
+                                    </div>
+                                @endif
+                            </div>
+                        </div>
+
+                        <!-- Análisis Antropométrico -->
+                        <div class="mb-6">
+                            <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-3 flex items-center gap-2">
+                                <span class="material-symbols-outlined text-base">analytics</span>
+                                Análisis Antropométrico
+                            </h3>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
+                                    <p class="text-xs text-blue-600 dark:text-blue-400 mb-1">IMC</p>
+                                    <p class="text-lg font-bold text-blue-700 dark:text-blue-300">
+                                        {{ number_format($appointment->attention->attentionData->bmi, 2) }}
+                                    </p>
+                                </div>
+                                @if($appointment->attention->attentionData->body_fat)
+                                    <div class="bg-rose-50 dark:bg-rose-900/20 rounded-lg p-3 border border-rose-200 dark:border-rose-800">
+                                        <p class="text-xs text-rose-600 dark:text-rose-400 mb-1">% Grasa Corporal</p>
+                                        <p class="text-lg font-bold text-rose-700 dark:text-rose-300">
+                                            {{ number_format($appointment->attention->attentionData->body_fat, 2) }}%
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->tmb)
+                                    <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
+                                        <p class="text-xs text-green-600 dark:text-green-400 mb-1">TMB</p>
+                                        <p class="text-sm font-bold text-green-700 dark:text-green-300">
+                                            {{ number_format($appointment->attention->attentionData->tmb, 0) }} kcal
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->tdee)
+                                    <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 border border-purple-200 dark:border-purple-800">
+                                        <p class="text-xs text-purple-600 dark:text-purple-400 mb-1">Gasto Energético</p>
+                                        <p class="text-sm font-bold text-purple-700 dark:text-purple-300">
+                                            {{ number_format($appointment->attention->attentionData->tdee, 0) }} kcal
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->whr)
+                                    <div class="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3 border border-orange-200 dark:border-orange-800">
+                                        <p class="text-xs text-orange-600 dark:text-orange-400 mb-1">Índice Cintura-Cadera</p>
+                                        <p class="text-lg font-bold text-orange-700 dark:text-orange-300">
+                                            {{ number_format($appointment->attention->attentionData->whr, 3) }}
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->wht)
+                                    <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-3 border border-yellow-200 dark:border-yellow-800">
+                                        <p class="text-xs text-yellow-600 dark:text-yellow-400 mb-1">Índice Cintura-Altura</p>
+                                        <p class="text-lg font-bold text-yellow-700 dark:text-yellow-300">
+                                            {{ number_format($appointment->attention->attentionData->wht, 3) }}
+                                        </p>
+                                    </div>
+                                @endif
+                                @if($appointment->attention->attentionData->frame_index)
+                                    <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-3 border border-indigo-200 dark:border-indigo-800">
+                                        <p class="text-xs text-indigo-600 dark:text-indigo-400 mb-1">Complexión Ósea</p>
+                                        <p class="text-lg font-bold text-indigo-700 dark:text-indigo-300">
+                                            {{ number_format($appointment->attention->attentionData->frame_index, 2) }}
                                         </p>
                                     </div>
                                 @endif

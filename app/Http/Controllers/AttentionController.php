@@ -60,13 +60,29 @@ class AttentionController extends Controller
 
         // Validación de datos
         $validated = $request->validate([
+            // Medidas básicas (obligatorias)
             'weight' => 'required|numeric|min:20|max:300',
             'height' => 'required|numeric|min:100|max:250',
-            'bmi' => 'required|numeric|min:10|max:60',
+            // Medidas corporales (opcionales)
             'waist' => 'nullable|numeric|min:30|max:200',
             'hip' => 'nullable|numeric|min:30|max:200',
+            'neck' => 'nullable|numeric|min:20|max:100',
+            'wrist' => 'nullable|numeric|min:10|max:30',
+            'arm_contracted' => 'nullable|numeric|min:15|max:100',
+            'arm_relaxed' => 'nullable|numeric|min:15|max:100',
+            'thigh' => 'nullable|numeric|min:30|max:150',
+            'calf' => 'nullable|numeric|min:20|max:100',
+            // Nivel de actividad
+            'activity_level' => 'required|in:sedentary,light,moderate,active,very_active',
+            // Valores calculados (obligatorios)
+            'bmi' => 'required|numeric|min:10|max:60',
             'body_fat' => 'nullable|numeric|min:0|max:100',
-            'blood_pressure' => 'nullable|string|max:20',
+            'tmb' => 'nullable|numeric|min:500|max:5000',
+            'tdee' => 'nullable|numeric|min:500|max:10000',
+            'whr' => 'nullable|numeric|min:0.5|max:1.5',
+            'wht' => 'nullable|numeric|min:0.3|max:1.0',
+            'frame_index' => 'nullable|numeric|min:5|max:20',
+            // Notas clínicas (obligatorias)
             'diagnosis' => 'required|string|max:5000',
             'recommendations' => 'required|string|max:5000',
         ], [
@@ -80,12 +96,15 @@ class AttentionController extends Controller
             'height.max' => 'La altura no puede superar 250 cm.',
             'bmi.required' => 'El IMC es obligatorio.',
             'bmi.numeric' => 'El IMC debe ser un número.',
+            'activity_level.required' => 'El nivel de actividad física es obligatorio.',
+            'activity_level.in' => 'El nivel de actividad física seleccionado no es válido.',
             'waist.numeric' => 'La medida de cintura debe ser un número.',
             'hip.numeric' => 'La medida de cadera debe ser un número.',
+            'neck.numeric' => 'La medida de cuello debe ser un número.',
+            'wrist.numeric' => 'La medida de muñeca debe ser un número.',
             'body_fat.numeric' => 'El porcentaje de grasa corporal debe ser un número.',
             'body_fat.min' => 'El porcentaje de grasa corporal no puede ser negativo.',
             'body_fat.max' => 'El porcentaje de grasa corporal no puede superar 100%.',
-            'blood_pressure.max' => 'La presión arterial no puede superar 20 caracteres.',
             'diagnosis.required' => 'El diagnóstico es obligatorio.',
             'diagnosis.max' => 'El diagnóstico no puede superar 5000 caracteres.',
             'recommendations.required' => 'Las recomendaciones son obligatorias.',
@@ -107,13 +126,28 @@ class AttentionController extends Controller
             // Crear los datos antropométricos
             AttentionData::create([
                 'attention_id' => $attention->id,
+                // Medidas básicas
                 'weight' => $validated['weight'],
                 'height' => $validated['height'],
+                // Medidas corporales
+                'waist' => $validated['waist'] ?? null,
+                'hip' => $validated['hip'] ?? null,
+                'neck' => $validated['neck'] ?? null,
+                'wrist' => $validated['wrist'] ?? null,
+                'arm_contracted' => $validated['arm_contracted'] ?? null,
+                'arm_relaxed' => $validated['arm_relaxed'] ?? null,
+                'thigh' => $validated['thigh'] ?? null,
+                'calf' => $validated['calf'] ?? null,
+                // Nivel de actividad
+                'activity_level' => $validated['activity_level'],
+                // Valores calculados
                 'bmi' => $validated['bmi'],
-                'waist' => $validated['waist'],
-                'hip' => $validated['hip'],
-                'body_fat' => $validated['body_fat'],
-                'blood_pressure' => $validated['blood_pressure'],
+                'body_fat' => $validated['body_fat'] ?? null,
+                'tmb' => $validated['tmb'] ?? null,
+                'tdee' => $validated['tdee'] ?? null,
+                'whr' => $validated['whr'] ?? null,
+                'wht' => $validated['wht'] ?? null,
+                'frame_index' => $validated['frame_index'] ?? null,
             ]);
 
             // Cambiar el estado de la cita a completada

@@ -14,13 +14,33 @@ return new class extends Migration
         Schema::create('attention_data', function (Blueprint $table) {
             $table->id();
             $table->foreignId('attention_id')->constrained('attentions')->onDelete('cascade');
+            
+            // Medidas básicas
             $table->decimal('weight', 5, 2)->nullable();
-            $table->decimal('height', 5, 2)->nullable(); // Cambiado de 4,2 a 5,2 para soportar hasta 999.99 cm
-            $table->decimal('bmi', 5, 2)->nullable();
+            $table->decimal('height', 5, 2)->nullable();
+            
+            // Medidas corporales
             $table->decimal('waist', 5, 2)->nullable();
             $table->decimal('hip', 5, 2)->nullable();
+            $table->decimal('neck', 5, 2)->nullable();
+            $table->decimal('wrist', 5, 2)->nullable();
+            $table->decimal('arm_contracted', 5, 2)->nullable();
+            $table->decimal('arm_relaxed', 5, 2)->nullable();
+            $table->decimal('thigh', 5, 2)->nullable();
+            $table->decimal('calf', 5, 2)->nullable();
+            
+            // Nivel de actividad física
+            $table->enum('activity_level', ['sedentary', 'light', 'moderate', 'active', 'very_active'])->default('moderate');
+            
+            // Valores calculados
+            $table->decimal('bmi', 5, 2)->nullable();
             $table->decimal('body_fat', 5, 2)->nullable();
-            $table->string('blood_pressure', 20)->nullable(); // Aumentado a 20 caracteres para soportar formatos como "120/80"
+            $table->decimal('tmb', 6, 2)->nullable(); // Tasa Metabólica Basal
+            $table->decimal('tdee', 6, 2)->nullable(); // Gasto Energético Total
+            $table->decimal('whr', 5, 3)->nullable(); // Índice Cintura-Cadera
+            $table->decimal('wht', 5, 3)->nullable(); // Índice Cintura-Altura
+            $table->decimal('frame_index', 5, 2)->nullable(); // Índice de complexión (Frisancho)
+            
             $table->timestamps();
         });
     }
