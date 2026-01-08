@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 class PatientDataForm extends Component
 {
     public User $patient;
+    public $appointmentId = null;
     public $phone = '';
     public $address = '';
     public $birth_date = '';
@@ -38,7 +39,7 @@ class PatientDataForm extends Component
         'address.max' => 'La dirección no puede tener más de 255 caracteres.',
     ];
 
-    public function mount(User $patient)
+    public function mount(User $patient, $appointmentId = null)
     {
         // Verificar que el usuario autenticado es nutricionista
         if (!Auth::user()->role || Auth::user()->role->name !== 'nutricionista') {
@@ -51,6 +52,7 @@ class PatientDataForm extends Component
         }
 
         $this->patient = $patient;
+        $this->appointmentId = $appointmentId;
 
         // Verificar si ya tiene datos personales
         if ($patient->personalData) {
@@ -84,23 +86,15 @@ class PatientDataForm extends Component
                 'phone' => $this->phone,
                 'address' => $this->address,
             ]);
-
-            session()->flash('success', 'Datos personales del paciente guardados correctamente.');
             
-            // Verificar si hay una cita pendiente de atención
-            $pendingAppointment = $this->patient->appointmentsAsPaciente()
-                ->where('nutricionista_id', Auth::id())
-                ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
-                ->where('start_time', '>=', now())
-                ->first();
-            
-            // Si hay una cita pendiente, redirigir a iniciar la atención
-            if ($pendingAppointment) {
-                return redirect()->route('nutricionista.attentions.create', $pendingAppointment)
-                    ->with('success', 'Datos personales guardados. Ahora puedes iniciar la atención.');
+            // Si hay un appointment_id pendiente, redirigir a registrar atención
+            if ($this->appointmentId) {
+                return $this->redirect(route('nutricionista.attentions.create', $this->appointmentId), navigate: false);
             }
             
-            return redirect()->route('nutricionista.patients.index');
+            // Si no hay appointment_id, redirigir a la lista de pacientes
+            return $this->redirect(route('nutricionista.patients.index'), navigate: false);
+
         } catch (\Exception $e) {
             session()->flash('error', 'Error al guardar los datos: ' . $e->getMessage());
         }

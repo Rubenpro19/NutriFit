@@ -127,15 +127,6 @@
                     Información Profesional
                 </h2>
 
-                @if(session('success'))
-                    <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 dark:bg-green-900/20 dark:border-green-800">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
-                            <p class="text-green-900 dark:text-green-300 font-semibold">{{ session('success') }}</p>
-                        </div>
-                    </div>
-                @endif
-
                 @if(session('error'))
                     <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 dark:bg-red-900/20 dark:border-red-800">
                         <div class="flex items-center gap-3">
@@ -239,15 +230,6 @@
                     <span class="material-symbols-outlined text-3xl">lock</span>
                     Cambiar Contraseña
                 </h2>
-
-                @if(session('password_success'))
-                    <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 dark:bg-green-900/20 dark:border-green-800">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
-                            <p class="text-green-900 dark:text-green-300 font-semibold">{{ session('password_success') }}</p>
-                        </div>
-                    </div>
-                @endif
 
                 @if(session('password_error'))
                     <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 dark:bg-red-900/20 dark:border-red-800">

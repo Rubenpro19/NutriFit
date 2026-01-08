@@ -117,7 +117,7 @@ class NutricionistaProfile extends Component
 
             $this->profile_photo = null;
 
-            session()->flash('success', 'Tu perfil ha sido actualizado correctamente.');
+            return redirect()->to(route('nutricionista.profile'))->with('success', 'Tu perfil ha sido actualizado correctamente.');
         } catch (\Exception $e) {
             session()->flash('error', 'Error al actualizar el perfil: ' . $e->getMessage());
         }
@@ -151,7 +151,7 @@ class NutricionistaProfile extends Component
             
             $this->hasPassword = true;
 
-            session()->flash('password_success', 'Tu contraseña ha sido actualizada correctamente.');
+            return redirect()->to(route('nutricionista.profile'))->with('password_success', 'Tu contraseña ha sido actualizada correctamente.');
         } catch (\Exception $e) {
             session()->flash('password_error', 'Error al actualizar la contraseña: ' . $e->getMessage());
         }

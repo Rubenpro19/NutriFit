@@ -179,7 +179,7 @@
                 </div>
             </div>
 
-            <livewire:nutricionista.patient-data-form :patient="$patient" />
+            <livewire:nutricionista.patient-data-form :patient="$patient" :appointmentId="$appointment" />
         </div>
     </main>
 

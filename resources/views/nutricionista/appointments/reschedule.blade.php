@@ -55,58 +55,71 @@
             </div>
         @endif
 
-        <!-- Modal de Éxito -->
+        <!-- Toast de Éxito -->
         @if(session('success'))
         <div x-data="{ show: true }" 
+             x-init="setTimeout(() => show = false, 5000)"
              x-show="show"
              x-cloak
-             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+             class="fixed top-20 right-4 z-50 max-w-md w-full sm:w-96"
              style="display: none;">
-            <div @click.away="show = false"
-                 x-transition:enter="transition ease-out duration-300"
-                 x-transition:enter-start="opacity-0 scale-90"
-                 x-transition:enter-end="opacity-100 scale-100"
-                 x-transition:leave="transition ease-in duration-200"
-                 x-transition:leave-start="opacity-100 scale-100"
-                 x-transition:leave-end="opacity-0 scale-90"
-                 class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center transform">
+            <div x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="translate-x-full opacity-0"
+                 x-transition:enter-end="translate-x-0 opacity-100"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="translate-x-0 opacity-100"
+                 x-transition:leave-end="translate-x-full opacity-0"
+                 class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-l-4 border-emerald-500 overflow-hidden">
                 
-                <!-- Ícono de éxito animado -->
-                <div class="mb-6 flex justify-center">
-                    <div class="relative">
-                        <div class="absolute inset-0 bg-emerald-400 rounded-full animate-ping opacity-75"></div>
-                        <div class="relative bg-gradient-to-br from-emerald-500 to-green-600 rounded-full p-4 shadow-lg">
-                            <span class="material-symbols-outlined text-white text-5xl">event_repeat</span>
+                <div class="p-4">
+                    <div class="flex items-start gap-3">
+                        <!-- Icono -->
+                        <div class="flex-shrink-0">
+                            <div class="bg-emerald-100 dark:bg-emerald-900/30 rounded-full p-2">
+                                <span class="material-symbols-outlined text-emerald-600 dark:text-emerald-400 text-2xl">event_repeat</span>
+                            </div>
                         </div>
+                        
+                        <!-- Contenido -->
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                                ¡Cita Reagendada con Éxito!
+                            </h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400 mb-3">
+                                {{ session('success') }}
+                            </p>
+                            
+                            <!-- Botón Ver Cita -->
+                            @if(session('appointment_id'))
+                                <a href="{{ route('nutricionista.appointments.show', session('appointment_id')) }}"
+                                   class="inline-flex items-center gap-2 px-4 py-2 bg-emerald-600 text-white text-sm font-semibold rounded-lg hover:bg-emerald-700 transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <span class="material-symbols-outlined text-base">visibility</span>
+                                    Ver Detalle de Cita
+                                </a>
+                            @endif
+                        </div>
+                        
+                        <!-- Botón Cerrar -->
+                        <button @click="show = false"
+                                class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
                     </div>
                 </div>
                 
-                <!-- Título -->
-                <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                    ¡Cita Reagendada con Éxito!
-                </h3>
-                
-                <!-- Mensaje -->
-                <p class="text-gray-600 dark:text-gray-400 mb-6">
-                    {{ session('success') }}
-                </p>
-                
-                <!-- Botones -->
-                <div class="flex flex-col sm:flex-row gap-3">
-                    @if(session('appointment_id'))
-                        <a href="{{ route('nutricionista.appointments.show', session('appointment_id')) }}"
-                           class="flex-1 px-6 py-3 bg-gradient-to-r from-emerald-600 to-green-600 text-white font-semibold rounded-lg hover:from-emerald-700 hover:to-green-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">visibility</span>
-                            Ver Detalle de Cita
-                        </a>
-                    @endif
-                    <button @click="show = false"
-                            class="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200">
-                        Cerrar
-                    </button>
+                <!-- Barra de progreso horizontal -->
+                <div class="h-1 bg-gray-200 dark:bg-gray-700">
+                    <div class="h-full bg-emerald-500 transition-all duration-100" style="width: 100%; animation: shrink 5s linear forwards;"></div>
                 </div>
             </div>
         </div>
+
+        <style>
+            @keyframes shrink {
+                from { width: 100%; }
+                to { width: 0%; }
+            }
+        </style>
         @endif
 
         <div class="grid lg:grid-cols-5 gap-8" x-data="{ showPhotoModal: false }">

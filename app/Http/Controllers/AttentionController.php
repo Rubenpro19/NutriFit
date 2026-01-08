@@ -34,7 +34,7 @@ class AttentionController extends Controller
         // Verificar si el paciente tiene datos personales
         if (!$appointment->paciente->personalData) {
             return redirect()
-                ->route('nutricionista.patients.data', $appointment->paciente)
+                ->route('nutricionista.patients.data', ['patient' => $appointment->paciente, 'appointment' => $appointment->id])
                 ->with('warning', 'Antes de iniciar la atención, debes completar los datos personales del paciente.');
         }
 

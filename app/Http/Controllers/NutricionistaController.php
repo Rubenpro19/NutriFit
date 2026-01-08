@@ -627,7 +627,9 @@ class NutricionistaController extends Controller
         return redirect()
             ->route('nutricionista.appointments.create')
             ->with('success', 'Cita asignada exitosamente al paciente ' . $paciente->name)
-            ->with('appointment_id', $appointment->id);
+            ->with('appointment_id', $appointment->id)
+            ->with('appointment_date', $validated['appointment_date'])
+            ->with('appointment_time', $validated['appointment_time']);
     }
 
     /**
@@ -684,7 +686,8 @@ class NutricionistaController extends Controller
         // Si no hay horarios seleccionados, simplemente redirigir
         if (!$request->has('time_slots') || empty($request->time_slots)) {
             return redirect()->route('nutricionista.schedules.index')
-                ->with('success', 'Horarios actualizados correctamente (sin disponibilidad configurada)');
+                ->with('success', 'Horarios actualizados correctamente (sin disponibilidad configurada)')
+                ->with('slots_count', 0);
         }
 
         // Validar que los slots tengan el formato correcto
@@ -692,6 +695,9 @@ class NutricionistaController extends Controller
             'time_slots' => 'array',
             'time_slots.*' => 'string',
         ]);
+
+        // Contar los slots totales
+        $totalSlots = count($request->time_slots);
 
         // Organizar los slots por día
         $slotsByDay = [];
@@ -755,13 +761,14 @@ class NutricionistaController extends Controller
         }
 
         return redirect()->route('nutricionista.schedules.index')
-            ->with('success', 'Horarios guardados correctamente');
+            ->with('success', 'Horarios guardados correctamente')
+            ->with('slots_count', $totalSlots);
     }
 
     /**
      * Muestra el formulario de datos personales del paciente
      */
-    public function patientData(User $patient)
+    public function patientData(User $patient, $appointment = null)
     {
         $nutricionista = auth()->user();
         
@@ -772,6 +779,6 @@ class NutricionistaController extends Controller
 
         $patient->load('personalData');
 
-        return view('nutricionista.patients.data', compact('patient'));
+        return view('nutricionista.patients.data', compact('patient', 'appointment'));
     }
 }

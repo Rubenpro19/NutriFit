@@ -37,56 +37,80 @@
                 </div>
             </div>
 
-            <!-- Modal de Éxito -->
+            <!-- Toast de Éxito -->
             @if(session('success'))
             <div x-data="{ show: true }" 
+                 x-init="setTimeout(() => show = false, 5000)"
                  x-show="show"
                  x-cloak
-                 class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+                 class="fixed top-20 right-4 z-50 max-w-md w-full sm:w-96"
                  style="display: none;">
-                <div @click.away="show = false"
-                     x-transition:enter="transition ease-out duration-300"
-                     x-transition:enter-start="opacity-0 scale-90"
-                     x-transition:enter-end="opacity-100 scale-100"
-                     x-transition:leave="transition ease-in duration-200"
-                     x-transition:leave-start="opacity-100 scale-100"
-                     x-transition:leave-end="opacity-0 scale-90"
-                     class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center transform">
+                <div x-transition:enter="transition ease-out duration-300 transform"
+                     x-transition:enter-start="translate-x-full opacity-0"
+                     x-transition:enter-end="translate-x-0 opacity-100"
+                     x-transition:leave="transition ease-in duration-200 transform"
+                     x-transition:leave-start="translate-x-0 opacity-100"
+                     x-transition:leave-end="translate-x-full opacity-0"
+                     class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-l-4 border-green-500 overflow-hidden">
                     
-                    <!-- Ícono de éxito animado -->
-                    <div class="mb-6 flex justify-center">
-                        <div class="relative">
-                            <div class="absolute inset-0 bg-green-400 rounded-full animate-ping opacity-75"></div>
-                            <div class="relative bg-gradient-to-br from-green-500 to-emerald-600 rounded-full p-4 shadow-lg">
-                                <span class="material-symbols-outlined text-white text-5xl">check_circle</span>
+                    
+                    <div class="p-4">
+                        <div class="flex items-start gap-3">
+                            <!-- Icono -->
+                            <div class="flex-shrink-0">
+                                <div class="bg-green-100 dark:bg-green-900/30 rounded-full p-2">
+                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-2xl">check_circle</span>
+                                </div>
                             </div>
+                            
+                            <!-- Contenido -->
+                            <div class="flex-1 min-w-0">
+                                <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                                    ¡Horarios Guardados con Éxito!
+                                </h4>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">
+                                    {{ session('success') }}
+                                </p>
+                                
+                                <!-- Resumen -->
+                                @if(session('slots_count'))
+                                <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-2 mb-3 border border-green-200 dark:border-green-700">
+                                    <div class="flex items-center gap-2 text-xs text-gray-700 dark:text-gray-300">
+                                        <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-sm">schedule</span>
+                                        <span class="font-semibold">{{ session('slots_count') }} horarios configurados</span>
+                                    </div>
+                                </div>
+                                @endif
+                                
+                                <!-- Botón Asignar Cita -->
+                                <a href="{{ route('nutricionista.appointments.create') }}"
+                                   class="inline-flex items-center gap-2 px-4 py-2 bg-green-600 text-white text-sm font-semibold rounded-lg hover:bg-green-700 transition-all duration-200 shadow-sm hover:shadow-md">
+                                    <span class="material-symbols-outlined text-base">event_available</span>
+                                    Asignar Cita
+                                </a>
+                            </div>
+                            
+                            <!-- Botón Cerrar -->
+                            <button @click="show = false"
+                                    class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
                         </div>
                     </div>
                     
-                    <!-- Título -->
-                    <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-3">
-                        ¡Horarios Guardados con Éxito!
-                    </h3>
-                    
-                    <!-- Mensaje -->
-                    <p class="text-gray-600 dark:text-gray-400 mb-6">
-                        {{ session('success') }}
-                    </p>
-                    
-                    <!-- Botones -->
-                    <div class="flex flex-col sm:flex-row gap-3">
-                        <a href="{{ route('nutricionista.appointments.create') }}"
-                           class="flex-1 px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-lg hover:shadow-xl flex items-center justify-center gap-2">
-                            <span class="material-symbols-outlined">event_available</span>
-                            Asignar Cita
-                        </a>
-                        <button @click="show = false"
-                                class="flex-1 px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-all duration-200">
-                            Cerrar
-                        </button>
+                    <!-- Barra de progreso horizontal -->
+                    <div class="h-1 bg-gray-200 dark:bg-gray-700">
+                        <div class="h-full bg-green-500 transition-all duration-100" style="width: 100%; animation: shrink 5s linear forwards;"></div>
                     </div>
                 </div>
             </div>
+
+            <style>
+                @keyframes shrink {
+                    from { width: 100%; }
+                    to { width: 0%; }
+                }
+            </style>
             @endif
 
             <!-- Formulario -->
