@@ -46,7 +46,7 @@ Route::middleware(['auth'])->group(function () {
 });
 
 // Panel administrador
-Route::middleware(['auth', 'role:administrador'])->prefix('administrador')->name('admin.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:administrador'])->prefix('administrador')->name('admin.')->group(function () {
     Route::get('/dashboard', [AdminController::class, 'index'])->name('dashboard');
     
     // Gestión de usuarios
@@ -77,7 +77,7 @@ Route::middleware(['auth', 'role:administrador'])->prefix('administrador')->name
 
 
 // Panel nutricionista
-Route::middleware(['auth', 'role:nutricionista'])->prefix('nutricionista')->name('nutricionista.')->group(function () {
+Route::middleware(['auth', 'verified', 'role:nutricionista'])->prefix('nutricionista')->name('nutricionista.')->group(function () {
     Route::get('/dashboard', [NutricionistaController::class, 'index'])->name('dashboard');
     
     // Gestión de horarios
@@ -117,8 +117,8 @@ Route::middleware(['auth', 'role:paciente'])->prefix('paciente')->name('paciente
     Route::post('/cambiar-contrasena', [App\Http\Controllers\PasswordController::class, 'updatePassword'])->name('change-default-password.update');
 });
 
-// Panel paciente - Rutas protegidas (con middleware password.changed)
-Route::middleware(['auth', 'role:paciente', 'password.changed'])->prefix('paciente')->name('paciente.')->group(function () {
+// Panel paciente - Rutas protegidas (con middleware password.changed y verified)
+Route::middleware(['auth', 'verified', 'role:paciente', 'password.changed'])->prefix('paciente')->name('paciente.')->group(function () {
     Route::get('/dashboard', [PacienteController::class, 'index'])->name('dashboard');
     
     // Agendar citas

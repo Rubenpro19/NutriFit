@@ -3,6 +3,8 @@
 namespace App\Actions\Fortify;
 
 use App\Models\User;
+use App\Rules\ValidEmailDomain;
+use App\Notifications\WelcomeNotification;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Validation\Rule;
 use Laravel\Fortify\Contracts\CreatesNewUsers;
@@ -26,6 +28,7 @@ class CreateNewUser implements CreatesNewUsers
                 'email',
                 'max:255',
                 Rule::unique(User::class),
+                new ValidEmailDomain(), // Validación DNS/MX
             ],
             'password' => $this->passwordRules(),
         ], [
@@ -44,11 +47,16 @@ class CreateNewUser implements CreatesNewUsers
             'password' => 'contraseña',
         ])->validate();
 
-        return User::create([
+        $user = User::create([
             'name' => $input['name'],
             'email' => $input['email'],
             'password' => $input['password'],
             'role_id' => 3,
         ]);
+
+        // El correo de bienvenida se enviará después de verificar el email
+        // Ver: App\Listeners\SendWelcomeNotification
+
+        return $user;
     }
 }

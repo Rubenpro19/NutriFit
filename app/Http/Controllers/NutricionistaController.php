@@ -627,8 +627,11 @@ class NutricionistaController extends Controller
             'price' => $validated['price'],
         ]);
 
-        // Enviar notificación al paciente
-        $paciente->notify(new \App\Notifications\AppointmentCreatedNotification($appointment));
+        // Enviar notificación al paciente (confirmación de cita)
+        $paciente->notify(new \App\Notifications\AppointmentCreatedForPatientNotification($appointment));
+        
+        // Enviar notificación al nutricionista (recordatorio de nueva cita en su agenda)
+        $nutricionista->notify(new \App\Notifications\AppointmentCreatedNotification($appointment));
 
         return redirect()
             ->route('nutricionista.appointments.create')

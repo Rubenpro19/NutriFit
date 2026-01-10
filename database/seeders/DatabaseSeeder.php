@@ -36,6 +36,7 @@ class DatabaseSeeder extends Seeder
             'role_id' => $pacienteRole?->id,
             'password' => Hash::make('paciente123'),
             'user_state_id' => $activoState?->id,
+            'email_verified_at' => now(),
         ]);
 
         // 🔹 Usuario administrador (contraseña desde .env)
@@ -45,6 +46,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make(env('ADMIN_PASSWORD', 'admin123')),
             'role_id' => $adminRole?->id,
             'user_state_id' => $activoState?->id,
+            'email_verified_at' => now(),
         ]);
 
         // 🔹 Usuario nutricionista específico
@@ -54,6 +56,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('ruben123'),
             'role_id' => $nutricionistaRole?->id,
             'user_state_id' => $activoState?->id,
+            'email_verified_at' => now(), // ✅ Ya verificado
         ]);
 
         // 🔹 Usuario nutricionista específico
@@ -63,6 +66,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('rossy123'),
             'role_id' => $nutricionistaRole?->id,
             'user_state_id' => $activoState?->id,
+            'email_verified_at' => now(),
         ]);
 
         // 🔹 Usuario paciente específico
@@ -72,6 +76,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('luis123'),
             'role_id' => $pacienteRole?->id,
             'user_state_id' => $activoState?->id,
+            'email_verified_at' => now(),
         ]);
 
         // 🔹 Usuario paciente específico
@@ -81,6 +86,7 @@ class DatabaseSeeder extends Seeder
             'password' => Hash::make('pepe123'),
             'role_id' => $pacienteRole?->id,
             'user_state_id' => $activoState?->id,
+            'email_verified_at' => now(),
         ]);
     }
 }
