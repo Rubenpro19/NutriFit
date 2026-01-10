@@ -85,14 +85,23 @@
                                 <span class="material-symbols-outlined text-lg">key</span>
                                 Nueva Contraseña
                             </label>
-                            <input 
-                                type="password" 
-                                id="password"
-                                name="password"
-                                required
-                                placeholder="Ingresa tu contraseña (mínimo 8 caracteres)"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent @error('password') border-red-500 @enderror"
-                            >
+                            <div class="relative">
+                                <input 
+                                    type="password" 
+                                    id="password"
+                                    name="password"
+                                    required
+                                    placeholder="Ingresa tu contraseña (mínimo 8 caracteres)"
+                                    class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent @error('password') border-red-500 @enderror"
+                                >
+                                <button 
+                                    type="button" 
+                                    onclick="togglePasswordVisibility('password', 'togglePassword')"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                                >
+                                    <span id="togglePassword" class="material-symbols-outlined text-xl">visibility</span>
+                                </button>
+                            </div>
                             @error('password')
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-400 flex items-center gap-1">
                                     <span class="material-symbols-outlined text-sm">error</span>
@@ -110,14 +119,23 @@
                                 <span class="material-symbols-outlined text-lg">key</span>
                                 Confirmar Nueva Contraseña
                             </label>
-                            <input 
-                                type="password" 
-                                id="password_confirmation"
-                                name="password_confirmation"
-                                required
-                                placeholder="Confirma tu contraseña"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                            >
+                            <div class="relative">
+                                <input 
+                                    type="password" 
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    required
+                                    placeholder="Confirma tu contraseña"
+                                    class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                >
+                                <button 
+                                    type="button" 
+                                    onclick="togglePasswordVisibility('password_confirmation', 'togglePasswordConfirmation')"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 transition-colors"
+                                >
+                                    <span id="togglePasswordConfirmation" class="material-symbols-outlined text-xl">visibility</span>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Botón Cambiar -->
@@ -159,5 +177,20 @@
     </main>
 
     @include('layouts.footer')
+
+    <script>
+        function togglePasswordVisibility(inputId, iconId) {
+            const input = document.getElementById(inputId);
+            const icon = document.getElementById(iconId);
+            
+            if (input.type === 'password') {
+                input.type = 'text';
+                icon.textContent = 'visibility_off';
+            } else {
+                input.type = 'password';
+                icon.textContent = 'visibility';
+            }
+        }
+    </script>
 </body>
 @endsection
