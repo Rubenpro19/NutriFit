@@ -114,17 +114,37 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Estima el porcentaje de grasa corporal usando método ajustado a Ripped Body
-     * Utiliza aproximación basada en IMC y género
+     * Estima el porcentaje de grasa corporal usando método mejorado
+     * Combina Deurenberg con validaciones para evitar valores negativos
      */
     function estimateBodyFat(bmi, age, gender) {
+        let bodyFat;
+        
         if (gender === 'male') {
-            // Para hombres: Fórmula de Deurenberg estándar
-            return (1.20 * bmi) + (0.23 * age) - (10.8 * 1) - 5.7;
+            // Para hombres: Fórmula de Deurenberg
+            bodyFat = (1.20 * bmi) + (0.23 * age) - (10.8 * 1) - 5.4;
+            
+            // Validación: los hombres no pueden tener menos de 3-5% de grasa
+            if (bodyFat < 3) {
+                bodyFat = 3 + ((bmi - 15) * 0.5); // Estimación mínima basada en IMC
+            }
         } else {
-            // Para mujeres: Ajuste calibrado para coincidir con Ripped Body
-            return (1.20 * bmi) + (0.23 * age) - 2.4;
+            // Para mujeres: Fórmula de Deurenberg adaptada
+            bodyFat = (1.20 * bmi) + (0.23 * age) - 5.4;
+            
+            // Validación: las mujeres no pueden tener menos de 10-12% de grasa
+            if (bodyFat < 10) {
+                bodyFat = 10 + ((bmi - 15) * 0.5); // Estimación mínima basada en IMC
+            }
         }
+        
+        // Validación general: porcentaje máximo razonable es 50%
+        if (bodyFat > 50) {
+            bodyFat = 50;
+        }
+        
+        // Asegurar que nunca sea negativo
+        return Math.max(bodyFat, gender === 'male' ? 3 : 10);
     }
 
     /**
@@ -439,18 +459,20 @@ document.addEventListener('DOMContentLoaded', function() {
      * NOTA: Este es solo informativo (US Navy). NO se usa para cálculos de TMB/TDEE
      */
     function updateBodyFatDisplay(bodyFatPercentage, age, gender) {
-        if (bodyFatPercentage === null) {
+        if (bodyFatPercentage === null || bodyFatPercentage === undefined) {
             displayBodyfat.textContent = '--';
             bodyfatCategory.textContent = 'Ingresa cintura, cuello' + (gender === 'female' ? ' y cadera' : '');
             return false;
         }
 
-        const bfValue = bodyFatPercentage.toFixed(2);
+        // Asegurar que el porcentaje nunca sea negativo
+        const validBodyFat = Math.max(bodyFatPercentage, gender === 'male' ? 3 : 10);
+        const bfValue = validBodyFat.toFixed(2);
         displayBodyfat.textContent = bfValue + '%';
 
-        const { category, color } = getBodyFatCategory(bodyFatPercentage, age, gender);
+        const { category, color } = getBodyFatCategory(validBodyFat, age, gender);
         
-        bodyfatCategory.textContent = category + ' (US Navy: ' + (gender === 'male' ? 'Hombre' : 'Mujer') + ', ' + age + ' años)';
+        bodyfatCategory.textContent = category + ' (Fórmula Deurenberg: ' + (gender === 'male' ? 'Hombre' : 'Mujer') + ', ' + age + ' años)';
         bodyfatCategory.className = `text-xs font-medium ${color}`;
         
         return true;

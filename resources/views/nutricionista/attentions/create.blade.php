@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Atender Cita - NutriFit')
+@section('title', 'Registrar Atención- NutriFit')
 
 @section('content')
 <body class="min-h-screen bg-gradient-to-br from-blue-50 via-white to-green-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
@@ -55,6 +55,61 @@
                     <span class="material-symbols-outlined text-3xl sm:text-4xl text-green-600 dark:text-green-400">health_and_safety</span>
                 </div>
             </div>
+
+            <!-- Indicador de Borrador Guardado -->
+            <div id="draft-indicator" class="hidden mt-4 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-3" x-data="{ showClearModal: false }">
+                <div class="flex items-center justify-between gap-3">
+                    <div class="flex items-center gap-2 text-amber-800 dark:text-amber-300">
+                        <span class="material-symbols-outlined text-lg">save</span>
+                        <span class="text-sm font-medium">Borrador guardado automáticamente</span>
+                        <span id="draft-timestamp" class="text-xs opacity-75"></span>
+                    </div>
+                    <button type="button" @click="showClearModal = true" class="text-xs text-amber-700 dark:text-amber-400 hover:text-amber-900 dark:hover:text-amber-200 underline transition">
+                        Limpiar borrador
+                    </button>
+                </div>
+
+                <!-- Modal de Confirmación para Limpiar Borrador -->
+                <div x-show="showClearModal" x-cloak
+                    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
+                    @click.self="showClearModal = false">
+                    <div @click.away="showClearModal = false"
+                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all"
+                        x-transition:enter="transition ease-out duration-300"
+                        x-transition:enter-start="opacity-0 scale-90"
+                        x-transition:enter-end="opacity-100 scale-100"
+                        x-transition:leave="transition ease-in duration-200"
+                        x-transition:leave-start="opacity-100 scale-100"
+                        x-transition:leave-end="opacity-0 scale-90">
+                        
+                        <div class="text-center mb-6">
+                            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-amber-100 dark:bg-amber-900/30 mb-4">
+                                <span class="material-symbols-outlined text-4xl text-amber-600 dark:text-amber-400">warning</span>
+                            </div>
+                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                ¿Eliminar el borrador guardado?
+                            </h3>
+                            <p class="text-gray-600 dark:text-gray-400">
+                                Se eliminarán todos los datos guardados automáticamente de este formulario. Esta acción no se puede deshacer.
+                            </p>
+                        </div>
+
+                        <div class="flex gap-3">
+                            <button type="button" 
+                                @click="showClearModal = false"
+                                class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                No, mantener
+                            </button>
+                            <button type="button"
+                                @click="clearDraftConfirmed(); showClearModal = false"
+                                class="flex-1 px-4 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-base">delete</span>
+                                Sí, eliminar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
 
         @if(session('error'))
@@ -80,7 +135,7 @@
                 <div class="grid md:grid-cols-2 gap-6">
                     <!-- Peso -->
                     <div>
-                        <label for="weight" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <label for="weight-input" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                             Peso <span class="text-red-500">*</span>
                         </label>
                         <div class="flex gap-2">
@@ -616,6 +671,165 @@
 
     <!-- Script para cálculos antropométricos completos -->
     @vite('resources/js/attention-calculator.js')
+
+    <!-- Script para autoguardado de borrador -->
+    <script>
+        // ID único del borrador basado en la cita
+        const DRAFT_KEY = 'attention_draft_{{ $appointment->id }}';
+        const DRAFT_TIMESTAMP_KEY = 'attention_draft_timestamp_{{ $appointment->id }}';
+        
+        // Elementos del formulario a guardar
+        const formFields = [
+            'weight-input', 'weight-unit', 'height', 'waist', 'hip', 'neck', 'wrist',
+            'arm_contracted', 'arm_relaxed', 'thigh', 'calf', 'activity_level',
+            'nutrition_goal', 'diagnosis', 'recommendations'
+        ];
+
+        // Función para guardar borrador
+        function saveDraft() {
+            const draftData = {};
+            let hasData = false;
+
+            formFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field && field.value) {
+                    draftData[fieldId] = field.value;
+                    hasData = true;
+                }
+            });
+
+            if (hasData) {
+                localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+                localStorage.setItem(DRAFT_TIMESTAMP_KEY, new Date().toISOString());
+                updateDraftIndicator();
+            }
+        }
+
+        // Función para cargar borrador
+        function loadDraft() {
+            const draftData = localStorage.getItem(DRAFT_KEY);
+            
+            if (draftData) {
+                try {
+                    const data = JSON.parse(draftData);
+                    let loadedAny = false;
+
+                    formFields.forEach(fieldId => {
+                        const field = document.getElementById(fieldId);
+                        // Solo cargar si el campo está vacío (no tiene old() de Laravel)
+                        if (field && data[fieldId] !== undefined) {
+                            // Para campos que ya tienen valor de old(), no sobrescribir
+                            if (!field.value || field.value === field.defaultValue) {
+                                field.value = data[fieldId];
+                                loadedAny = true;
+                            }
+                        }
+                    });
+
+                    if (loadedAny) {
+                        updateDraftIndicator();
+                        // Disparar evento change en los campos para recalcular
+                        const heightField = document.getElementById('height');
+                        if (heightField) {
+                            heightField.dispatchEvent(new Event('input', { bubbles: true }));
+                        }
+                        
+                        // Disparar change en los selects también
+                        const activityLevel = document.getElementById('activity_level');
+                        const nutritionGoal = document.getElementById('nutrition_goal');
+                        if (activityLevel) activityLevel.dispatchEvent(new Event('change', { bubbles: true }));
+                        if (nutritionGoal) nutritionGoal.dispatchEvent(new Event('change', { bubbles: true }));
+                    }
+                } catch (e) {
+                    console.error('Error al cargar borrador:', e);
+                }
+            }
+        }
+
+        // Función para actualizar el indicador visual
+        function updateDraftIndicator() {
+            const indicator = document.getElementById('draft-indicator');
+            const timestamp = localStorage.getItem(DRAFT_TIMESTAMP_KEY);
+            
+            if (timestamp) {
+                const date = new Date(timestamp);
+                const now = new Date();
+                const diffMinutes = Math.floor((now - date) / 60000);
+                
+                let timeText = '';
+                if (diffMinutes < 1) {
+                    timeText = 'hace unos segundos';
+                } else if (diffMinutes < 60) {
+                    timeText = `hace ${diffMinutes} minuto${diffMinutes > 1 ? 's' : ''}`;
+                } else {
+                    const hours = Math.floor(diffMinutes / 60);
+                    timeText = `hace ${hours} hora${hours > 1 ? 's' : ''}`;
+                }
+                
+                document.getElementById('draft-timestamp').textContent = `(${timeText})`;
+                indicator.classList.remove('hidden');
+            }
+        }
+
+        // Función para limpiar borrador (llamada desde el modal)
+        function clearDraftConfirmed() {
+            localStorage.removeItem(DRAFT_KEY);
+            localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+            document.getElementById('draft-indicator').classList.add('hidden');
+            
+            // Mostrar notificación de éxito
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2';
+            notification.innerHTML = '<span class="material-symbols-outlined">check_circle</span><span>Borrador eliminado correctamente</span>';
+            document.body.appendChild(notification);
+            
+            // Animación de salida
+            setTimeout(() => {
+                notification.style.opacity = '0';
+                notification.style.transform = 'translateX(100%)';
+                notification.style.transition = 'all 0.3s ease-in-out';
+            }, 2500);
+            
+            setTimeout(() => notification.remove(), 3000);
+        }
+
+        // Exponer la función globalmente para que Alpine.js pueda acceder a ella
+        window.clearDraftConfirmed = clearDraftConfirmed;
+
+        // Autoguardar cada vez que cambia un campo (con debounce)
+        let saveTimeout;
+        function debouncedSave() {
+            clearTimeout(saveTimeout);
+            saveTimeout = setTimeout(saveDraft, 1000); // Guardar 1 segundo después del último cambio
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar borrador al iniciar
+            loadDraft();
+
+            // Agregar listeners a todos los campos
+            formFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                if (field) {
+                    field.addEventListener('input', debouncedSave);
+                    field.addEventListener('change', debouncedSave);
+                }
+            });
+
+            // Limpiar borrador al enviar formulario exitosamente
+            document.getElementById('attention-form').addEventListener('submit', function(e) {
+                // Solo limpiar si no hay errores (esperamos a que el formulario se envíe)
+                setTimeout(() => {
+                    localStorage.removeItem(DRAFT_KEY);
+                    localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+                }, 100);
+            });
+        });
+
+        // Actualizar timestamp cada minuto
+        setInterval(updateDraftIndicator, 60000);
+    </script>
 
     </div>
     </main>
