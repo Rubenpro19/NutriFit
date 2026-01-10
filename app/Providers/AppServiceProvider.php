@@ -22,10 +22,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        // Enviar correo de bienvenida después de verificar email
-        Event::listen(
-            Verified::class,
-            SendWelcomeNotification::class,
-        );
+        // ...existing code...
     }
 }
