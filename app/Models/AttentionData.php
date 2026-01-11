@@ -25,7 +25,9 @@ class AttentionData extends Model
         'calf',
         // Nivel de actividad
         'activity_level',
-        // Valores calculados
+        // Objetivo nutricional
+        'nutrition_goal',
+        // Valores calculados - Índices corporales
         'bmi',
         'body_fat',
         'tmb',
@@ -33,6 +35,25 @@ class AttentionData extends Model
         'whr',
         'wht',
         'frame_index',
+        // Macronutrientes y calorías
+        'target_calories',
+        'protein_grams',
+        'fat_grams',
+        'carbs_grams',
+        // Porcentajes de macronutrientes
+        'protein_percentage',
+        'fat_percentage',
+        'carbs_percentage',
+        // Distribución de equivalentes
+        'eq_cereales',
+        'eq_verduras',
+        'eq_frutas',
+        'eq_lacteo',
+        'eq_animal',
+        'eq_aceites',
+        'eq_grasas_prot',
+        'eq_leguminosas',
+        'total_calories_equivalents',
     ];
 
     protected $casts = [
@@ -53,6 +74,22 @@ class AttentionData extends Model
         'whr' => 'decimal:3',
         'wht' => 'decimal:3',
         'frame_index' => 'decimal:2',
+        'target_calories' => 'decimal:2',
+        'protein_grams' => 'decimal:2',
+        'fat_grams' => 'decimal:2',
+        'carbs_grams' => 'decimal:2',
+        'protein_percentage' => 'decimal:2',
+        'fat_percentage' => 'decimal:2',
+        'carbs_percentage' => 'decimal:2',
+        'eq_cereales' => 'decimal:2',
+        'eq_verduras' => 'decimal:2',
+        'eq_frutas' => 'decimal:2',
+        'eq_lacteo' => 'decimal:2',
+        'eq_animal' => 'decimal:2',
+        'eq_aceites' => 'decimal:2',
+        'eq_grasas_prot' => 'decimal:2',
+        'eq_leguminosas' => 'decimal:2',
+        'total_calories_equivalents' => 'decimal:2',
     ];
 
     public function attention(): BelongsTo

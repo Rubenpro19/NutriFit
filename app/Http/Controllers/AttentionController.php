@@ -72,8 +72,9 @@ class AttentionController extends Controller
             'arm_relaxed' => 'required|numeric|min:15|max:100',
             'thigh' => 'required|numeric|min:30|max:150',
             'calf' => 'required|numeric|min:20|max:100',
-            // Nivel de actividad
+            // Nivel de actividad y objetivo
             'activity_level' => 'required|in:sedentary,light,moderate,active,very_active',
+            'nutrition_goal' => 'required|in:deficit,maintenance,surplus',
             // Valores calculados (obligatorios)
             'bmi' => 'required|numeric|min:10|max:60',
             'body_fat' => 'nullable|numeric|min:0|max:100',
@@ -82,6 +83,25 @@ class AttentionController extends Controller
             'whr' => 'nullable|numeric|min:0.5|max:1.5',
             'wht' => 'nullable|numeric|min:0.3|max:1.0',
             'frame_index' => 'nullable|numeric|min:5|max:20',
+            // Macronutrientes
+            'target_calories' => 'nullable|numeric|min:500|max:10000',
+            'protein_grams' => 'nullable|numeric|min:0|max:1000',
+            'fat_grams' => 'nullable|numeric|min:0|max:1000',
+            'carbs_grams' => 'nullable|numeric|min:0|max:2000',
+            // Porcentajes de macronutrientes
+            'protein_percentage' => 'nullable|numeric|min:0|max:100',
+            'fat_percentage' => 'nullable|numeric|min:0|max:100',
+            'carbs_percentage' => 'nullable|numeric|min:0|max:100',
+            // Equivalentes
+            'eq_cereales' => 'nullable|numeric|min:0|max:50',
+            'eq_verduras' => 'nullable|numeric|min:0|max:50',
+            'eq_frutas' => 'nullable|numeric|min:0|max:50',
+            'eq_lacteo' => 'nullable|numeric|min:0|max:50',
+            'eq_animal' => 'nullable|numeric|min:0|max:50',
+            'eq_aceites' => 'nullable|numeric|min:0|max:50',
+            'eq_grasas_prot' => 'nullable|numeric|min:0|max:50',
+            'eq_leguminosas' => 'nullable|numeric|min:0|max:50',
+            'total_calories_equivalents' => 'nullable|numeric|min:0|max:10000',
             // Notas clínicas (obligatorias)
             'diagnosis' => 'required|string|max:5000',
             'recommendations' => 'required|string|max:5000',
@@ -110,6 +130,8 @@ class AttentionController extends Controller
             'bmi.numeric' => 'El IMC debe ser un número.',
             'activity_level.required' => 'El nivel de actividad física es obligatorio.',
             'activity_level.in' => 'El nivel de actividad física seleccionado no es válido.',
+            'nutrition_goal.required' => 'El objetivo nutricional es obligatorio.',
+            'nutrition_goal.in' => 'El objetivo nutricional seleccionado no es válido.',
             'body_fat.numeric' => 'El porcentaje de grasa corporal debe ser un número.',
             'body_fat.min' => 'El porcentaje de grasa corporal no puede ser negativo.',
             'body_fat.max' => 'El porcentaje de grasa corporal no puede superar 100%.',
@@ -146,9 +168,10 @@ class AttentionController extends Controller
                 'arm_relaxed' => $validated['arm_relaxed'] ?? null,
                 'thigh' => $validated['thigh'] ?? null,
                 'calf' => $validated['calf'] ?? null,
-                // Nivel de actividad
+                // Nivel de actividad y objetivo
                 'activity_level' => $validated['activity_level'],
-                // Valores calculados
+                'nutrition_goal' => $validated['nutrition_goal'] ?? 'maintenance',
+                // Valores calculados - Índices corporales
                 'bmi' => $validated['bmi'],
                 'body_fat' => $validated['body_fat'] ?? null,
                 'tmb' => $validated['tmb'] ?? null,
@@ -156,6 +179,25 @@ class AttentionController extends Controller
                 'whr' => $validated['whr'] ?? null,
                 'wht' => $validated['wht'] ?? null,
                 'frame_index' => $validated['frame_index'] ?? null,
+                // Macronutrientes
+                'target_calories' => $validated['target_calories'] ?? null,
+                'protein_grams' => $validated['protein_grams'] ?? null,
+                'fat_grams' => $validated['fat_grams'] ?? null,
+                'carbs_grams' => $validated['carbs_grams'] ?? null,
+                // Porcentajes de macronutrientes
+                'protein_percentage' => $validated['protein_percentage'] ?? null,
+                'fat_percentage' => $validated['fat_percentage'] ?? null,
+                'carbs_percentage' => $validated['carbs_percentage'] ?? null,
+                // Equivalentes
+                'eq_cereales' => $validated['eq_cereales'] ?? 0,
+                'eq_verduras' => $validated['eq_verduras'] ?? 0,
+                'eq_frutas' => $validated['eq_frutas'] ?? 0,
+                'eq_lacteo' => $validated['eq_lacteo'] ?? 0,
+                'eq_animal' => $validated['eq_animal'] ?? 0,
+                'eq_aceites' => $validated['eq_aceites'] ?? 0,
+                'eq_grasas_prot' => $validated['eq_grasas_prot'] ?? 0,
+                'eq_leguminosas' => $validated['eq_leguminosas'] ?? 0,
+                'total_calories_equivalents' => $validated['total_calories_equivalents'] ?? 0,
             ]);
 
             // Cambiar el estado de la cita a completada

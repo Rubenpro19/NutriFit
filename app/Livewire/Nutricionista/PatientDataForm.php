@@ -11,6 +11,7 @@ class PatientDataForm extends Component
 {
     public User $patient;
     public $appointmentId = null;
+    public $cedula = '';
     public $phone = '';
     public $address = '';
     public $birth_date = '';
@@ -24,7 +25,8 @@ class PatientDataForm extends Component
         return [
             'gender' => 'required|in:male,female,other',
             'birth_date' => 'required|date|before:today',
-            'phone' => 'nullable|string|max:10',
+            'cedula' => 'nullable|numeric|digits_between:6,20|unique:personal_data,cedula,' . ($this->patient->personalData?->id ?? 'NULL'),
+            'phone' => 'nullable|numeric|digits:10',
             'address' => 'nullable|string|max:255',
         ];
     }
@@ -35,7 +37,11 @@ class PatientDataForm extends Component
         'birth_date.required' => 'La fecha de nacimiento es obligatoria.',
         'birth_date.date' => 'La fecha de nacimiento debe ser una fecha válida.',
         'birth_date.before' => 'La fecha de nacimiento debe ser anterior a hoy.',
-        'phone.max' => 'El teléfono no puede tener más de 10 caracteres.',
+        'cedula.numeric' => 'La cédula solo debe contener números.',
+        'cedula.digits_between' => 'La cédula debe tener entre 6 y 20 dígitos.',
+        'cedula.unique' => 'Esta cédula ya está registrada.',
+        'phone.numeric' => 'El teléfono solo debe contener números.',
+        'phone.digits' => 'El teléfono debe tener exactamente 10 dígitos.',
         'address.max' => 'La dirección no puede tener más de 255 caracteres.',
     ];
 
@@ -60,6 +66,7 @@ class PatientDataForm extends Component
             $this->isReadOnly = true;
             
             // Cargar datos existentes
+            $this->cedula = $patient->personalData->cedula ?? '';
             $this->phone = $patient->personalData->phone ?? '';
             $this->address = $patient->personalData->address ?? '';
             $this->birth_date = $patient->personalData->birth_date ? 
@@ -83,6 +90,7 @@ class PatientDataForm extends Component
                 'user_id' => $this->patient->id,
                 'gender' => $this->gender,
                 'birth_date' => $this->birth_date,
+                'cedula' => $this->cedula,
                 'phone' => $this->phone,
                 'address' => $this->address,
             ]);

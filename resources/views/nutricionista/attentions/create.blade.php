@@ -351,12 +351,14 @@
                                     value="{{ old('protein_grams') }}">
                                 <input type="hidden" id="fat_grams" name="fat_grams" value="{{ old('fat_grams') }}">
                                 <input type="hidden" id="carbs_grams" name="carbs_grams" value="{{ old('carbs_grams') }}">
-                            </div>
-
-                            <!-- Resultados Nutricionales -->
-                            <div
-                                class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 mt-6">
-                                <!-- Título principal -->
+                <input type="hidden" id="protein_percentage" name="protein_percentage"
+                    value="{{ old('protein_percentage') }}">
+                <input type="hidden" id="fat_percentage" name="fat_percentage"
+                    value="{{ old('fat_percentage') }}">
+                <input type="hidden" id="carbs_percentage" name="carbs_percentage"
+                    value="{{ old('carbs_percentage') }}">
+                <input type="hidden" id="total_calories_equivalents" name="total_calories_equivalents"
+                    value="{{ old('total_calories_equivalents') }}">
                                 <div class="text-center mb-6">
                                     <h2
                                         class="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2 mb-2">

@@ -12,6 +12,7 @@ class PersonalData extends Model
 
     protected $fillable = [
         'user_id',
+        'cedula',
         'phone',
         'address',
         'birth_date',
