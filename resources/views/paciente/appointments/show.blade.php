@@ -327,7 +327,7 @@
                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4">Acciones</h3>
 
                             @if($appointment->appointmentState->name === 'pendiente')
-                                <div x-data="{ showModal: false }">
+                                <div x-data="{ showModal: false, submitting: false }">
                                     <button type="button" @click="showModal = true"
                                         class="w-full flex items-center justify-center gap-2 bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-semibold py-3 px-4 rounded-xl hover:bg-red-200 dark:hover:bg-red-900/50 transition mb-3">
                                         <span class="material-symbols-outlined">cancel</span>
@@ -337,8 +337,8 @@
                                     <!-- Modal de Confirmación -->
                                     <div x-show="showModal" x-cloak
                                         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
-                                        @click.self="showModal = false">
-                                        <div @click.away="showModal = false"
+                                        @click.self="!submitting && (showModal = false)">
+                                        <div @click.away="!submitting && (showModal = false)"
                                             class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all"
                                             x-transition:enter="transition ease-out duration-300"
                                             x-transition:enter-start="opacity-0 scale-90"
@@ -346,40 +346,33 @@
                                             x-transition:leave="transition ease-in duration-200"
                                             x-transition:leave-start="opacity-100 scale-100"
                                             x-transition:leave-end="opacity-0 scale-90">
-
+                                            
                                             <div class="text-center mb-6">
-                                                <div
-                                                    class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
-                                                    <span
-                                                        class="material-symbols-outlined text-4xl text-red-600 dark:text-red-400">warning</span>
+                                                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-red-100 dark:bg-red-900/30 mb-4">
+                                                    <span class="material-symbols-outlined text-4xl text-red-600 dark:text-red-400">warning</span>
                                                 </div>
                                                 <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
                                                     ¿Cancelar esta cita?
                                                 </h3>
                                                 <p class="text-gray-600 dark:text-gray-400">
-                                                    Esta acción no se puede deshacer. El nutricionista será notificado de la
-                                                    cancelación.
+                                                    Esta acción no se puede deshacer. El nutricionista será notificado de la cancelación.
                                                 </p>
                                             </div>
 
                                             <div class="flex gap-3">
                                                 <button type="button" @click="showModal = false"
-                                                    class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                                    :disabled="submitting"
+                                                    class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition disabled:opacity-50 disabled:cursor-not-allowed">
                                                     No, mantener
                                                 </button>
-                                                <form method="POST"
-                                                    action="{{ route('paciente.appointments.cancel', $appointment) }}"
-                                                    class="flex-1" x-data="{ submitting: false }" @submit="submitting = true">
+                                                <form method="POST" action="{{ route('paciente.appointments.cancel', $appointment) }}" class="flex-1" @submit="submitting = true">
                                                     @csrf
-                                                    <button type="submit" :disabled="submitting"
+                                                    <button type="submit"
+                                                        :disabled="submitting"
                                                         class="w-full px-4 py-3 bg-red-600 text-white font-semibold rounded-lg hover:bg-red-700 transition disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2">
-                                                        <svg x-show="submitting" class="animate-spin h-4 w-4"
-                                                            xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                                                            <circle class="opacity-25" cx="12" cy="12" r="10"
-                                                                stroke="currentColor" stroke-width="4"></circle>
-                                                            <path class="opacity-75" fill="currentColor"
-                                                                d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
-                                                            </path>
+                                                        <svg x-show="submitting" class="animate-spin h-4 w-4" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                                                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                                                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                                                         </svg>
                                                         <span x-text="submitting ? 'Cancelando...' : 'Sí, cancelar'"></span>
                                                     </button>
@@ -426,5 +419,54 @@
         </main>
 
         @include('layouts.footer')
-    </body>
+
+    <!-- Toast de Éxito - Cita Cancelada -->
+    @if(session('cancellation_success'))
+    <div x-data="{ show: true }" 
+            x-init="setTimeout(() => show = false, 5000)"
+            x-show="show"
+            x-cloak
+            class="fixed top-20 right-4 z-50 max-w-md w-full sm:w-96"
+            style="display: none;">
+        <div x-transition:enter="transition ease-out duration-300 transform"
+                x-transition:enter-start="translate-x-full opacity-0"
+                x-transition:enter-end="translate-x-0 opacity-100"
+                x-transition:leave="transition ease-in duration-200 transform"
+                x-transition:leave-start="translate-x-0 opacity-100"
+                x-transition:leave-end="translate-x-full opacity-0"
+                class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-l-4 border-red-500 overflow-hidden">
+            <div class="p-4">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0">
+                        <div class="bg-red-100 dark:bg-red-900/30 rounded-full p-2">
+                            <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-2xl">cancel</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                            Cita Cancelada
+                        </h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            {{ session('cancellation_success') }}
+                        </p>
+                    </div>
+                    <button @click="show = false"
+                            class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+            </div>
+            <div class="h-1 bg-gray-200 dark:bg-gray-700">
+                <div class="h-full bg-red-500 transition-all duration-100" style="width: 100%; animation: shrink 5s linear forwards;"></div>
+            </div>
+        </div>
+    </div>
+    <style>
+        @keyframes shrink {
+            from { width: 100%; }
+            to { width: 0%; }
+        }
+    </style>
+    @endif
+</body>
 @endsection

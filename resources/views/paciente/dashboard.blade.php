@@ -113,7 +113,7 @@
                                         <span class="material-symbols-outlined">visibility</span>
                                         Ver Detalles Completos
                                     </a>
-                                    <div x-data="{ showModal: false }" class="flex-1">
+                                    <div x-data="{ showModal: false, submitting: false }" class="flex-1">
                                         <button type="button" @click="showModal = true"
                                             class="w-full rounded-xl bg-red-600 px-6 py-4 text-center font-bold text-white transition hover:bg-red-700 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
                                             <span class="material-symbols-outlined">cancel</span>
@@ -123,8 +123,8 @@
                                         <!-- Modal de Confirmación -->
                                         <div x-show="showModal" x-cloak
                                             class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
-                                            @click.self="showModal = false">
-                                            <div @click.away="showModal = false"
+                                            @click.self="!submitting && (showModal = false)">
+                                            <div @click.away="!submitting && (showModal = false)"
                                                 class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all"
                                                 x-transition:enter="transition ease-out duration-300"
                                                 x-transition:enter-start="opacity-0 scale-90"
@@ -147,10 +147,11 @@
 
                                                 <div class="flex gap-3">
                                                     <button type="button" @click="showModal = false"
-                                                        class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                                                        :disabled="submitting"
+                                                        class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition disabled:opacity-50 disabled:cursor-not-allowed">
                                                         No, mantener
                                                     </button>
-                                                    <form method="POST" action="{{ route('paciente.appointments.cancel', $nextAppointment) }}" class="flex-1" x-data="{ submitting: false }" @submit="submitting = true">
+                                                    <form method="POST" action="{{ route('paciente.appointments.cancel', $nextAppointment) }}" class="flex-1" @submit="submitting = true">
                                                         @csrf
                                                         <button type="submit"
                                                             :disabled="submitting"
@@ -408,5 +409,99 @@
         </main>
 
         @include('layouts.footer')
+        
+        <!-- Toast de Éxito - Cita Agendada -->
+        @if(session('booking_success'))
+        <div x-data="{ show: true }" 
+             x-init="setTimeout(() => show = false, 5000)"
+             x-show="show"
+             x-cloak
+             class="fixed top-20 right-4 z-50 max-w-md w-full sm:w-96"
+             style="display: none;">
+            <div x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="translate-x-full opacity-0"
+                 x-transition:enter-end="translate-x-0 opacity-100"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="translate-x-0 opacity-100"
+                 x-transition:leave-end="translate-x-full opacity-0"
+                 class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-l-4 border-green-500 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0">
+                            <div class="bg-green-100 dark:bg-green-900/30 rounded-full p-2">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-2xl">event_available</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                                ¡Cita Agendada!
+                            </h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                {{ session('booking_success') }}
+                            </p>
+                        </div>
+                        <button @click="show = false"
+                                class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="h-1 bg-gray-200 dark:bg-gray-700">
+                    <div class="h-full bg-green-500 transition-all duration-100" style="width: 100%; animation: shrink 5s linear forwards;"></div>
+                </div>
+            </div>
+        </div>
+
+        @endif
+        
+        <!-- Toast de Éxito - Cita Cancelada -->
+        @if(session('cancellation_success'))
+        <div x-data="{ show: true }" 
+             x-init="setTimeout(() => show = false, 5000)"
+             x-show="show"
+             x-cloak
+             class="fixed top-20 right-4 z-50 max-w-md w-full sm:w-96"
+             style="display: none;">
+            <div x-transition:enter="transition ease-out duration-300 transform"
+                 x-transition:enter-start="translate-x-full opacity-0"
+                 x-transition:enter-end="translate-x-0 opacity-100"
+                 x-transition:leave="transition ease-in duration-200 transform"
+                 x-transition:leave-start="translate-x-0 opacity-100"
+                 x-transition:leave-end="translate-x-full opacity-0"
+                 class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-l-4 border-red-500 overflow-hidden">
+                <div class="p-4">
+                    <div class="flex items-start gap-3">
+                        <div class="flex-shrink-0">
+                            <div class="bg-red-100 dark:bg-red-900/30 rounded-full p-2">
+                                <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-2xl">cancel</span>
+                            </div>
+                        </div>
+                        <div class="flex-1 min-w-0">
+                            <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                                Cita Cancelada
+                            </h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                {{ session('cancellation_success') }}
+                            </p>
+                        </div>
+                        <button @click="show = false"
+                                class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                </div>
+                <div class="h-1 bg-gray-200 dark:bg-gray-700">
+                    <div class="h-full bg-red-500 transition-all duration-100" style="width: 100%; animation: shrink 5s linear forwards;"></div>
+                </div>
+            </div>
+        </div>
+        @endif
+
+        <style>
+            @keyframes shrink {
+                from { width: 100%; }
+                to { width: 0%; }
+            }
+        </style>
     </body>
 @endsection

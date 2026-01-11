@@ -17,7 +17,7 @@ class PacienteController extends Controller
     public function index()
     {
         $paciente = auth()->user();
-        
+
         // Marcar citas vencidas
         Appointment::markExpiredAppointments();
 
@@ -101,15 +101,15 @@ class PacienteController extends Controller
         // Generar 4 semanas desde el inicio de la semana actual (lunes)
         $weeks = [];
         $startDate = Carbon::now()->startOfWeek(); // Empieza el lunes
-        
+
         for ($weekIndex = 0; $weekIndex < 4; $weekIndex++) {
             $weekDays = [];
-            
+
             for ($dayIndex = 0; $dayIndex < 7; $dayIndex++) {
                 $date = $startDate->copy()->addDays(($weekIndex * 7) + $dayIndex);
                 $dateStr = $date->format('Y-m-d');
                 $dayOfWeek = $date->dayOfWeek;
-                
+
                 $dayData = [
                     'date' => $date,
                     'date_formatted' => $date->locale('es')->isoFormat('dddd, D [de] MMMM'),
@@ -119,36 +119,36 @@ class PacienteController extends Controller
                     'is_past' => $date->isPast() && !$date->isToday(),
                     'slots' => []
                 ];
-                
+
                 // Si el día no es pasado y existe horario configurado
                 if (!$dayData['is_past'] && isset($schedules[$dayOfWeek])) {
                     foreach ($schedules[$dayOfWeek] as $schedule) {
                         $startTime = Carbon::parse($schedule->start_time);
                         $endTime = Carbon::parse($schedule->end_time);
                         $currentTime = $startTime->copy();
-                        
+
                         while ($currentTime->lt($endTime)) {
                             $slot = $currentTime->format('H:i');
                             $isAvailable = $schedule->isTimeSlotAvailable($dateStr, $slot);
-                            
+
                             if ($isAvailable) {
                                 $dayData['slots'][] = [
                                     'time' => $slot,
                                     'time_formatted' => $currentTime->format('h:i A'),
                                 ];
                             }
-                            
+
                             $currentTime->addMinutes(45);
                         }
                     }
                 }
-                
+
                 // Solo incluir días que tienen slots disponibles
                 if (!empty($dayData['slots'])) {
                     $weekDays[] = $dayData;
                 }
             }
-            
+
             // Solo añadir la semana si tiene al menos un día con slots
             if (!empty($weekDays)) {
                 $weeks[] = [
@@ -222,12 +222,12 @@ class PacienteController extends Controller
 
         // Notificar al nutricionista sobre la nueva cita (en cola, inmediato)
         $nutricionista->notify(new AppointmentCreatedNotification($appointment));
-        
+
         // Notificar al paciente con 20 segundos de retraso (solo para desarrollo/Mailtrap)
         $paciente->notify((new AppointmentConfirmedForPatient($appointment))->delay(now()->addSeconds(20)));
 
         return redirect()->route('paciente.dashboard')
-            ->with('success', '¡Cita agendada exitosamente!');
+            ->with('booking_success', '¡Cita agendada exitosamente!');
     }
 
     /**
@@ -241,7 +241,7 @@ class PacienteController extends Controller
         }
 
         $cancelledState = AppointmentState::where('name', 'cancelada')->first();
-        
+
         $appointment->update([
             'appointment_state_id' => $cancelledState->id
         ]);
@@ -252,11 +252,11 @@ class PacienteController extends Controller
 
         // Notificar al paciente que canceló (en cola, inmediato)
         $paciente->notify(new AppointmentCancelledByPatient($appointment, 'paciente'));
-        
+
         // Notificar al nutricionista con 20 segundos de retraso (solo para desarrollo/Mailtrap)
         $nutricionista->notify((new AppointmentCancelledByPatient($appointment, 'nutricionista'))->delay(now()->addSeconds(20)));
 
-        return back()->with('success', 'Cita cancelada exitosamente.');
+        return back()->with('cancellation_success', 'Cita cancelada exitosamente.');
     }
 
     /**
@@ -275,7 +275,7 @@ class PacienteController extends Controller
 
         // Filtrar por estado si se proporciona
         if ($request->filled('estado')) {
-            $query->whereHas('appointmentState', function($q) use ($request) {
+            $query->whereHas('appointmentState', function ($q) use ($request) {
                 $q->where('name', $request->estado);
             });
         }
@@ -298,7 +298,7 @@ class PacienteController extends Controller
         $appointments = $query->orderBy('start_time', 'desc')->paginate(10);
 
         // Obtener lista de nutricionistas con los que el paciente ha tenido citas
-        $nutricionistas = User::whereHas('appointmentsAsNutricionista', function($q) use ($paciente) {
+        $nutricionistas = User::whereHas('appointmentsAsNutricionista', function ($q) use ($paciente) {
             $q->where('paciente_id', $paciente->id);
         })->orderBy('name')->get();
 
