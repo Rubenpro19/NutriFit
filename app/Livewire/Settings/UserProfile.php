@@ -105,7 +105,6 @@ class UserProfile extends Component
 
         try {
             $user = Auth::user();
-            
             // Actualizar nombre del usuario
             $user->update(['name' => $this->name]);
 
@@ -116,8 +115,6 @@ class UserProfile extends Component
                 if ($user->personalData && $user->personalData->profile_photo) {
                     Storage::disk('public')->delete($user->personalData->profile_photo);
                 }
-                
-                // Guardar nueva foto
                 $photoPath = $this->profile_photo->store('profile-photos', 'public');
             }
 
@@ -130,15 +127,13 @@ class UserProfile extends Component
                     'gender' => $this->gender, // Preservar el género asignado por el nutricionista
                     'profile_photo' => $photoPath,
                 ]);
-                
-                // Actualizar la ruta en el componente
                 $this->profile_photo_path = $photoPath;
             }
 
-            // Limpiar el archivo temporal
             $this->profile_photo = null;
 
-            session()->flash('success', 'Tu perfil ha sido actualizado correctamente.');
+            // Redirigir para mostrar el toast
+            return redirect()->to(route('paciente.profile'))->with('success', 'Tu perfil ha sido actualizado correctamente.');
         } catch (\Exception $e) {
             session()->flash('error', 'Error al actualizar el perfil: ' . $e->getMessage());
         }
@@ -174,11 +169,10 @@ class UserProfile extends Component
 
             // Limpiar campos
             $this->reset(['current_password', 'password', 'password_confirmation']);
-            
-            // Actualizar hasPassword para futuras validaciones
             $this->hasPassword = true;
 
-            session()->flash('password_success', 'Tu contraseña ha sido actualizada correctamente.');
+            // Redirigir para mostrar el toast
+            return redirect()->to(route('paciente.profile'))->with('password_success', 'Tu contraseña ha sido actualizada correctamente.');
         } catch (\Exception $e) {
             session()->flash('password_error', 'Error al actualizar la contraseña: ' . $e->getMessage());
         }
