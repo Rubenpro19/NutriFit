@@ -242,40 +242,70 @@
 
                 <form wire:submit.prevent="updatePassword" class="space-y-6">
                     @if($hasPassword)
-                        <div>
+                        <div x-data="{ showCurrentPassword: false }">
                             <label for="current_password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                 Contraseña Actual *
                             </label>
-                            <input 
-                                type="password" 
-                                wire:model="current_password" 
-                                id="current_password"
-                                class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                            <div class="relative">
+                                <input 
+                                    :type="showCurrentPassword ? 'text' : 'password'" 
+                                    wire:model="current_password" 
+                                    id="current_password"
+                                    class="w-full px-4 py-3 pr-12 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                                <button 
+                                    type="button"
+                                    @click="showCurrentPassword = !showCurrentPassword"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                                >
+                                    <span class="material-symbols-outlined" x-show="!showCurrentPassword">visibility</span>
+                                    <span class="material-symbols-outlined" x-show="showCurrentPassword" x-cloak>visibility_off</span>
+                                </button>
+                            </div>
                             @error('current_password') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                         </div>
                     @endif
 
-                    <div>
+                    <div x-data="{ showPassword: false }">
                         <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             Nueva Contraseña *
                         </label>
-                        <input 
-                            type="password" 
-                            wire:model="password" 
-                            id="password"
-                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                        <div class="relative">
+                            <input 
+                                :type="showPassword ? 'text' : 'password'" 
+                                wire:model="password" 
+                                id="password"
+                                class="w-full px-4 py-3 pr-12 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                            <button 
+                                type="button"
+                                @click="showPassword = !showPassword"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                            >
+                                <span class="material-symbols-outlined" x-show="!showPassword">visibility</span>
+                                <span class="material-symbols-outlined" x-show="showPassword" x-cloak>visibility_off</span>
+                            </button>
+                        </div>
                         @error('password') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                     </div>
 
-                    <div>
+                    <div x-data="{ showPasswordConfirmation: false }">
                         <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                             Confirmar Nueva Contraseña *
                         </label>
-                        <input 
-                            type="password" 
-                            wire:model="password_confirmation" 
-                            id="password_confirmation"
-                            class="w-full px-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                        <div class="relative">
+                            <input 
+                                :type="showPasswordConfirmation ? 'text' : 'password'" 
+                                wire:model="password_confirmation" 
+                                id="password_confirmation"
+                                class="w-full px-4 py-3 pr-12 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
+                            <button 
+                                type="button"
+                                @click="showPasswordConfirmation = !showPasswordConfirmation"
+                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                            >
+                                <span class="material-symbols-outlined" x-show="!showPasswordConfirmation">visibility</span>
+                                <span class="material-symbols-outlined" x-show="showPasswordConfirmation" x-cloak>visibility_off</span>
+                            </button>
+                        </div>
                     </div>
 
                     <button 

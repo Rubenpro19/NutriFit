@@ -155,7 +155,7 @@ class UserProfile extends Component
 
             // Verificar contraseña actual si existe
             if ($this->hasPassword && !Hash::check($this->current_password, $user->password)) {
-                session()->flash('password_error', 'La contraseña actual es incorrecta.');
+                $this->addError('current_password', 'La contraseña actual es incorrecta.');
                 return;
             }
 

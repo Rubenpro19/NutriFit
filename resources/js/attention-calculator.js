@@ -618,6 +618,20 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
+     * Constantes de calorías por equivalente (Definidas por el nutricionista)
+     */
+    const GROUP_CALORIES = {
+        cereales: 73,
+        verduras: 24,
+        frutas: 60,
+        lacteo: 111,    // lacteo_semidescremado
+        animal: 46,     // origen_animal
+        aceites: 45,
+        grasas_prot: 69, // grasas_con_proteina
+        leguminosas: 121
+    };
+
+    /**
      * Calcula los macronutrientes según el protocolo Ripped Body
      */
     function calculateMacros(weight, targetCalories, goal) {
@@ -641,6 +655,55 @@ document.addEventListener('DOMContentLoaded', function() {
             carbs: { grams: carbsGrams, kcal: carbsKcal }
         };
     }
+
+    /**
+     * Calcula las calorías totales basadas en los equivalentes ingresados
+     */
+    function calculateEquivalentCalories() {
+        let totalEquivalentKcal = 0;
+
+        // Iterar sobre cada grupo
+        for (const [key, kcalPerEq] of Object.entries(GROUP_CALORIES)) {
+            // Mapear claves del objeto a IDs de inputs
+            // cereales -> eq_cereales
+            // lacteo -> eq_lacteo (simplificado en el objeto, mapeado aquí)
+            // animal -> eq_animal
+            // grasas_prot -> eq_grasas_prot
+            
+            const inputId = `eq_${key}`;
+            const displayId = `kcal_${key}`;
+            
+            const input = document.getElementById(inputId);
+            const display = document.getElementById(displayId);
+            
+            if (input && display) {
+                const equivalents = parseFloat(input.value) || 0;
+                const totalKcal = Math.round(equivalents * kcalPerEq);
+                
+                display.textContent = totalKcal;
+                totalEquivalentKcal += totalKcal;
+            }
+        }
+
+        // Actualizar total
+        const totalDisplay = document.getElementById('total_kcal_equivalents');
+        if (totalDisplay) {
+            totalDisplay.textContent = Math.round(totalEquivalentKcal) + ' kcal';
+        }
+    }
+
+    // Event listeners para los inputs de equivalentes
+    const equivalentInputs = [
+        'eq_cereales', 'eq_verduras', 'eq_frutas', 'eq_lacteo', 
+        'eq_animal', 'eq_aceites', 'eq_grasas_prot', 'eq_leguminosas'
+    ];
+
+    equivalentInputs.forEach(id => {
+        const input = document.getElementById(id);
+        if (input) {
+            input.addEventListener('input', calculateEquivalentCalories);
+        }
+    });
 
     /**
      * Guarda los valores de macros en inputs ocultos

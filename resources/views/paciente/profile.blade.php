@@ -104,6 +104,49 @@
     </div>
     @endif
 
+    <!-- Toast de Error - Perfil -->
+    @if(session('error'))
+    <div x-data="{ show: true }" 
+         x-init="setTimeout(() => show = false, 7000)"
+         x-show="show"
+         x-cloak
+         class="fixed top-20 right-4 z-50 max-w-md w-full sm:w-96"
+         style="display: none;">
+        <div x-transition:enter="transition ease-out duration-300 transform"
+             x-transition:enter-start="translate-x-full opacity-0"
+             x-transition:enter-end="translate-x-0 opacity-100"
+             x-transition:leave="transition ease-in duration-200 transform"
+             x-transition:leave-start="translate-x-0 opacity-100"
+             x-transition:leave-end="translate-x-full opacity-0"
+             class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-l-4 border-red-500 overflow-hidden">
+            <div class="p-4">
+                <div class="flex items-start gap-3">
+                    <div class="flex-shrink-0">
+                        <div class="bg-red-100 dark:bg-red-900/30 rounded-full p-2">
+                            <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-2xl">error</span>
+                        </div>
+                    </div>
+                    <div class="flex-1 min-w-0">
+                        <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                            Error al Actualizar Perfil
+                        </h4>
+                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                            {{ session('error') }}
+                        </p>
+                    </div>
+                    <button @click="show = false"
+                            class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+            </div>
+            <div class="h-1 bg-gray-200 dark:bg-gray-700">
+                <div class="h-full bg-red-500 transition-all duration-100" style="width: 100%; animation: shrink 7s linear forwards;"></div>
+            </div>
+        </div>
+    </div>
+    @endif
+
     @include('layouts.footer')
 
     <style>

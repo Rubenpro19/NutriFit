@@ -149,24 +149,6 @@
                     Información de Perfil
                 </h2>
 
-                @if(session('success'))
-                    <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 dark:bg-green-900/20 dark:border-green-800">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
-                            <p class="text-green-900 dark:text-green-300 font-semibold">{{ session('success') }}</p>
-                        </div>
-                    </div>
-                @endif
-
-                @if(session('error'))
-                    <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 dark:bg-red-900/20 dark:border-red-800">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-red-600 dark:text-red-400">error</span>
-                            <p class="text-red-900 dark:text-red-300 font-semibold">{{ session('error') }}</p>
-                        </div>
-                    </div>
-                @endif
-
                 <form wire:submit.prevent="saveProfile">
                     <div class="space-y-6">
                         <!-- Foto de Perfil -->
@@ -340,39 +322,31 @@
                     Cambiar Contraseña
                 </h2>
 
-                @if(session('password_success'))
-                    <div class="mb-6 bg-green-50 border border-green-200 rounded-lg p-4 dark:bg-green-900/20 dark:border-green-800">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
-                            <p class="text-green-900 dark:text-green-300 font-semibold">{{ session('password_success') }}</p>
-                        </div>
-                    </div>
-                @endif
-
-                @if(session('password_error'))
-                    <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 dark:bg-red-900/20 dark:border-red-800">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-red-600 dark:text-red-400">error</span>
-                            <p class="text-red-900 dark:text-red-300 font-semibold">{{ session('password_error') }}</p>
-                        </div>
-                    </div>
-                @endif
-
                 <form wire:submit.prevent="updatePassword">
                     <div class="space-y-6">
                         @if($hasPassword)
                             <!-- Contraseña Actual -->
-                            <div>
+                            <div x-data="{ showCurrentPassword: false }">
                                 <label for="current_password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                     <span class="material-symbols-outlined text-lg">vpn_key</span>
                                     Contraseña Actual
                                 </label>
-                                <input 
-                                    type="password" 
-                                    id="current_password"
-                                    wire:model="current_password"
-                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent @error('current_password') border-red-500 @enderror"
-                                >
+                                <div class="relative">
+                                    <input 
+                                        :type="showCurrentPassword ? 'text' : 'password'" 
+                                        id="current_password"
+                                        wire:model="current_password"
+                                        class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent @error('current_password') border-red-500 @enderror"
+                                    >
+                                    <button 
+                                        type="button"
+                                        @click="showCurrentPassword = !showCurrentPassword"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                                    >
+                                        <span class="material-symbols-outlined" x-show="!showCurrentPassword">visibility</span>
+                                        <span class="material-symbols-outlined" x-show="showCurrentPassword" x-cloak>visibility_off</span>
+                                    </button>
+                                </div>
                                 @error('current_password')
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
@@ -391,34 +365,54 @@
                         @endif
 
                         <!-- Nueva Contraseña -->
-                        <div>
+                        <div x-data="{ showPassword: false }">
                             <label for="password" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-lg">key</span>
                                 Nueva Contraseña
                             </label>
-                            <input 
-                                type="password" 
-                                id="password"
-                                wire:model="password"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent @error('password') border-red-500 @enderror"
-                            >
+                            <div class="relative">
+                                <input 
+                                    :type="showPassword ? 'text' : 'password'" 
+                                    id="password"
+                                    wire:model="password"
+                                    class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent @error('password') border-red-500 @enderror"
+                                >
+                                <button 
+                                    type="button"
+                                    @click="showPassword = !showPassword"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                                >
+                                    <span class="material-symbols-outlined" x-show="!showPassword">visibility</span>
+                                    <span class="material-symbols-outlined" x-show="showPassword" x-cloak>visibility_off</span>
+                                </button>
+                            </div>
                             @error('password')
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
                         </div>
 
                         <!-- Confirmar Nueva Contraseña -->
-                        <div>
+                        <div x-data="{ showPasswordConfirmation: false }">
                             <label for="password_confirmation" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-lg">key</span>
                                 Confirmar Nueva Contraseña
                             </label>
-                            <input 
-                                type="password" 
-                                id="password_confirmation"
-                                wire:model="password_confirmation"
-                                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
-                            >
+                            <div class="relative">
+                                <input 
+                                    :type="showPasswordConfirmation ? 'text' : 'password'" 
+                                    id="password_confirmation"
+                                    wire:model="password_confirmation"
+                                    class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
+                                >
+                                <button 
+                                    type="button"
+                                    @click="showPasswordConfirmation = !showPasswordConfirmation"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                                >
+                                    <span class="material-symbols-outlined" x-show="!showPasswordConfirmation">visibility</span>
+                                    <span class="material-symbols-outlined" x-show="showPasswordConfirmation" x-cloak>visibility_off</span>
+                                </button>
+                            </div>
                         </div>
 
                         <!-- Botón Cambiar Contraseña -->
