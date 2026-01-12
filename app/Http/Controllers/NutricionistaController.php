@@ -867,6 +867,16 @@ class NutricionistaController extends Controller
         $bodyFats = [];
         $waists = [];
         $hips = [];
+        $necks = [];
+        $wrists = [];
+        $armContracted = [];
+        $armRelaxed = [];
+        $thighs = [];
+        $calves = [];
+        $tmbs = [];
+        $tdees = [];
+        $whrs = [];
+        $whts = [];
         $targetCalories = [];
 
         foreach ($attentions as $attention) {
@@ -880,6 +890,16 @@ class NutricionistaController extends Controller
             $bodyFats[] = $data->body_fat ? (float) $data->body_fat : null;
             $waists[] = $data->waist ? (float) $data->waist : null;
             $hips[] = $data->hip ? (float) $data->hip : null;
+            $necks[] = $data->neck ? (float) $data->neck : null;
+            $wrists[] = $data->wrist ? (float) $data->wrist : null;
+            $armContracted[] = $data->arm_contracted ? (float) $data->arm_contracted : null;
+            $armRelaxed[] = $data->arm_relaxed ? (float) $data->arm_relaxed : null;
+            $thighs[] = $data->thigh ? (float) $data->thigh : null;
+            $calves[] = $data->calf ? (float) $data->calf : null;
+            $tmbs[] = $data->tmb ? (float) $data->tmb : null;
+            $tdees[] = $data->tdee ? (float) $data->tdee : null;
+            $whrs[] = $data->whr ? (float) $data->whr : null;
+            $whts[] = $data->wht ? (float) $data->wht : null;
             $targetCalories[] = $data->target_calories ? (float) $data->target_calories : null;
         }
 
@@ -890,6 +910,16 @@ class NutricionistaController extends Controller
             'bodyFats' => $bodyFats,
             'waists' => $waists,
             'hips' => $hips,
+            'necks' => $necks,
+            'wrists' => $wrists,
+            'armContracted' => $armContracted,
+            'armRelaxed' => $armRelaxed,
+            'thighs' => $thighs,
+            'calves' => $calves,
+            'tmbs' => $tmbs,
+            'tdees' => $tdees,
+            'whrs' => $whrs,
+            'whts' => $whts,
             'targetCalories' => $targetCalories,
         ];
     }
@@ -934,6 +964,36 @@ class NutricionistaController extends Controller
                 'initial' => $first->waist ? (float) $first->waist : null,
                 'current' => $last->waist ? (float) $last->waist : null,
                 'change' => ($first->waist && $last->waist) ? round((float) $last->waist - (float) $first->waist, 2) : null,
+            ],
+            'hip' => [
+                'initial' => $first->hip ? (float) $first->hip : null,
+                'current' => $last->hip ? (float) $last->hip : null,
+                'change' => ($first->hip && $last->hip) ? round((float) $last->hip - (float) $first->hip, 2) : null,
+            ],
+            'neck' => [
+                'initial' => $first->neck ? (float) $first->neck : null,
+                'current' => $last->neck ? (float) $last->neck : null,
+                'change' => ($first->neck && $last->neck) ? round((float) $last->neck - (float) $first->neck, 2) : null,
+            ],
+            'arm_contracted' => [
+                'initial' => $first->arm_contracted ? (float) $first->arm_contracted : null,
+                'current' => $last->arm_contracted ? (float) $last->arm_contracted : null,
+                'change' => ($first->arm_contracted && $last->arm_contracted) ? round((float) $last->arm_contracted - (float) $first->arm_contracted, 2) : null,
+            ],
+            'thigh' => [
+                'initial' => $first->thigh ? (float) $first->thigh : null,
+                'current' => $last->thigh ? (float) $last->thigh : null,
+                'change' => ($first->thigh && $last->thigh) ? round((float) $last->thigh - (float) $first->thigh, 2) : null,
+            ],
+            'tmb' => [
+                'initial' => $first->tmb ? (float) $first->tmb : null,
+                'current' => $last->tmb ? (float) $last->tmb : null,
+                'change' => ($first->tmb && $last->tmb) ? round((float) $last->tmb - (float) $first->tmb, 0) : null,
+            ],
+            'tdee' => [
+                'initial' => $first->tdee ? (float) $first->tdee : null,
+                'current' => $last->tdee ? (float) $last->tdee : null,
+                'change' => ($first->tdee && $last->tdee) ? round((float) $last->tdee - (float) $first->tdee, 0) : null,
             ],
         ];
     }
