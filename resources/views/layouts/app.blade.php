@@ -32,6 +32,10 @@
     <style>
         [x-cloak] { display: none !important; }
     </style>
+    
+    @stack('styles')
 </head>
 @yield('content')
+
+@stack('scripts')
 </html>

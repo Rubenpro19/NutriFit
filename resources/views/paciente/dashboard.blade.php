@@ -333,10 +333,22 @@
                                     <span class="material-symbols-outlined text-white">calendar_month</span>
                                 </div>
                                 <div class="flex-1">
-                                    <p class="font-semibold text-gray-900 dark:text-white">Historial Completo</p>
+                                    <p class="font-semibold text-gray-900 dark:text-white">Mis Citas</p>
                                     <p class="text-xs text-gray-600 dark:text-gray-400">Ver todas tus citas</p>
                                 </div>
                                 <span class="material-symbols-outlined text-gray-400 group-hover:text-blue-600 dark:group-hover:text-blue-400">chevron_right</span>
+                            </a>
+
+                            <a href="{{ route('paciente.history') }}"
+                               class="flex items-center gap-3 p-4 rounded-xl bg-gradient-to-r from-purple-50 to-violet-50 dark:from-purple-900/20 dark:to-violet-900/20 hover:from-purple-100 hover:to-violet-100 dark:hover:from-purple-900/30 dark:hover:to-violet-900/30 transition group">
+                                <div class="w-12 h-12 rounded-full bg-gradient-to-br from-purple-600 to-violet-600 flex items-center justify-center group-hover:scale-110 transition">
+                                    <span class="material-symbols-outlined text-white">monitoring</span>
+                                </div>
+                                <div class="flex-1">
+                                    <p class="font-semibold text-gray-900 dark:text-white">Mi Historial Clínico</p>
+                                    <p class="text-xs text-gray-600 dark:text-gray-400">Ver progreso y gráficas</p>
+                                </div>
+                                <span class="material-symbols-outlined text-gray-400 group-hover:text-purple-600 dark:group-hover:text-purple-400">chevron_right</span>
                             </a>
 
                             @if(!$nextAppointment)

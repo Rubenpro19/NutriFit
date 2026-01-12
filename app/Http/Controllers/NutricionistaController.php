@@ -790,4 +790,117 @@ class NutricionistaController extends Controller
 
         return view('nutricionista.patients.data', compact('patient', 'appointment'));
     }
+
+    /**
+     * Ver historial clínico de un paciente con gráficas de progreso
+     */
+    public function patientHistory(User $patient)
+    {
+        $nutricionista = auth()->user();
+        
+        // Verificar que es un paciente
+        if (!$patient->role || $patient->role->name !== 'paciente') {
+            abort(404, 'Paciente no encontrado.');
+        }
+
+        $patient->load('personalData');
+
+        // Obtener todas las atenciones del paciente con este nutricionista
+        $attentions = \App\Models\Attention::where('paciente_id', $patient->id)
+            ->where('nutricionista_id', $nutricionista->id)
+            ->with(['attentionData', 'appointment'])
+            ->whereHas('attentionData')
+            ->orderBy('created_at', 'asc')
+            ->get();
+
+        // Preparar datos para las gráficas
+        $chartData = $this->prepareChartData($attentions);
+
+        // Calcular estadísticas de progreso
+        $progressStats = $this->calculateProgressStats($attentions);
+
+        return view('nutricionista.patients.history', compact('patient', 'attentions', 'chartData', 'progressStats'));
+    }
+
+    /**
+     * Preparar datos para las gráficas de Chart.js
+     */
+    private function prepareChartData($attentions)
+    {
+        $labels = [];
+        $weights = [];
+        $bmis = [];
+        $bodyFats = [];
+        $waists = [];
+        $hips = [];
+        $targetCalories = [];
+
+        foreach ($attentions as $attention) {
+            $data = $attention->attentionData;
+            if (!$data) continue;
+
+            $date = $attention->created_at->format('d/m/Y');
+            $labels[] = $date;
+            $weights[] = (float) $data->weight;
+            $bmis[] = (float) $data->bmi;
+            $bodyFats[] = $data->body_fat ? (float) $data->body_fat : null;
+            $waists[] = $data->waist ? (float) $data->waist : null;
+            $hips[] = $data->hip ? (float) $data->hip : null;
+            $targetCalories[] = $data->target_calories ? (float) $data->target_calories : null;
+        }
+
+        return [
+            'labels' => $labels,
+            'weights' => $weights,
+            'bmis' => $bmis,
+            'bodyFats' => $bodyFats,
+            'waists' => $waists,
+            'hips' => $hips,
+            'targetCalories' => $targetCalories,
+        ];
+    }
+
+    /**
+     * Calcular estadísticas de progreso
+     */
+    private function calculateProgressStats($attentions)
+    {
+        if ($attentions->isEmpty()) {
+            return null;
+        }
+
+        $first = $attentions->first()->attentionData;
+        $last = $attentions->last()->attentionData;
+
+        if (!$first || !$last) {
+            return null;
+        }
+
+        return [
+            'total_attentions' => $attentions->count(),
+            'first_date' => $attentions->first()->created_at->format('d/m/Y'),
+            'last_date' => $attentions->last()->created_at->format('d/m/Y'),
+            'weight' => [
+                'initial' => (float) $first->weight,
+                'current' => (float) $last->weight,
+                'change' => round((float) $last->weight - (float) $first->weight, 2),
+                'percentage' => $first->weight > 0 ? round((((float) $last->weight - (float) $first->weight) / (float) $first->weight) * 100, 1) : 0,
+            ],
+            'bmi' => [
+                'initial' => (float) $first->bmi,
+                'current' => (float) $last->bmi,
+                'change' => round((float) $last->bmi - (float) $first->bmi, 2),
+            ],
+            'body_fat' => [
+                'initial' => $first->body_fat ? (float) $first->body_fat : null,
+                'current' => $last->body_fat ? (float) $last->body_fat : null,
+                'change' => ($first->body_fat && $last->body_fat) ? round((float) $last->body_fat - (float) $first->body_fat, 2) : null,
+            ],
+            'waist' => [
+                'initial' => $first->waist ? (float) $first->waist : null,
+                'current' => $last->waist ? (float) $last->waist : null,
+                'change' => ($first->waist && $last->waist) ? round((float) $last->waist - (float) $first->waist, 2) : null,
+            ],
+        ];
+    }
 }

@@ -128,6 +128,11 @@
                                         <span class="material-symbols-outlined text-lg">event</span>
                                         Mis Citas
                                     </a>
+                                    <a href="{{ route('paciente.history') }}" 
+                                       class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
+                                        <span class="material-symbols-outlined text-lg">monitoring</span>
+                                        Mi Historial Clínico
+                                    </a>
                                     <a href="{{ route('paciente.booking.index') }}" 
                                        class="flex items-center gap-3 px-4 py-2 text-sm text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700">
                                         <span class="material-symbols-outlined text-lg">add_circle</span>
@@ -275,6 +280,11 @@
                                class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
                                 <span class="material-symbols-outlined text-lg">event</span>
                                 Mis Citas
+                            </a>
+                            <a href="{{ route('paciente.history') }}" 
+                               class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">
+                                <span class="material-symbols-outlined text-lg">monitoring</span>
+                                Mi Historial Clínico
                             </a>
                             <a href="{{ route('paciente.booking.index') }}" 
                                class="mb-2 flex items-center gap-2 rounded-lg bg-white px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:bg-gray-700 dark:text-gray-300 dark:hover:bg-gray-600">

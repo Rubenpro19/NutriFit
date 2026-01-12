@@ -139,6 +139,15 @@
                                 <p class="text-sm text-gray-600 dark:text-gray-300 bg-gray-50 dark:bg-gray-700 p-3 rounded-lg">{{ $lastAttention->recommendations }}</p>
                             </div>
                         </div>
+
+                        <!-- Botón Ver Historial Completo -->
+                        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <a href="{{ route('nutricionista.patients.history', $patient) }}" 
+                               class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all text-sm">
+                                <span class="material-symbols-outlined text-lg">monitoring</span>
+                                Ver Historial Clínico Completo
+                            </a>
+                        </div>
                     </div>
                 @endif
 

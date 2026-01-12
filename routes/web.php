@@ -88,6 +88,7 @@ Route::middleware(['auth', 'verified', 'role:nutricionista'])->prefix('nutricion
     Route::get('/pacientes', [NutricionistaController::class, 'patients'])->name('patients.index');
     Route::get('/pacientes/{patient}', [NutricionistaController::class, 'showPatient'])->name('patients.show');
     Route::get('/pacientes/{patient}/datos/{appointment?}', [NutricionistaController::class, 'patientData'])->name('patients.data');
+    Route::get('/pacientes/{patient}/historial', [NutricionistaController::class, 'patientHistory'])->name('patients.history');
     
     // Asignar citas a pacientes
     Route::get('/citas/asignar', [NutricionistaController::class, 'createAppointment'])->name('appointments.create');
@@ -130,6 +131,9 @@ Route::middleware(['auth', 'verified', 'role:paciente', 'password.changed'])->pr
     Route::get('/citas', [PacienteController::class, 'appointments'])->name('appointments.index');
     Route::get('/citas/{appointment}', [PacienteController::class, 'showAppointment'])->name('appointments.show');
     Route::post('/citas/{appointment}/cancelar', [PacienteController::class, 'cancelAppointment'])->name('appointments.cancel');
+    
+    // Historial clínico
+    Route::get('/historial', [PacienteController::class, 'history'])->name('history');
     
     // Perfil de usuario
     Route::get('/perfil', [PacienteController::class, 'profile'])->name('profile');
