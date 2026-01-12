@@ -39,9 +39,7 @@
                 </div>
             </div>
 
-            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6" x-data="{ showPhotoModal: false }">
-                <!-- Columna Principal -->
-                <div class="lg:col-span-2 space-y-6">
+            <div class="space-y-6" x-data="{ showPhotoModal: false }">
                     <!-- Información del Paciente -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
                         <div class="bg-gradient-to-r from-green-600 to-emerald-600 p-6">
@@ -133,7 +131,7 @@
                 </div>
 
                 <!-- Próxima Cita y Estadísticas -->
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
                     <!-- Próxima Cita -->
                     @if($nextAppointment)
                         <div class="bg-gradient-to-br from-blue-50 to-blue-100 dark:from-blue-900/20 dark:to-blue-800/20 border-2 border-blue-200 dark:border-blue-700 rounded-xl shadow-lg p-6">
@@ -218,6 +216,23 @@
                     </div>
                 </div>
 
+                <!-- Historial Clínico Completo - Card Destacada -->
+                <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl shadow-xl p-8 border-2 border-green-200 dark:border-green-800">
+                    <div class="text-center">
+                        <div class="inline-flex items-center justify-center w-16 h-16 bg-green-600 dark:bg-green-700 rounded-full mb-4">
+                            <span class="material-symbols-outlined text-white text-3xl">monitoring</span>
+                        </div>
+                        <h3 class="text-2xl font-bold text-gray-900 dark:text-white mb-2">Historial Clínico Completo</h3>
+                        <p class="text-gray-600 dark:text-gray-300 mb-6">Consulta todas las atenciones, gráficas de progreso y evolución del paciente</p>
+                        <a href="{{ route('nutricionista.patients.history', $patient) }}" 
+                           class="inline-flex items-center justify-center gap-3 px-8 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 hover:shadow-2xl hover:scale-105 transition-all text-lg shadow-lg">
+                            <span class="material-symbols-outlined text-2xl">folder_open</span>
+                            Abrir Historial Clínico
+                            <span class="material-symbols-outlined text-2xl">arrow_forward</span>
+                        </a>
+                    </div>
+                </div>
+
                 <!-- Última Atención (destacada) -->
                 @if($lastAttention)
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
@@ -274,15 +289,13 @@
                             </div>
                         </div>
 
-                        <!-- Botón Ver Historial Completo - Destacado -->
-                        <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
-                            <a href="{{ route('nutricionista.patients.history', $patient) }}" 
-                               class="flex items-center justify-center gap-2 w-full px-6 py-4 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 hover:shadow-xl hover:scale-105 transition-all text-base shadow-lg">
-                                <span class="material-symbols-outlined text-xl">monitoring</span>
-                                Ver Historial Clínico Completo
-                                <span class="material-symbols-outlined text-xl">arrow_forward</span>
+                        <!-- Acceso a la Cita -->
+                        <div class="mt-4">
+                            <a href="{{ route('nutricionista.appointments.show', $lastAttention->appointment) }}" 
+                               class="inline-flex items-center justify-center gap-2 w-full px-4 py-3 bg-blue-600 dark:bg-blue-700 text-white font-semibold rounded-lg hover:bg-blue-700 dark:hover:bg-blue-600 hover:scale-105 transition-all">
+                                <span class="material-symbols-outlined">event</span>
+                                Ver Detalle de esta Cita
                             </a>
-                            <p class="text-xs text-center text-gray-500 dark:text-gray-400 mt-2">Consulta todas las atenciones y gráficas de progreso</p>
                         </div>
                     </div>
                 @endif
@@ -339,31 +352,6 @@
                             @endforeach
                         </div>
                     @endif
-                </div>
-            </div>
-
-            <!-- Sidebar -->
-            <div class="space-y-6">
-                <!-- Acciones Rápidas -->
-                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-                    <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-green-600">quick_reference_all</span>
-                        Acciones Rápidas
-                    </h3>
-                    <div class="space-y-3">
-                        <a 
-                            href="{{ route('nutricionista.patients.index') }}"
-                            class="block w-full text-center px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
-                        >
-                            Ver Todos los Pacientes
-                        </a>
-                        <a 
-                            href="{{ route('nutricionista.dashboard') }}"
-                            class="block w-full text-center px-4 py-3 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-semibold rounded-lg hover:bg-green-200 dark:hover:bg-green-900/50 transition-colors border border-green-200 dark:border-green-800"
-                        >
-                            Ir al Dashboard
-                        </a>
-                    </div>
                 </div>
             </div>
 

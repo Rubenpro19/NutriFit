@@ -57,28 +57,23 @@ class PatientsTable extends Component
     {
         $nutricionista = auth()->user();
         
-        // Query base: obtener todos los usuarios con rol 'paciente' (no limitar a los que ya tienen citas)
+        // Query base: obtener todos los usuarios con rol 'paciente'
         $query = User::whereHas('role', fn($q) => $q->where('name', 'paciente'))
-            ->with(['userState', 'personalData'])
+            ->with([
+                'userState', 
+                'personalData',
+                'appointmentsAsPaciente' => function($q) use ($nutricionista) {
+                    // Cargar solo la próxima cita pendiente
+                    $q->where('nutricionista_id', $nutricionista->id)
+                      ->whereHas('appointmentState', fn($sq) => $sq->where('name', 'pendiente'))
+                      ->where('start_time', '>=', now())
+                      ->orderBy('start_time', 'asc')
+                      ->limit(1);
+                }
+            ])
             ->withCount([
                 'appointmentsAsPaciente as total_appointments' => function($q) use ($nutricionista) {
                     $q->where('nutricionista_id', $nutricionista->id);
-                },
-                'appointmentsAsPaciente as completed_appointments' => function($q) use ($nutricionista) {
-                    $q->where('nutricionista_id', $nutricionista->id)
-                      ->whereHas('appointmentState', fn($sq) => $sq->where('name', 'completada'));
-                },
-                'appointmentsAsPaciente as pending_appointments' => function($q) use ($nutricionista) {
-                    $q->where('nutricionista_id', $nutricionista->id)
-                      ->whereHas('appointmentState', fn($sq) => $sq->where('name', 'pendiente'))
-                      ->where('start_time', '>=', now());
-                }
-            ])
-            ->withExists([
-                'appointmentsAsPaciente as has_upcoming_appointment' => function($q) use ($nutricionista) {
-                    $q->where('nutricionista_id', $nutricionista->id)
-                      ->whereHas('appointmentState', fn($sq) => $sq->where('name', 'pendiente'))
-                      ->where('start_time', '>=', now());
                 }
             ]);
 

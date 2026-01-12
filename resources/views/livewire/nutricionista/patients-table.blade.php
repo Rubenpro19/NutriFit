@@ -147,42 +147,53 @@
                         <p class="text-sm text-gray-600 dark:text-gray-400 truncate">{{ $patient->email }}</p>
                     </div>
 
-                    <!-- Estadísticas -->
-                    <div class="p-6 space-y-3">
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600 dark:text-gray-400">Total de Citas</span>
-                            <span class="text-lg font-bold text-gray-900 dark:text-white">{{ $patient->total_appointments }}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600 dark:text-gray-400">Completadas</span>
-                            <span class="text-lg font-bold text-green-600 dark:text-green-400">{{ $patient->completed_appointments }}</span>
-                        </div>
-                        <div class="flex justify-between items-center">
-                            <span class="text-sm text-gray-600 dark:text-gray-400">Próximas</span>
-                            <span class="text-lg font-bold text-blue-600 dark:text-blue-400">{{ $patient->pending_appointments }}</span>
-                        </div>
+                    <!-- Información del Paciente -->
+                    <div class="p-6">
+                        <!-- Próxima Cita -->
+                        @php
+                            $nextAppointment = $patient->appointmentsAsPaciente->first();
+                        @endphp
 
-                        <!-- Indicador de Cita Próxima -->
-                        @if($patient->has_upcoming_appointment)
-                            <div class="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800 rounded-lg">
-                                <p class="text-xs text-blue-800 dark:text-blue-400 font-semibold flex items-center">
-                                    <svg class="w-4 h-4 mr-2" fill="currentColor" viewBox="0 0 20 20">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/>
-                                    </svg>
-                                    Tiene cita próxima
-                                </p>
+                        @if($nextAppointment)
+                            <div class="mb-4 p-4 bg-gradient-to-br from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 border-2 border-blue-200 dark:border-blue-800 rounded-xl">
+                                <div class="flex items-start gap-3 mb-3">
+                                    <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-xl mt-0.5">event_available</span>
+                                    <div class="flex-1">
+                                        <p class="text-xs font-semibold text-blue-800 dark:text-blue-400 mb-1">Próxima Cita</p>
+                                        <p class="text-sm font-bold text-gray-900 dark:text-white">
+                                            {{ \Carbon\Carbon::parse($nextAppointment->start_time)->locale('es')->isoFormat('dddd, D [de] MMMM') }}
+                                        </p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400 mt-0.5">
+                                            {{ \Carbon\Carbon::parse($nextAppointment->start_time)->format('H:i') }}
+                                        </p>
+                                    </div>
+                                </div>
+                                <a 
+                                    href="{{ route('nutricionista.appointments.show', $nextAppointment) }}"
+                                    class="flex items-center justify-center gap-2 w-full px-3 py-2 bg-white dark:bg-gray-800 text-blue-600 dark:text-blue-400 text-sm font-semibold rounded-lg hover:bg-blue-50 dark:hover:bg-blue-900/30 transition-all duration-200 border border-blue-200 dark:border-blue-700 hover:scale-[1.02] active:scale-95"
+                                >
+                                    <span class="material-symbols-outlined text-lg">visibility</span>
+                                    Ver Detalle de Cita
+                                </a>
+                            </div>
+                        @else
+                            <div class="mb-4 p-4 bg-gray-50 dark:bg-gray-700/30 border border-gray-200 dark:border-gray-600 rounded-xl">
+                                <div class="flex items-center gap-3">
+                                    <span class="material-symbols-outlined text-gray-400 dark:text-gray-500 text-xl">event_busy</span>
+                                    <p class="text-sm text-gray-600 dark:text-gray-400">Sin citas programadas</p>
+                                </div>
                             </div>
                         @endif
                     </div>
 
-                    <!-- Botones de Acción -->
+                    <!-- Botón de Acción Principal -->
                     <div class="p-6 pt-0">
-                        <!-- Botón Ver Historial -->
                         <a 
                             href="{{ route('nutricionista.patients.show', $patient) }}"
-                            class="block w-full text-center px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg"
+                            class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95"
                         >
-                            Ver Historial Completo
+                            <span class="material-symbols-outlined">person_search</span>
+                            Ver Detalles del Paciente
                         </a>
                     </div>
                 </div>

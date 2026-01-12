@@ -233,6 +233,16 @@
                             @endif
                         @endif
                     </div>
+
+                    <!-- Botón de Acceso al Perfil Completo -->
+                    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <a href="{{ route('nutricionista.patients.show', $appointment->paciente) }}" 
+                           class="flex items-center justify-center gap-2 w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 hover:shadow-xl hover:scale-105 transition-all shadow-lg">
+                            <span class="material-symbols-outlined">person_search</span>
+                            Ver Perfil Completo del Paciente
+                            <span class="material-symbols-outlined">arrow_forward</span>
+                        </a>
+                    </div>
                         </div>
                     </div>
                 </div>
@@ -468,59 +478,200 @@
                                 <span class="material-symbols-outlined text-base">analytics</span>
                                 Análisis Antropométrico
                             </h3>
-                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
-                                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
-                                    <p class="text-xs text-blue-600 dark:text-blue-400 mb-1">IMC</p>
-                                    <p class="text-lg font-bold text-blue-700 dark:text-blue-300">
-                                        {{ number_format($appointment->attention->attentionData->bmi, 2) }}
-                                    </p>
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <!-- IMC con interpretación -->
+                                <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-4 border border-blue-200 dark:border-blue-800">
+                                    <div class="flex items-center justify-between mb-2">
+                                        <p class="text-xs text-blue-600 dark:text-blue-400 font-semibold">Índice de Masa Corporal (IMC)</p>
+                                    </div>
+                                    <p class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ number_format($appointment->attention->attentionData->bmi, 1) }}</p>
+                                    @php
+                                        $bmi = $appointment->attention->attentionData->bmi;
+                                        if ($bmi < 18.5) {
+                                            $bmiCategory = 'Bajo peso';
+                                            $bmiColor = 'text-yellow-600 dark:text-yellow-400';
+                                            $bmiBg = 'bg-yellow-100 dark:bg-yellow-900/30';
+                                        } elseif ($bmi < 25) {
+                                            $bmiCategory = 'Peso normal';
+                                            $bmiColor = 'text-green-600 dark:text-green-400';
+                                            $bmiBg = 'bg-green-100 dark:bg-green-900/30';
+                                        } elseif ($bmi < 30) {
+                                            $bmiCategory = 'Sobrepeso';
+                                            $bmiColor = 'text-orange-600 dark:text-orange-400';
+                                            $bmiBg = 'bg-orange-100 dark:bg-orange-900/30';
+                                        } else {
+                                            $bmiCategory = 'Obesidad';
+                                            $bmiColor = 'text-red-600 dark:text-red-400';
+                                            $bmiBg = 'bg-red-100 dark:bg-red-900/30';
+                                        }
+                                    @endphp
+                                    <span class="inline-block px-2 py-1 rounded-lg text-xs font-semibold {{ $bmiColor }} {{ $bmiBg }}">{{ $bmiCategory }}</span>
                                 </div>
+
                                 @if($appointment->attention->attentionData->body_fat)
-                                    <div class="bg-rose-50 dark:bg-rose-900/20 rounded-lg p-3 border border-rose-200 dark:border-rose-800">
-                                        <p class="text-xs text-rose-600 dark:text-rose-400 mb-1">% Grasa Corporal</p>
-                                        <p class="text-lg font-bold text-rose-700 dark:text-rose-300">
-                                            {{ number_format($appointment->attention->attentionData->body_fat, 2) }}%
-                                        </p>
+                                    <!-- Porcentaje de Grasa con interpretación -->
+                                    <div class="bg-rose-50 dark:bg-rose-900/20 rounded-lg p-4 border border-rose-200 dark:border-rose-800">
+                                        <p class="text-xs text-rose-600 dark:text-rose-400 font-semibold mb-2">Porcentaje de Grasa Corporal</p>
+                                        <p class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ number_format($appointment->attention->attentionData->body_fat, 1) }}%</p>
+                                        @php
+                                            $bodyFat = $appointment->attention->attentionData->body_fat;
+                                            $gender = $appointment->paciente->personalData->gender ?? 'male';
+                                            
+                                            if ($gender === 'male') {
+                                                if ($bodyFat < 6) {
+                                                    $fatCategory = 'Esencial';
+                                                    $fatColor = 'text-blue-600 dark:text-blue-400';
+                                                } elseif ($bodyFat < 14) {
+                                                    $fatCategory = 'Atlético';
+                                                    $fatColor = 'text-green-600 dark:text-green-400';
+                                                } elseif ($bodyFat < 18) {
+                                                    $fatCategory = 'Fitness';
+                                                    $fatColor = 'text-emerald-600 dark:text-emerald-400';
+                                                } elseif ($bodyFat < 25) {
+                                                    $fatCategory = 'Aceptable';
+                                                    $fatColor = 'text-yellow-600 dark:text-yellow-400';
+                                                } else {
+                                                    $fatCategory = 'Alto';
+                                                    $fatColor = 'text-red-600 dark:text-red-400';
+                                                }
+                                            } else {
+                                                if ($bodyFat < 14) {
+                                                    $fatCategory = 'Esencial';
+                                                    $fatColor = 'text-blue-600 dark:text-blue-400';
+                                                } elseif ($bodyFat < 21) {
+                                                    $fatCategory = 'Atlético';
+                                                    $fatColor = 'text-green-600 dark:text-green-400';
+                                                } elseif ($bodyFat < 25) {
+                                                    $fatCategory = 'Fitness';
+                                                    $fatColor = 'text-emerald-600 dark:text-emerald-400';
+                                                } elseif ($bodyFat < 32) {
+                                                    $fatCategory = 'Aceptable';
+                                                    $fatColor = 'text-yellow-600 dark:text-yellow-400';
+                                                } else {
+                                                    $fatCategory = 'Alto';
+                                                    $fatColor = 'text-red-600 dark:text-red-400';
+                                                }
+                                            }
+                                        @endphp
+                                        <p class="text-xs {{ $fatColor }} font-semibold">{{ $fatCategory }}</p>
                                     </div>
                                 @endif
+
                                 @if($appointment->attention->attentionData->tmb)
-                                    <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-3 border border-green-200 dark:border-green-800">
-                                        <p class="text-xs text-green-600 dark:text-green-400 mb-1">TMB</p>
-                                        <p class="text-sm font-bold text-green-700 dark:text-green-300">
-                                            {{ number_format($appointment->attention->attentionData->tmb, 0) }} kcal
-                                        </p>
+                                    <!-- TMB con descripción -->
+                                    <div class="bg-green-50 dark:bg-green-900/20 rounded-lg p-4 border border-green-200 dark:border-green-800">
+                                        <p class="text-xs text-green-600 dark:text-green-400 font-semibold mb-2">Tasa Metabólica Basal (TMB)</p>
+                                        <p class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{{ number_format($appointment->attention->attentionData->tmb, 0) }} <span class="text-sm font-normal">kcal/día</span></p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Calorías en reposo absoluto</p>
                                     </div>
                                 @endif
+
                                 @if($appointment->attention->attentionData->tdee)
-                                    <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 border border-purple-200 dark:border-purple-800">
-                                        <p class="text-xs text-purple-600 dark:text-purple-400 mb-1">Gasto Energético</p>
-                                        <p class="text-sm font-bold text-purple-700 dark:text-purple-300">
-                                            {{ number_format($appointment->attention->attentionData->tdee, 0) }} kcal
-                                        </p>
+                                    <!-- TDEE con descripción -->
+                                    <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-4 border border-purple-200 dark:border-purple-800">
+                                        <p class="text-xs text-purple-600 dark:text-purple-400 font-semibold mb-2">Gasto Energético Total (TDEE)</p>
+                                        <p class="text-2xl font-bold text-gray-900 dark:text-white mb-1">{{ number_format($appointment->attention->attentionData->tdee, 0) }} <span class="text-sm font-normal">kcal/día</span></p>
+                                        <p class="text-xs text-gray-600 dark:text-gray-400">Calorías con actividad incluida</p>
                                     </div>
                                 @endif
+
                                 @if($appointment->attention->attentionData->whr)
-                                    <div class="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-3 border border-orange-200 dark:border-orange-800">
-                                        <p class="text-xs text-orange-600 dark:text-orange-400 mb-1">Índice Cintura-Cadera</p>
-                                        <p class="text-lg font-bold text-orange-700 dark:text-orange-300">
-                                            {{ number_format($appointment->attention->attentionData->whr, 3) }}
-                                        </p>
+                                    <!-- Índice Cintura-Cadera con interpretación -->
+                                    <div class="bg-orange-50 dark:bg-orange-900/20 rounded-lg p-4 border border-orange-200 dark:border-orange-800">
+                                        <p class="text-xs text-orange-600 dark:text-orange-400 font-semibold mb-2">Índice Cintura-Cadera (WHR)</p>
+                                        <p class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ number_format($appointment->attention->attentionData->whr, 3) }}</p>
+                                        @php
+                                            $whr = $appointment->attention->attentionData->whr;
+                                            $gender = $appointment->paciente->personalData->gender ?? 'male';
+                                            
+                                            if ($gender === 'male') {
+                                                if ($whr < 0.90) {
+                                                    $whrCategory = 'Bajo riesgo';
+                                                    $whrColor = 'text-green-600 dark:text-green-400';
+                                                } elseif ($whr < 1.0) {
+                                                    $whrCategory = 'Riesgo moderado';
+                                                    $whrColor = 'text-yellow-600 dark:text-yellow-400';
+                                                } else {
+                                                    $whrCategory = 'Riesgo alto';
+                                                    $whrColor = 'text-red-600 dark:text-red-400';
+                                                }
+                                            } else {
+                                                if ($whr < 0.80) {
+                                                    $whrCategory = 'Bajo riesgo';
+                                                    $whrColor = 'text-green-600 dark:text-green-400';
+                                                } elseif ($whr < 0.85) {
+                                                    $whrCategory = 'Riesgo moderado';
+                                                    $whrColor = 'text-yellow-600 dark:text-yellow-400';
+                                                } else {
+                                                    $whrCategory = 'Riesgo alto';
+                                                    $whrColor = 'text-red-600 dark:text-red-400';
+                                                }
+                                            }
+                                        @endphp
+                                        <p class="text-xs {{ $whrColor }} font-semibold">{{ $whrCategory }}</p>
                                     </div>
                                 @endif
+
                                 @if($appointment->attention->attentionData->wht)
-                                    <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-3 border border-yellow-200 dark:border-yellow-800">
-                                        <p class="text-xs text-yellow-600 dark:text-yellow-400 mb-1">Índice Cintura-Altura</p>
-                                        <p class="text-lg font-bold text-yellow-700 dark:text-yellow-300">
-                                            {{ number_format($appointment->attention->attentionData->wht, 3) }}
-                                        </p>
+                                    <!-- Índice Cintura-Altura con interpretación -->
+                                    <div class="bg-yellow-50 dark:bg-yellow-900/20 rounded-lg p-4 border border-yellow-200 dark:border-yellow-800">
+                                        <p class="text-xs text-yellow-600 dark:text-yellow-400 font-semibold mb-2">Índice Cintura-Altura (WHtR)</p>
+                                        <p class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ number_format($appointment->attention->attentionData->wht, 3) }}</p>
+                                        @php
+                                            $wht = $appointment->attention->attentionData->wht;
+                                            
+                                            if ($wht < 0.40) {
+                                                $whtCategory = 'Extremadamente delgado';
+                                                $whtColor = 'text-blue-600 dark:text-blue-400';
+                                            } elseif ($wht < 0.50) {
+                                                $whtCategory = 'Saludable';
+                                                $whtColor = 'text-green-600 dark:text-green-400';
+                                            } elseif ($wht < 0.60) {
+                                                $whtCategory = 'Sobrepeso';
+                                                $whtColor = 'text-yellow-600 dark:text-yellow-400';
+                                            } else {
+                                                $whtCategory = 'Alto riesgo';
+                                                $whtColor = 'text-red-600 dark:text-red-400';
+                                            }
+                                        @endphp
+                                        <p class="text-xs {{ $whtColor }} font-semibold">{{ $whtCategory }}</p>
                                     </div>
                                 @endif
+
                                 @if($appointment->attention->attentionData->frame_index)
-                                    <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-3 border border-indigo-200 dark:border-indigo-800">
-                                        <p class="text-xs text-indigo-600 dark:text-indigo-400 mb-1">Complexión Ósea</p>
-                                        <p class="text-lg font-bold text-indigo-700 dark:text-indigo-300">
-                                            {{ number_format($appointment->attention->attentionData->frame_index, 2) }}
-                                        </p>
+                                    <!-- Complexión Ósea con interpretación -->
+                                    <div class="bg-indigo-50 dark:bg-indigo-900/20 rounded-lg p-4 border border-indigo-200 dark:border-indigo-800">
+                                        <p class="text-xs text-indigo-600 dark:text-indigo-400 font-semibold mb-2">Complexión Ósea</p>
+                                        <p class="text-2xl font-bold text-gray-900 dark:text-white mb-2">{{ number_format($appointment->attention->attentionData->frame_index, 2) }}</p>
+                                        @php
+                                            $frameIndex = $appointment->attention->attentionData->frame_index;
+                                            $gender = $appointment->paciente->personalData->gender ?? 'male';
+                                            
+                                            if ($gender === 'male') {
+                                                if ($frameIndex < 10.4) {
+                                                    $frameCategory = 'Pequeña';
+                                                    $frameColor = 'text-blue-600 dark:text-blue-400';
+                                                } elseif ($frameIndex < 11) {
+                                                    $frameCategory = 'Mediana';
+                                                    $frameColor = 'text-green-600 dark:text-green-400';
+                                                } else {
+                                                    $frameCategory = 'Grande';
+                                                    $frameColor = 'text-purple-600 dark:text-purple-400';
+                                                }
+                                            } else {
+                                                if ($frameIndex < 10.1) {
+                                                    $frameCategory = 'Pequeña';
+                                                    $frameColor = 'text-blue-600 dark:text-blue-400';
+                                                } elseif ($frameIndex < 11) {
+                                                    $frameCategory = 'Mediana';
+                                                    $frameColor = 'text-green-600 dark:text-green-400';
+                                                } else {
+                                                    $frameCategory = 'Grande';
+                                                    $frameColor = 'text-purple-600 dark:text-purple-400';
+                                                }
+                                            }
+                                        @endphp
+                                        <p class="text-xs {{ $frameColor }} font-semibold">{{ $frameCategory }}</p>
                                     </div>
                                 @endif
                             </div>
@@ -530,7 +681,7 @@
                         <div class="mb-4">
                             <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Diagnóstico</h3>
                             <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                                <p class="text-sm text-gray-900 dark:text-white whitespace-pre-line">
+                                <p class="text-sm text-gray-900 dark:text-white">
                                     {{ $appointment->attention->diagnosis }}
                                 </p>
                             </div>
@@ -540,7 +691,7 @@
                         <div>
                             <h3 class="text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">Recomendaciones</h3>
                             <div class="bg-emerald-50 dark:bg-emerald-900/20 rounded-xl p-4 border border-emerald-200 dark:border-emerald-800">
-                                <p class="text-sm text-gray-900 dark:text-white whitespace-pre-line">
+                                <p class="text-sm text-gray-900 dark:text-white">
                                     {{ $appointment->attention->recommendations }}
                                 </p>
                             </div>
