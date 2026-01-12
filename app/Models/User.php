@@ -18,6 +18,13 @@ class User extends Authenticatable implements MustVerifyEmail
     use HasFactory, Notifiable, TwoFactorAuthenticatable;
 
     /**
+     * The relationships that should always be loaded.
+     *
+     * @var array
+     */
+    protected $with = ['personalData'];
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var list<string>
@@ -53,6 +60,14 @@ class User extends Authenticatable implements MustVerifyEmail
             ->take(2)
             ->map(fn ($word) => Str::substr($word, 0, 1))
             ->implode('');
+    }
+
+    public function profilePhotoUrl(): ?string
+    {
+        if ($this->personalData && $this->personalData->profile_photo) {
+            return asset('storage/' . $this->personalData->profile_photo);
+        }
+        return null;
     }
 
     public function role(): BelongsTo

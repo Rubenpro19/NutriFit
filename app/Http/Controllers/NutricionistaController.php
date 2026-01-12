@@ -55,7 +55,7 @@ class NutricionistaController extends Controller
             ->orderBy('start_time', 'asc')
             ->get();
 
-        // Todas las citas pendientes de las próximas 4 semanas organizadas por fecha
+        // Todas las citas pendientes de las próximas 4 semanas organizadas por semana y luego por fecha
         // Incluye citas que ya comenzaron pero aún no han terminado
         $fourWeeksFromNow = now()->addWeeks(4)->endOfDay();
         $upcomingAppointments = Appointment::where('nutricionista_id', $nutricionista->id)
@@ -66,7 +66,15 @@ class NutricionistaController extends Controller
             ->orderBy('start_time', 'asc')
             ->get()
             ->groupBy(function($appointment) {
-                return \Carbon\Carbon::parse($appointment->start_time)->format('Y-m-d');
+                $date = \Carbon\Carbon::parse($appointment->start_time);
+                // Agrupar por semana (número de semana + año)
+                return $date->year . '-W' . $date->week;
+            })
+            ->map(function($weekAppointments) {
+                // Dentro de cada semana, agrupar por fecha
+                return $weekAppointments->groupBy(function($appointment) {
+                    return \Carbon\Carbon::parse($appointment->start_time)->format('Y-m-d');
+                });
             });
 
         return view('nutricionista.dashboard', compact(

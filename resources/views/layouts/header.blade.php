@@ -53,8 +53,14 @@
                         <div class="relative" x-data="{ open: false }">
                             <button @click="open = !open" 
                                     class="flex items-center gap-2 rounded-lg bg-gradient-to-r from-green-600 to-emerald-600 px-4 py-2 text-sm font-semibold text-white shadow-md transition hover:from-green-700 hover:to-emerald-700 hover:shadow-lg">
-                                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20">
-                                    <span class="text-sm font-bold">{{ auth()->user()->initials() }}</span>
+                                <div class="flex h-8 w-8 items-center justify-center rounded-full bg-white/20 overflow-hidden">
+                                    @if(auth()->user()->profilePhotoUrl())
+                                        <img src="{{ auth()->user()->profilePhotoUrl() }}" 
+                                             alt="{{ auth()->user()->name }}" 
+                                             class="w-full h-full object-cover">
+                                    @else
+                                        <span class="text-sm font-bold">{{ auth()->user()->initials() }}</span>
+                                    @endif
                                 </div>
                                 <span>{{ auth()->user()->name }}</span>
                                 <span class="material-symbols-outlined text-lg">expand_more</span>
@@ -224,8 +230,14 @@
                         {{-- Usuario info --}}
                         <div class="mt-4 rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-800">
                             <div class="mb-3 flex items-center gap-3">
-                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-green-600 to-emerald-600 text-white">
-                                    <span class="text-sm font-bold">{{ auth()->user()->initials() }}</span>
+                                <div class="flex h-10 w-10 items-center justify-center rounded-full bg-gradient-to-r from-green-600 to-emerald-600 text-white overflow-hidden">
+                                    @if(auth()->user()->profilePhotoUrl())
+                                        <img src="{{ auth()->user()->profilePhotoUrl() }}" 
+                                             alt="{{ auth()->user()->name }}" 
+                                             class="w-full h-full object-cover">
+                                    @else
+                                        <span class="text-sm font-bold">{{ auth()->user()->initials() }}</span>
+                                    @endif
                                 </div>
                                 <div>
                                     <p class="text-sm font-medium text-gray-900 dark:text-white">{{ auth()->user()->name }}</p>

@@ -112,14 +112,25 @@
         <div class="grid lg:grid-cols-3 gap-6" x-data="{ showPhotoModal: false }">
             <!-- Información Principal -->
             <div class="lg:col-span-2 space-y-6">
-                <!-- Información del Paciente -->
-                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
-                    <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
-                        <span class="material-symbols-outlined text-emerald-600">person</span>
-                        Información del Paciente
-                    </h2>
+                <!-- Información del Paciente (Colapsable) -->
+                <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700" x-data="{ expanded: false }">
+                    <button @click="expanded = !expanded" class="w-full p-6 flex items-center justify-between text-left hover:bg-gray-50 dark:hover:bg-gray-700/50 transition-colors rounded-2xl">
+                        <h2 class="text-xl font-semibold text-gray-900 dark:text-white flex items-center gap-2">
+                            <span class="material-symbols-outlined text-emerald-600">person</span>
+                            Información del Paciente
+                        </h2>
+                        <span class="material-symbols-outlined text-gray-400 transition-transform duration-200" :class="{ 'rotate-180': expanded }">
+                            expand_more
+                        </span>
+                    </button>
                     
-                    <div class="flex items-center gap-4 mb-6">
+                    <div x-show="expanded" 
+                         x-collapse
+                         class="border-t border-gray-200 dark:border-gray-700">
+                        <div class="p-6">
+                    
+                    <!-- Foto y Nombre -->
+                    <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
                         <div class="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 shadow-lg {{ $appointment->paciente->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
                              @if($appointment->paciente->personalData?->profile_photo) @click="showPhotoModal = true" @endif>
                             @if($appointment->paciente->personalData?->profile_photo)
@@ -140,18 +151,88 @@
                                 <span class="material-symbols-outlined text-base">email</span>
                                 {{ $appointment->paciente->email }}
                             </p>
-                            @if($appointment->paciente->personalData)
-                                <p class="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-1">
-                                    <span class="material-symbols-outlined text-base">phone</span>
+                            <p class="text-xs text-gray-500 dark:text-gray-500 flex items-center gap-1 mt-1">
+                                <span class="material-symbols-outlined text-sm">event</span>
+                                Paciente desde {{ $appointment->paciente->created_at->format('d/m/Y') }}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Datos Personales en Grid -->
+                    <div class="grid md:grid-cols-2 gap-4">
+                        @if($appointment->paciente->personalData)
+                            <!-- Cédula -->
+                            @if($appointment->paciente->personalData->cedula)
+                                <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">badge</span>
+                                        Cédula
+                                    </p>
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                        {{ $appointment->paciente->personalData->cedula }}
+                                    </p>
+                                </div>
+                            @endif
+
+                            <!-- Teléfono -->
+                            <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                                <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">phone</span>
+                                    Teléfono
+                                </p>
+                                <p class="text-sm font-semibold text-gray-900 dark:text-white">
                                     {{ $appointment->paciente->personalData->phone ?? 'No disponible' }}
                                 </p>
-                                @if($appointment->paciente->personalData->date_of_birth)
-                                    <p class="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-1">
-                                        <span class="material-symbols-outlined text-base">cake</span>
-                                        {{ \Carbon\Carbon::parse($appointment->paciente->personalData->date_of_birth)->age }} años
+                            </div>
+
+                            <!-- Fecha de Nacimiento y Edad -->
+                            @if($appointment->paciente->personalData->birth_date)
+                                <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">cake</span>
+                                        Fecha de Nacimiento
                                     </p>
-                                @endif
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                        {{ \Carbon\Carbon::parse($appointment->paciente->personalData->birth_date)->format('d/m/Y') }}
+                                        <span class="text-xs text-gray-500 dark:text-gray-400">({{ \Carbon\Carbon::parse($appointment->paciente->personalData->birth_date)->age }} años)</span>
+                                    </p>
+                                </div>
                             @endif
+
+                            <!-- Género -->
+                            @if($appointment->paciente->personalData->gender)
+                                <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">wc</span>
+                                        Género
+                                    </p>
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                        @php
+                                            $genderLabels = [
+                                                'male' => 'Masculino',
+                                                'female' => 'Femenino',
+                                                'other' => 'Otro'
+                                            ];
+                                        @endphp
+                                        {{ $genderLabels[$appointment->paciente->personalData->gender] ?? 'No especificado' }}
+                                    </p>
+                                </div>
+                            @endif
+
+                            <!-- Dirección -->
+                            @if($appointment->paciente->personalData->address)
+                                <div class="bg-gray-50 dark:bg-gray-700/50 rounded-lg p-3 md:col-span-2">
+                                    <p class="text-xs text-gray-500 dark:text-gray-400 mb-1 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-sm">home</span>
+                                        Dirección
+                                    </p>
+                                    <p class="text-sm font-semibold text-gray-900 dark:text-white">
+                                        {{ $appointment->paciente->personalData->address }}
+                                    </p>
+                                </div>
+                            @endif
+                        @endif
+                    </div>
                         </div>
                     </div>
                 </div>
@@ -165,42 +246,60 @@
 
                     <div class="grid md:grid-cols-2 gap-4">
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Fecha</p>
-                            <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">calendar_today</span>
+                                Fecha
+                            </p>
+                            <p class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                 {{ \Carbon\Carbon::parse($appointment->start_time)->format('d/m/Y') }}
                             </p>
                         </div>
 
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Hora</p>
-                            <p class="text-lg font-semibold text-gray-900 dark:text-white">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">schedule</span>
+                                Hora
+                            </p>
+                            <p class="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2">
                                 {{ \Carbon\Carbon::parse($appointment->start_time)->format('H:i') }}
                             </p>
                         </div>
 
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Tipo de Consulta</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">medical_services</span>
+                                Tipo de Consulta
+                            </p>
                             <p class="text-sm font-semibold text-gray-900 dark:text-white">
                                 {{ $appointment->appointment_type === 'primera_vez' ? 'Primera vez' : ($appointment->appointment_type === 'seguimiento' ? 'Seguimiento' : 'Control') }}
                             </p>
                         </div>
 
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Duración</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">timer</span>
+                                Duración
+                            </p>
                             <p class="text-sm font-semibold text-gray-900 dark:text-white">
                                 45 minutos
                             </p>
                         </div>
 
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Precio</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">payments</span>
+                                Precio
+                            </p>
                             <p class="text-lg font-bold text-emerald-600 dark:text-emerald-400">
                                 ${{ number_format($appointment->price, 2) }}
                             </p>
                         </div>
 
                         <div class="bg-gray-50 dark:bg-gray-700/50 rounded-xl p-4">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Estado</p>
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">info</span>
+                                Estado
+                            </p>
                             @php
                                 $stateColors = [
                                     'pendiente' => 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300',
@@ -217,10 +316,29 @@
 
                     @if($appointment->reason)
                         <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
-                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2">Motivo de la Consulta</p>
-                            <p class="text-sm text-gray-900 dark:text-white">
-                                {{ $appointment->reason }}
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">assignment</span>
+                                Motivo de la Consulta
                             </p>
+                            <div class="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-800">
+                                <p class="text-sm text-gray-900 dark:text-white">
+                                    {{ $appointment->reason }}
+                                </p>
+                            </div>
+                        </div>
+                    @endif
+
+                    @if($appointment->notes)
+                        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+                            <p class="text-xs text-gray-500 dark:text-gray-400 mb-2 flex items-center gap-1">
+                                <span class="material-symbols-outlined text-sm">description</span>
+                                Notas de la Consulta
+                            </p>
+                            <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-800">
+                                <p class="text-sm text-gray-900 dark:text-white">
+                                    {{ $appointment->notes }}
+                                </p>
+                            </div>
                         </div>
                     @endif
                 </div>
@@ -531,12 +649,12 @@
                         <div class="space-y-2 text-sm">
                             <div class="flex justify-between">
                                 <span class="text-gray-600 dark:text-gray-400">Creada el:</span>
-                                <span class="text-gray-900 dark:text-white">{{ $appointment->created_at->format('d/m/Y') }}</span>
+                                <span class="text-gray-900 dark:text-white">{{ ucfirst($appointment->created_at->isoFormat('dddd, DD/MM/YYYY HH:mm')) }}</span>
                             </div>
                             @if($appointment->appointmentState->name === 'completada' && $appointment->attention)
                                 <div class="flex justify-between">
                                     <span class="text-gray-600 dark:text-gray-400">Completada el:</span>
-                                    <span class="text-gray-900 dark:text-white">{{ $appointment->attention->created_at->format('d/m/Y') }}</span>
+                                    <span class="text-gray-900 dark:text-white">{{ ucfirst($appointment->attention->created_at->isoFormat('dddd, DD/MM/YYYY HH:mm')) }}</span>
                                 </div>
                             @endif
                         </div>

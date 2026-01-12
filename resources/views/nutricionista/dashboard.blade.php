@@ -302,50 +302,96 @@
 
                 <div class="p-6">
                     @if($upcomingAppointments->count() > 0)
-                        <div class="space-y-6">
-                            @foreach($upcomingAppointments as $date => $appointments)
+                        <div class="space-y-8">
+                            @php
+                                $weekNumber = 0; // Contador relativo de semanas
+                            @endphp
+                            @foreach($upcomingAppointments as $weekKey => $weekAppointments)
                                 @php
-                                    $dateCarbon = \Carbon\Carbon::parse($date);
-                                    $isToday = $dateCarbon->isToday();
-                                    $isTomorrow = $dateCarbon->isTomorrow();
+                                    $weekNumber++;
+                                    // Obtener la primera cita de la semana para calcular el rango
+                                    $firstAppointment = $weekAppointments->flatten()->first();
+                                    $weekStart = \Carbon\Carbon::parse($firstAppointment->start_time)->startOfWeek();
+                                    $weekEnd = \Carbon\Carbon::parse($firstAppointment->start_time)->endOfWeek();
+                                    $isCurrentWeek = now()->between($weekStart, $weekEnd);
                                 @endphp
-                                
-                                <div class="border-l-4 @if($isToday) border-blue-500 @elseif($isTomorrow) border-green-500 @else border-cyan-500 @endif pl-6">
-                                    {{-- Encabezado de la Fecha --}}
-                                    <div class="mb-4">
-                                        <div class="flex items-center gap-3 mb-2">
-                                            <div class="@if($isToday) bg-blue-100 dark:bg-blue-900/30 @elseif($isTomorrow) bg-green-100 dark:bg-green-900/30 @else bg-cyan-100 dark:bg-cyan-900/30 @endif rounded-lg px-4 py-2">
-                                                <p class="text-2xl font-bold @if($isToday) text-blue-600 dark:text-blue-400 @elseif($isTomorrow) text-green-600 dark:text-green-400 @else text-cyan-600 dark:text-cyan-400 @endif">
-                                                    {{ $dateCarbon->format('d') }}
-                                                </p>
-                                                <p class="text-xs font-medium @if($isToday) text-blue-600 dark:text-blue-400 @elseif($isTomorrow) text-green-600 dark:text-green-400 @else text-cyan-600 dark:text-cyan-400 @endif uppercase">
-                                                    {{ $dateCarbon->format('M') }}
-                                                </p>
+
+                                {{-- Encabezado de Semana --}}
+                                <div class="border-2 @if($isCurrentWeek) border-blue-500 dark:border-blue-400 @else border-gray-300 dark:border-gray-600 @endif rounded-xl overflow-hidden">
+                                    <div class="@if($isCurrentWeek) bg-gradient-to-r from-blue-500 to-cyan-500 @else bg-gradient-to-r from-gray-500 to-gray-600 @endif px-6 py-4">
+                                        <div class="flex items-center justify-between">
+                                            <div class="flex items-center gap-3">
+                                                <div class="bg-white/20 backdrop-blur-sm rounded-lg p-2">
+                                                    <span class="material-symbols-outlined text-white text-2xl">calendar_view_week</span>
+                                                </div>
+                                                <div>
+                                                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
+                                                        Semana {{ $weekNumber }}
+                                                        @if($isCurrentWeek)
+                                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/30 backdrop-blur-sm">
+                                                                <span class="material-symbols-outlined text-sm mr-1">schedule</span>
+                                                                Semana Actual
+                                                            </span>
+                                                        @endif
+                                                    </h3>
+                                                    <p class="text-white/90 text-sm">
+                                                        {{ $weekStart->locale('es')->isoFormat('D [de] MMMM') }} - {{ $weekEnd->locale('es')->isoFormat('D [de] MMMM, YYYY') }}
+                                                    </p>
+                                                </div>
                                             </div>
-                                            <div>
-                                                <h3 class="text-xl font-bold text-gray-900 dark:text-white capitalize">
-                                                    {{ $dateCarbon->locale('es')->isoFormat('dddd, D [de] MMMM') }}
-                                                    @if($isToday)
-                                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 ml-2">
-                                                            <span class="material-symbols-outlined text-sm mr-1">today</span>
-                                                            Hoy
-                                                        </span>
-                                                    @elseif($isTomorrow)
-                                                        <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ml-2">
-                                                            <span class="material-symbols-outlined text-sm mr-1">event</span>
-                                                            Mañana
-                                                        </span>
-                                                    @endif
-                                                </h3>
-                                                <p class="text-sm text-gray-600 dark:text-gray-400">
-                                                    {{ $appointments->count() }} {{ $appointments->count() === 1 ? 'cita programada' : 'citas programadas' }}
+                                            <div class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
+                                                <p class="text-sm text-white font-medium">
+                                                    {{ $weekAppointments->flatten()->count() }} {{ $weekAppointments->flatten()->count() === 1 ? 'cita' : 'citas' }}
                                                 </p>
                                             </div>
                                         </div>
                                     </div>
 
-                                    {{-- Lista de Citas del Día --}}
-                                    <div class="grid gap-4 md:grid-cols-2">
+                                    {{-- Días de la semana --}}
+                                    <div class="p-6 space-y-6">
+                                        @foreach($weekAppointments as $date => $appointments)
+                                            @php
+                                                $dateCarbon = \Carbon\Carbon::parse($date);
+                                                $isToday = $dateCarbon->isToday();
+                                                $isTomorrow = $dateCarbon->isTomorrow();
+                                            @endphp
+                                            
+                                            <div class="border-l-4 @if($isToday) border-blue-500 @elseif($isTomorrow) border-green-500 @else border-cyan-500 @endif pl-6">
+                                                {{-- Encabezado de la Fecha --}}
+                                                <div class="mb-4">
+                                                    <div class="flex items-center gap-3 mb-2">
+                                                        <div class="@if($isToday) bg-blue-100 dark:bg-blue-900/30 @elseif($isTomorrow) bg-green-100 dark:bg-green-900/30 @else bg-cyan-100 dark:bg-cyan-900/30 @endif rounded-lg px-4 py-2">
+                                                            <p class="text-2xl font-bold @if($isToday) text-blue-600 dark:text-blue-400 @elseif($isTomorrow) text-green-600 dark:text-green-400 @else text-cyan-600 dark:text-cyan-400 @endif">
+                                                                {{ $dateCarbon->format('d') }}
+                                                            </p>
+                                                            <p class="text-xs font-medium @if($isToday) text-blue-600 dark:text-blue-400 @elseif($isTomorrow) text-green-600 dark:text-green-400 @else text-cyan-600 dark:text-cyan-400 @endif uppercase">
+                                                                {{ $dateCarbon->format('M') }}
+                                                            </p>
+                                                        </div>
+                                                        <div>
+                                                            <h3 class="text-xl font-bold text-gray-900 dark:text-white capitalize">
+                                                                {{ $dateCarbon->locale('es')->isoFormat('dddd, D [de] MMMM') }}
+                                                                @if($isToday)
+                                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 ml-2">
+                                                                        <span class="material-symbols-outlined text-sm mr-1">today</span>
+                                                                        Hoy
+                                                                    </span>
+                                                                @elseif($isTomorrow)
+                                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ml-2">
+                                                                        <span class="material-symbols-outlined text-sm mr-1">event</span>
+                                                                        Mañana
+                                                                    </span>
+                                                                @endif
+                                                            </h3>
+                                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                                {{ $appointments->count() }} {{ $appointments->count() === 1 ? 'cita programada' : 'citas programadas' }}
+                                                            </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                {{-- Lista de Citas del Día --}}
+                                                <div class="grid gap-4 md:grid-cols-2">
                                         @foreach($appointments as $appointment)
                                             <div class="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800/50 rounded-xl border-2 border-gray-200 dark:border-gray-600 p-4 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-200">
                                                 {{-- Header con hora --}}
@@ -425,6 +471,9 @@
                                                 </a>
                                             </div>
                                         @endforeach
+                                    </div>
+                                </div>
+                            @endforeach
                                     </div>
                                 </div>
                             @endforeach
