@@ -229,12 +229,13 @@
                                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Cadera</th>
                                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Kcal/día</th>
                                     <th class="px-6 py-3 text-left text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Objetivo</th>
+                                    <th class="px-6 py-3 text-center text-xs font-semibold text-gray-600 dark:text-gray-300 uppercase tracking-wider">Acción</th>
                                 </tr>
                             </thead>
                             <tbody class="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
                                 @foreach($attentions->reverse() as $attention)
                                     @php $data = $attention->attentionData; @endphp
-                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-750 transition-colors">
+                                    <tr class="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
                                         <td class="px-6 py-4 whitespace-nowrap">
                                             <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $attention->created_at->format('d/m/Y') }}</div>
                                             <div class="text-xs text-gray-500 dark:text-gray-400">{{ $attention->created_at->format('H:i') }}</div>
@@ -283,6 +284,13 @@
                                             @else
                                                 <span class="text-gray-400">-</span>
                                             @endif
+                                        </td>
+                                        <td class="px-6 py-4 whitespace-nowrap text-center">
+                                            <a href="{{ route('nutricionista.appointments.show', $attention->appointment_id) }}" 
+                                               class="inline-flex items-center gap-1 px-3 py-1.5 bg-green-600 hover:bg-green-700 text-white text-xs font-semibold rounded-lg transition-colors duration-200 shadow-sm hover:shadow-md">
+                                                <span class="material-symbols-outlined text-sm">visibility</span>
+                                                Ver Detalles
+                                            </a>
                                         </td>
                                     </tr>
                                 @endforeach

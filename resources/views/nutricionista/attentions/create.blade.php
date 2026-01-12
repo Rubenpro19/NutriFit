@@ -979,7 +979,12 @@
 
                 // Autoguardar cada vez que cambia un campo (con debounce)
                 let saveTimeout;
+                let formSubmitted = false; // Bandera para evitar guardar después de enviar
+                
                 function debouncedSave() {
+                    // No guardar si el formulario ya fue enviado
+                    if (formSubmitted) return;
+                    
                     clearTimeout(saveTimeout);
                     saveTimeout = setTimeout(saveDraft, 1000); // Guardar 1 segundo después del último cambio
                 }
@@ -998,13 +1003,20 @@
                         }
                     });
 
-                    // Limpiar borrador al enviar formulario exitosamente
+                    // Limpiar borrador al enviar el formulario exitosamente
                     document.getElementById('attention-form').addEventListener('submit', function (e) {
-                        // Solo limpiar si no hay errores (esperamos a que el formulario se envíe)
-                        setTimeout(() => {
-                            localStorage.removeItem(DRAFT_KEY);
-                            localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
-                        }, 100);
+                        // Marcar que el formulario fue enviado
+                        formSubmitted = true;
+                        
+                        // Limpiar el borrador cuando se envía el formulario
+                        localStorage.removeItem(DRAFT_KEY);
+                        localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+                        
+                        // Ocultar el indicador
+                        const indicator = document.getElementById('draft-indicator');
+                        if (indicator) {
+                            indicator.classList.add('hidden');
+                        }
                     });
                 });
 
