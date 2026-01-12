@@ -452,11 +452,31 @@ class NutricionistaController extends Controller
             $nutricionistaName = $pendingAppointment->nutricionista->name ?? 'otro nutricionista';
             $isOwnAppointment = $pendingAppointment->nutricionista_id === $nutricionista->id;
             
+            // Verificar si el paciente tiene atenciones previas con este nutricionista
+            $hasPreviousAttentions = \App\Models\Attention::where('paciente_id', $paciente->id)
+                ->where('nutricionista_id', $nutricionista->id)
+                ->exists();
+            
+            // Preparar datos del paciente
+            $pacienteData = [
+                'id' => $paciente->id,
+                'name' => $paciente->name,
+                'email' => $paciente->email,
+                'initials' => $paciente->initials(),
+            ];
+            
+            // Solo incluir profile_photo si tiene un valor válido
+            if ($paciente->personalData?->profile_photo) {
+                $pacienteData['profile_photo'] = $paciente->personalData->profile_photo;
+            }
+            
             return response()->json([
                 'error' => $isOwnAppointment 
                     ? "El paciente ya tiene una cita pendiente contigo"
                     : "El paciente ya tiene una cita pendiente con {$nutricionistaName}",
                 'isOwnAppointment' => $isOwnAppointment,
+                'paciente' => $pacienteData,
+                'hasPreviousAppointments' => $hasPreviousAttentions,
                 'appointment' => $isOwnAppointment ? [
                     'id' => $pendingAppointment->id,
                     'start_time' => $pendingAppointment->start_time->format('Y-m-d H:i'),
@@ -550,9 +570,15 @@ class NutricionistaController extends Controller
             $pacienteData['profile_photo'] = $paciente->personalData->profile_photo;
         }
         
+        // Verificar si el paciente tiene atenciones previas con este nutricionista
+        $hasPreviousAttentions = \App\Models\Attention::where('paciente_id', $paciente->id)
+            ->where('nutricionista_id', $nutricionista->id)
+            ->exists();
+        
         return response()->json([
             'paciente' => $pacienteData,
-            'weeks' => $weeks
+            'weeks' => $weeks,
+            'hasPreviousAppointments' => $hasPreviousAttentions
         ]);
     }
 

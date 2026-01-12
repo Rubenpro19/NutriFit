@@ -495,7 +495,7 @@
                                                 class="w-full px-3 sm:px-4 py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                                             >
                                                 <option value="">Seleccionar tipo...</option>
-                                                <option value="primera_vez">Primera Vez</option>
+                                                <option value="primera_vez" x-show="!hasPreviousAppointments">Primera Vez</option>
                                                 <option value="seguimiento">Seguimiento</option>
                                                 <option value="control">Control</option>
                                             </select>
@@ -516,6 +516,7 @@
                                                     step="0.01"
                                                     min="0"
                                                     required
+                                                    value="30"
                                                     placeholder="0.00"
                                                     class="w-full pl-7 sm:pl-8 pr-3 sm:pr-4 py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                                                 >
@@ -730,6 +731,7 @@
                 errorMessage: '',
                 isOwnAppointment: false,
                 appointmentData: null,
+                hasPreviousAppointments: false,
 
                 init() {
                     this.filteredPatients = this.allPatients;
@@ -759,6 +761,7 @@
                     this.errorMessage = '';
                     this.isOwnAppointment = false;
                     this.appointmentData = null;
+                    this.hasPreviousAppointments = false;
 
                     // Buscar el paciente en la lista local
                     this.selectedPatient = this.allPatients.find(p => p.id === patientId);
@@ -772,6 +775,7 @@
                             if (data.paciente) {
                                 this.selectedPatient = data.paciente;
                             }
+                            this.hasPreviousAppointments = data.hasPreviousAppointments || false;
                             this.weeks = data.weeks.map(week => ({
                                 label: week.start_date_formatted,
                                 week_number: week.week_number,
@@ -783,6 +787,7 @@
                             this.errorMessage = data.error || 'Error al cargar horarios';
                             this.isOwnAppointment = data.isOwnAppointment || false;
                             this.appointmentData = data.appointment || null;
+                            this.hasPreviousAppointments = data.hasPreviousAppointments || false;
                             // Actualizar con datos del servidor si están disponibles
                             if (data.paciente) {
                                 this.selectedPatient = data.paciente;
@@ -824,6 +829,7 @@
                     this.errorMessage = '';
                     this.isOwnAppointment = false;
                     this.appointmentData = null;
+                    this.hasPreviousAppointments = false;
                 }
             }
         }
