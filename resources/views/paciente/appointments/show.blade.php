@@ -220,7 +220,7 @@
                                             @if($appointment->attention->attentionData->weight)
                                                 <div class="bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 border border-blue-200 dark:border-blue-800">
                                                     <p class="text-xs text-blue-600 dark:text-blue-400 font-semibold mb-1">Peso</p>
-                                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                                                    <p class="text-lg font-bold text-gray-900 dark:text-white">
                                                         {{ $appointment->attention->attentionData->weight }} kg
                                                     </p>
                                                 </div>
@@ -229,7 +229,7 @@
                                             @if($appointment->attention->attentionData->height)
                                                 <div class="bg-green-50 dark:bg-green-900/20 rounded-xl p-4 border border-green-200 dark:border-green-800">
                                                     <p class="text-xs text-green-600 dark:text-green-400 font-semibold mb-1">Altura</p>
-                                                    <p class="text-2xl font-bold text-gray-900 dark:text-white">
+                                                    <p class="text-lg font-bold text-gray-900 dark:text-white">
                                                         {{ $appointment->attention->attentionData->height }} cm
                                                     </p>
                                                 </div>
@@ -759,24 +759,14 @@
                             <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
                                 <h4 class="font-semibold text-gray-900 dark:text-white mb-3 text-sm">Información</h4>
                                 <div class="space-y-2 text-sm">
-                                    <div class="flex flex-col gap-1">
+                                    <div class="flex justify-between">
                                         <span class="text-gray-600 dark:text-gray-400">Creada el:</span>
-                                        <span class="text-gray-900 dark:text-white font-medium">
-                                            {{ ucfirst($appointment->created_at->isoFormat('dddd, D/M/Y')) }}
-                                        </span>
-                                        <span class="text-gray-500 dark:text-gray-500 text-xs">
-                                            {{ $appointment->created_at->format('h:i A') }}
-                                        </span>
+                                        <span class="text-gray-900 dark:text-white">{{ ucfirst($appointment->created_at->isoFormat('dddd, DD/MM/YYYY')) }} {{ $appointment->created_at->format('h:i A') }}</span>
                                     </div>
                                     @if($appointment->appointmentState->name === 'completada' && $appointment->attention)
-                                        <div class="flex flex-col gap-1">
+                                        <div class="flex justify-between">
                                             <span class="text-gray-600 dark:text-gray-400">Completada el:</span>
-                                            <span class="text-gray-900 dark:text-white font-medium">
-                                                {{ ucfirst($appointment->attention->created_at->isoFormat('dddd, D/M/Y')) }}
-                                            </span>
-                                            <span class="text-gray-500 dark:text-gray-500 text-xs">
-                                                {{ $appointment->attention->created_at->format('h:i A') }}
-                                            </span>
+                                            <span class="text-gray-900 dark:text-white">{{ ucfirst($appointment->attention->created_at->isoFormat('dddd, DD/MM/YYYY')) }} {{ $appointment->attention->created_at->format('h:i A') }}</span>
                                         </div>
                                     @endif
                                 </div>
