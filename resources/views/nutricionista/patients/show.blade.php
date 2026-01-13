@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Detalle del Paciente - NutriFit')
+@section('title', 'Perfil del Paciente - NutriFit')
 
 @section('content')
 <body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
@@ -14,7 +14,7 @@
                 <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
                 <a href="{{ route('nutricionista.patients.index') }}" class="text-green-600 dark:text-green-400 hover:underline transition-colors">Mis Pacientes</a>
                 <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
-                <span class="text-gray-700 dark:text-gray-300 font-medium">Detalle del Paciente</span>
+                <span class="text-gray-700 dark:text-gray-300 font-medium">Perfil del Paciente</span>
             </nav>
 
             <!-- Header -->

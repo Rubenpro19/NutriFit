@@ -3,7 +3,7 @@
 @section('title', 'Historial Clínico - ' . $patient->name . ' - NutriFit')
 
 @section('content')
-<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-teal-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
     @include('layouts.header')
 
     <main class="flex-grow">
