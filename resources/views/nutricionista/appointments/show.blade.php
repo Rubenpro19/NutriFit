@@ -886,7 +886,7 @@
                                                 <div class="text-right">
                                                     <div class="flex items-center gap-2 justify-end mb-1">
                                                         <span class="material-symbols-outlined {{ $statusColor }} text-2xl">{{ $statusIcon }}</span>
-                                                        <span class="text-2xl font-bold {{ $statusColor }}">{{ number_format($percentage, 1) }}%</span>
+                                                        <span class="text-2xl font-bold {{ $statusColor }}">{{ number_format($percentage, 2) }}%</span>
                                                     </div>
                                                     <p class="text-xs text-gray-600 dark:text-gray-400">
                                                         del objetivo ({{ number_format($appointment->attention->attentionData->target_calories, 0) }} kcal)

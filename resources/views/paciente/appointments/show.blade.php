@@ -589,12 +589,12 @@
                                         </div>
                                     </div>
 
-                                    <!-- Macronutrientes (si existen) -->
+                                    <!-- Macronutrientes Objetivo (si existen) -->
                                     @if($appointment->attention->attentionData->protein_grams || $appointment->attention->attentionData->carbs_grams || $appointment->attention->attentionData->fat_grams)
                                         <div class="mb-6">
                                             <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
                                                 <span class="material-symbols-outlined text-amber-600">nutrition</span>
-                                                Distribución de Macronutrientes
+                                                Macronutrientes Objetivo
                                             </h3>
                                             <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
                                                 @if($appointment->attention->attentionData->protein_grams)
@@ -636,6 +636,134 @@
                                                     </div>
                                                 @endif
                                             </div>
+                                        </div>
+                                    @endif
+
+                                    <!-- Distribución de Equivalentes -->
+                                    @if($appointment->attention->attentionData->eq_cereales !== null || 
+                                        $appointment->attention->attentionData->eq_verduras !== null || 
+                                        $appointment->attention->attentionData->eq_frutas !== null ||
+                                        $appointment->attention->attentionData->eq_lacteo !== null ||
+                                        $appointment->attention->attentionData->eq_animal !== null ||
+                                        $appointment->attention->attentionData->eq_aceites !== null ||
+                                        $appointment->attention->attentionData->eq_grasas_prot !== null ||
+                                        $appointment->attention->attentionData->eq_leguminosas !== null)
+                                        <div class="mb-6">
+                                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 flex items-center gap-2">
+                                                <span class="material-symbols-outlined text-purple-600">restaurant_menu</span>
+                                                Plan Nutricional - Distribución de Equivalentes
+                                            </h3>
+                                            
+                                            <div class="bg-purple-50 dark:bg-purple-900/20 rounded-xl p-4 border border-purple-200 dark:border-purple-800 mb-4">
+                                                <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                                    @if($appointment->attention->attentionData->eq_cereales !== null)
+                                                        <div class="text-center">
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">🌾 Cereales</p>
+                                                            <p class="text-2xl font-bold text-purple-600 dark:text-purple-400">{{ number_format($appointment->attention->attentionData->eq_cereales, 1) }}</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-500">equivalentes</p>
+                                                        </div>
+                                                    @endif
+
+                                                    @if($appointment->attention->attentionData->eq_verduras !== null)
+                                                        <div class="text-center">
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">🥬 Verduras</p>
+                                                            <p class="text-2xl font-bold text-green-600 dark:text-green-400">{{ number_format($appointment->attention->attentionData->eq_verduras, 1) }}</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-500">equivalentes</p>
+                                                        </div>
+                                                    @endif
+
+                                                    @if($appointment->attention->attentionData->eq_frutas !== null)
+                                                        <div class="text-center">
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">🍎 Frutas</p>
+                                                            <p class="text-2xl font-bold text-red-600 dark:text-red-400">{{ number_format($appointment->attention->attentionData->eq_frutas, 1) }}</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-500">equivalentes</p>
+                                                        </div>
+                                                    @endif
+
+                                                    @if($appointment->attention->attentionData->eq_lacteo !== null)
+                                                        <div class="text-center">
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">🥛 Lácteos</p>
+                                                            <p class="text-2xl font-bold text-blue-600 dark:text-blue-400">{{ number_format($appointment->attention->attentionData->eq_lacteo, 1) }}</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-500">equivalentes</p>
+                                                        </div>
+                                                    @endif
+
+                                                    @if($appointment->attention->attentionData->eq_animal !== null)
+                                                        <div class="text-center">
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">🍗 Origen Animal</p>
+                                                            <p class="text-2xl font-bold text-orange-600 dark:text-orange-400">{{ number_format($appointment->attention->attentionData->eq_animal, 1) }}</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-500">equivalentes</p>
+                                                        </div>
+                                                    @endif
+
+                                                    @if($appointment->attention->attentionData->eq_aceites !== null)
+                                                        <div class="text-center">
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">🫒 Aceites</p>
+                                                            <p class="text-2xl font-bold text-yellow-600 dark:text-yellow-400">{{ number_format($appointment->attention->attentionData->eq_aceites, 1) }}</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-500">equivalentes</p>
+                                                        </div>
+                                                    @endif
+
+                                                    @if($appointment->attention->attentionData->eq_grasas_prot !== null)
+                                                        <div class="text-center">
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">🥜 Grasas c/Proteína</p>
+                                                            <p class="text-2xl font-bold text-amber-600 dark:text-amber-400">{{ number_format($appointment->attention->attentionData->eq_grasas_prot, 1) }}</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-500">equivalentes</p>
+                                                        </div>
+                                                    @endif
+
+                                                    @if($appointment->attention->attentionData->eq_leguminosas !== null)
+                                                        <div class="text-center">
+                                                            <p class="text-xs text-gray-600 dark:text-gray-400 mb-1">🫘 Leguminosas</p>
+                                                            <p class="text-2xl font-bold text-teal-600 dark:text-teal-400">{{ number_format($appointment->attention->attentionData->eq_leguminosas, 1) }}</p>
+                                                            <p class="text-xs text-gray-500 dark:text-gray-500">equivalentes</p>
+                                                        </div>
+                                                    @endif
+                                                </div>
+                                            </div>
+
+                                            <!-- Total de Calorías de Equivalentes -->
+                                            @if($appointment->attention->attentionData->total_calories_equivalents)
+                                                <div class="bg-gradient-to-r from-emerald-50 to-green-50 dark:from-emerald-900/20 dark:to-green-900/20 rounded-xl p-5 border-2 border-emerald-300 dark:border-emerald-700">
+                                                    <div class="flex items-center justify-between">
+                                                        <div>
+                                                            <p class="text-sm text-emerald-700 dark:text-emerald-300 font-semibold mb-1">Total de Calorías del Plan</p>
+                                                            <p class="text-3xl font-bold text-emerald-900 dark:text-emerald-100">
+                                                                {{ number_format($appointment->attention->attentionData->total_calories_equivalents, 0) }} <span class="text-lg">kcal</span>
+                                                            </p>
+                                                        </div>
+                                                        
+                                                        @if($appointment->attention->attentionData->target_calories)
+                                                            @php
+                                                                $percentage = ($appointment->attention->attentionData->total_calories_equivalents / $appointment->attention->attentionData->target_calories) * 100;
+                                                                
+                                                                if ($percentage >= 90 && $percentage <= 110) {
+                                                                    $statusColor = 'text-green-600 dark:text-green-400';
+                                                                    $statusBg = 'bg-green-100 dark:bg-green-900/30';
+                                                                    $statusIcon = 'check_circle';
+                                                                } elseif ($percentage >= 85 && $percentage <= 115) {
+                                                                    $statusColor = 'text-yellow-600 dark:text-yellow-400';
+                                                                    $statusBg = 'bg-yellow-100 dark:bg-yellow-900/30';
+                                                                    $statusIcon = 'warning';
+                                                                } else {
+                                                                    $statusColor = 'text-red-600 dark:text-red-400';
+                                                                    $statusBg = 'bg-red-100 dark:bg-red-900/30';
+                                                                    $statusIcon = 'error';
+                                                                }
+                                                            @endphp
+                                                            <div class="text-right">
+                                                                <div class="flex items-center gap-2 justify-end mb-1">
+                                                                    <span class="material-symbols-outlined {{ $statusColor }} text-2xl">{{ $statusIcon }}</span>
+                                                                    <span class="text-2xl font-bold {{ $statusColor }}">{{ number_format($percentage, 2) }}%</span>
+                                                                </div>
+                                                                <p class="text-xs text-gray-600 dark:text-gray-400">
+                                                                    del objetivo ({{ number_format($appointment->attention->attentionData->target_calories, 0) }} kcal)
+                                                                </p>
+                                                            </div>
+                                                        @endif
+                                                    </div>
+                                                </div>
+                                            @endif
                                         </div>
                                     @endif
                                 @endif

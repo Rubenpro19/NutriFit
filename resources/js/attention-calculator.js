@@ -749,7 +749,7 @@ document.addEventListener('DOMContentLoaded', function() {
             targetDisplay.textContent = targetCalories + ' kcal';
             
             const percent = (currentCalories / targetCalories) * 100;
-            const percentText = Math.round(percent) + '%';
+            const percentText = percent.toFixed(2) + '%';
             
             if (percentDisplay) {
                 percentDisplay.textContent = percentText;
