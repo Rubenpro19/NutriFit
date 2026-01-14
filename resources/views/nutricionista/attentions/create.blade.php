@@ -135,7 +135,7 @@
                 <!-- Grid principal: Formulario + Panel de Resultados -->
                 <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Columna Izquierda: Formulario (2/3) -->
-                    <div class="lg:col-span-2 order-1">
+                    <div class="lg:col-span-2 order-2 lg:order-1">
                         <form method="POST" action="{{ route('nutricionista.attentions.store', $appointment) }}"
                             id="attention-form">
                             @csrf
@@ -1028,7 +1028,7 @@
                     </div>
 
                     <!-- Columna Derecha: Panel de Resultados (1/3) -->
-                    <div class="lg:col-span-1 order-2">
+                    <div class="lg:col-span-1 order-1 lg:order-2">
                         <div
                             class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 lg:sticky lg:top-8">
                             <h2
