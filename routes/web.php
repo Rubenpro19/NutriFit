@@ -106,6 +106,8 @@ Route::middleware(['auth', 'verified', 'role:nutricionista'])->prefix('nutricion
     // Gestión de atenciones
     Route::get('/citas/{appointment}/atender', [AttentionController::class, 'create'])->name('attentions.create');
     Route::post('/citas/{appointment}/atender', [AttentionController::class, 'store'])->name('attentions.store');
+    Route::get('/citas/{appointment}/editar-atencion', [AttentionController::class, 'edit'])->name('attentions.edit');
+    Route::put('/citas/{appointment}/editar-atencion', [AttentionController::class, 'update'])->name('attentions.update');
     
     // PDF de atención
     Route::get('/citas/{appointment}/pdf', [AttentionPdfController::class, 'download'])->name('attentions.pdf.download');

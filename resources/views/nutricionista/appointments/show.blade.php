@@ -1019,6 +1019,15 @@
                         </div>
 
                         @if($appointment->attention && $appointment->attention->attentionData)
+                            <!-- Botón de Editar Atención -->
+                            <div class="mb-3">
+                                <a href="{{ route('nutricionista.attentions.edit', $appointment) }}" 
+                                   class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-blue-700 hover:to-indigo-700 transition shadow-lg">
+                                    <span class="material-symbols-outlined">edit</span>
+                                    Editar Atención
+                                </a>
+                            </div>
+
                             <!-- Botones de PDF -->
                             <div class="space-y-3">
                                 <a href="{{ route('nutricionista.attentions.pdf.download', $appointment) }}" 
