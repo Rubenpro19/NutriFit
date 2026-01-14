@@ -20,10 +20,10 @@
 
         <!-- CONTENIDO PRINCIPAL -->
         <div class="container mx-auto px-4 py-16">
-            <div class="grid gap-12 lg:grid-cols-2">
+            <div class="grid gap-12 lg:grid-cols-2 lg:items-start">
                 
                 <!-- FORMULARIO DE CONTACTO -->
-                <div class="rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-xl border border-gray-200 dark:border-gray-700 dark:border-gray-700">
+                <div class="rounded-2xl bg-white dark:bg-gray-800 p-8 shadow-xl border border-gray-200 dark:border-gray-700 h-fit">
                     <div class="mb-6">
                         <h2 class="mb-2 text-2xl font-bold text-green-900 dark:text-green-400 dark:text-green-400">Envíanos un mensaje</h2>
                         <p class="text-gray-600 dark:text-gray-400 dark:text-gray-400">Completa el formulario y nos pondremos en contacto contigo</p>
@@ -156,20 +156,6 @@
                                 </div>
                             </div>
 
-                            <!-- Teléfono -->
-                            <div class="flex items-start gap-4">
-                                <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-blue-100 dark:bg-blue-900/30">
-                                    <span class="material-symbols-outlined text-2xl text-blue-700 dark:text-blue-400">phone</span>
-                                </div>
-                                <div>
-                                    <h3 class="mb-1 font-semibold text-gray-900 dark:text-gray-100">Teléfono</h3>
-                                    <a href="tel:+593984668389" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-                                        +593 98 466 8389
-                                    </a>
-                                    <p class="text-sm text-gray-600 dark:text-gray-400">Lun - Vie: 9:00 AM - 6:00 PM</p>
-                                </div>
-                            </div>
-
                             <!-- WhatsApp -->
                             <div class="flex items-start gap-4">
                                 <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/30">
@@ -189,10 +175,30 @@
                                 <div class="flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/30">
                                     <span class="material-symbols-outlined text-2xl text-purple-700 dark:text-purple-400">location_on</span>
                                 </div>
-                                <div>
+                                <div class="flex-1">
                                     <h3 class="mb-1 font-semibold text-gray-900 dark:text-gray-100">Ubicación</h3>
-                                    <p class="text-gray-700 dark:text-gray-300">Santa Ana, Manabí, Ecuador</p>
-                                    {{-- <p class="text-sm text-gray-600 dark:text-gray-400">Consultas virtuales disponibles</p> --}}
+                                    <p class="text-gray-700 dark:text-gray-300 mb-3">Santa Ana, Manabí, Ecuador</p>
+                                    
+                                    <!-- Mapa Embebido -->
+                                    <div class="rounded-lg overflow-hidden border-2 border-purple-200 dark:border-purple-700 shadow-md">
+                                        <iframe 
+                                            src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3987.268689!2d-80.372294!3d-1.205192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMcKwMTInMTguNyJTIDgwwrAyMicyMC4zIlc!5e0!3m2!1ses!2sec!4v1705000000000!5m2!1ses!2sec" 
+                                            width="100%" 
+                                            height="250" 
+                                            style="border:0;" 
+                                            allowfullscreen="" 
+                                            loading="lazy" 
+                                            referrerpolicy="no-referrer-when-downgrade"
+                                            class="w-full">
+                                        </iframe>
+                                    </div>
+                                    
+                                    <a href="https://www.google.com/maps?q=-1.205192,-80.372294" 
+                                       target="_blank"
+                                       class="mt-2 inline-flex items-center gap-1 text-sm text-purple-600 dark:text-purple-400 hover:text-purple-700 dark:hover:text-purple-300 transition">
+                                        <span class="material-symbols-outlined text-base">open_in_new</span>
+                                        Ver en Google Maps
+                                    </a>
                                 </div>
                             </div>
                         </div>
