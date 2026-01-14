@@ -150,7 +150,7 @@
                                 <div>
                                     <h3 class="mb-1 font-semibold text-gray-900 dark:text-gray-100">Email</h3>
                                     <a href="mailto:contacto@nutrifit.ec" class="text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300">
-                                        contacto@nutrifit.ec
+                                        nutifit2026@gmail.com
                                     </a>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">Respuesta en 24-48 horas</p>
                                 </div>
@@ -163,8 +163,8 @@
                                 </div>
                                 <div>
                                     <h3 class="mb-1 font-semibold text-gray-900 dark:text-gray-100">Teléfono</h3>
-                                    <a href="tel:+593987654321" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
-                                        +593 98 765 4321
+                                    <a href="tel:+593984668389" class="text-blue-600 dark:text-blue-400 hover:text-blue-700 dark:hover:text-blue-300">
+                                        +593 98 466 8389
                                     </a>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">Lun - Vie: 9:00 AM - 6:00 PM</p>
                                 </div>
@@ -177,8 +177,8 @@
                                 </div>
                                 <div>
                                     <h3 class="mb-1 font-semibold text-gray-900 dark:text-gray-100">WhatsApp</h3>
-                                    <a href="https://wa.me/593987654321" target="_blank" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300">
-                                        +593 98 765 4321
+                                    <a href="https://wa.me/593984668389" target="_blank" class="text-emerald-600 dark:text-emerald-400 hover:text-emerald-700 dark:hover:text-emerald-300">
+                                        +593 98 466 8389
                                     </a>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">Atención inmediata</p>
                                 </div>

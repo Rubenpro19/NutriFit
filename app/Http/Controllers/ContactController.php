@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\ContactFormNotification;
 
 class ContactController extends Controller
 {
@@ -31,8 +33,16 @@ class ContactController extends Controller
         // En el futuro puedes configurar el envío por email
         Log::info('Nuevo mensaje de contacto recibido', $validated);
 
-        // Aquí puedes agregar la lógica para enviar un email:
-        // Mail::to('contacto@nutrifit.ec')->send(new ContactMail($validated));
+        // Enviar notificación por correo al destinatario predefinido
+        try {
+            Notification::route('mail', 'nutifit2026@gmail.com')
+                ->notify(new ContactFormNotification($validated));
+            
+            Log::info('Notificación de contacto enviada exitosamente');
+        } catch (\Exception $e) {
+            Log::error('Error al enviar notificación de contacto: ' . $e->getMessage());
+            // Continuar aunque falle el envío del correo
+        }
 
         return back()->with('success', '¡Gracias por contactarnos! Tu mensaje ha sido enviado exitosamente. Nos pondremos en contacto contigo pronto.');
     }
