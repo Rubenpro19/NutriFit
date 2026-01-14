@@ -41,7 +41,7 @@ class AppointmentSeeder extends Seeder
                 'appointment_state_id' => $confirmada->id,
                 'reason' => 'Primera consulta nutricional',
                 'appointment_type' => 'primera_vez',
-                'price' => 150.00,
+                'price' => 30.00,
             ],
             [
                 'nutricionista_id' => $nutricionista->id,
@@ -51,7 +51,7 @@ class AppointmentSeeder extends Seeder
                 'appointment_state_id' => $confirmada->id,
                 'reason' => 'Seguimiento de dieta',
                 'appointment_type' => 'seguimiento',
-                'price' => 120.00,
+                'price' => 30.00,
             ],
             [
                 'nutricionista_id' => $nutricionista->id,
@@ -61,7 +61,7 @@ class AppointmentSeeder extends Seeder
                 'appointment_state_id' => $pendiente->id,
                 'reason' => 'Control de peso',
                 'appointment_type' => 'control',
-                'price' => 100.00,
+                'price' => 30.00,
             ],
             [
                 'nutricionista_id' => $nutricionista->id,
@@ -71,7 +71,7 @@ class AppointmentSeeder extends Seeder
                 'appointment_state_id' => $confirmada->id,
                 'reason' => 'Consulta general',
                 'appointment_type' => 'primera_vez',
-                'price' => 150.00,
+                'price' => 30.00,
             ],
         ];
 
@@ -85,7 +85,7 @@ class AppointmentSeeder extends Seeder
             'appointment_state_id' => $pendiente->id,
             'reason' => 'Evaluación inicial',
             'appointment_type' => 'primera_vez',
-            'price' => 150.00,
+            'price' => 30.00,
         ];
 
         // Crear citas para esta semana
@@ -98,7 +98,7 @@ class AppointmentSeeder extends Seeder
             'appointment_state_id' => $confirmada->id,
             'reason' => 'Revisión de avances',
             'appointment_type' => 'seguimiento',
-            'price' => 120.00,
+            'price' => 30.00,
         ];
 
         foreach ($appointments as $appointmentData) {

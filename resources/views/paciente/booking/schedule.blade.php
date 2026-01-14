@@ -61,9 +61,17 @@
                 <!-- Información del Nutricionista -->
                 <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700">
                     <div class="flex items-start gap-4 mb-6">
-                        <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0">
-                            {{ substr($nutricionista->name, 0, 1) }}
-                        </div>
+                        @if($nutricionista->personalData?->profile_photo)
+                            <div class="w-20 h-20 rounded-full overflow-hidden shadow-lg flex-shrink-0">
+                                <img src="{{ asset('storage/' . $nutricionista->personalData->profile_photo) }}" 
+                                     alt="{{ $nutricionista->name }}" 
+                                     class="w-full h-full object-cover">
+                            </div>
+                        @else
+                            <div class="w-20 h-20 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-2xl flex-shrink-0 shadow-lg">
+                                {{ $nutricionista->initials() }}
+                            </div>
+                        @endif
                         <div class="flex-1">
                             <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-1">
                                 {{ $nutricionista->name }}
@@ -88,6 +96,17 @@
                         <div class="flex items-center gap-3 text-gray-700 dark:text-gray-300">
                             <span class="material-symbols-outlined text-green-600 dark:text-green-400">schedule</span>
                             <span>Duración: 45 minutos</span>
+                        </div>
+                    </div>
+
+                    <!-- Precio de Consulta -->
+                    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <div class="flex items-center justify-between p-4 bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl border border-green-200 dark:border-green-700">
+                            <div class="flex items-center gap-2">
+                                <span class="material-symbols-outlined text-green-600 dark:text-green-400">payments</span>
+                                <span class="font-semibold text-gray-900 dark:text-white">Precio por consulta</span>
+                            </div>
+                            <span class="text-2xl font-bold text-green-600 dark:text-green-400">$30.00</span>
                         </div>
                     </div>
                 </div>
