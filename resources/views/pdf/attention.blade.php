@@ -555,9 +555,41 @@
                     </tr>
                     <tr>
                         <td><strong>ICC (Cintura/Cadera)</strong></td>
-                        <td class="text-center">{{ $attentionData->whr ? number_format($attentionData->whr, 3) : '-' }}</td>
+                        <td class="text-center">
+                            @if($attentionData->whr)
+                                {{ number_format($attentionData->whr, 3) }}
+                                @php
+                                    $gender = $paciente->personalData?->gender ?? 'male';
+                                    if ($gender === 'male') {
+                                        if ($attentionData->whr < 0.90) $whrCategory = 'Normal';
+                                        elseif ($attentionData->whr < 1.0) $whrCategory = 'Riesgo moderado';
+                                        else $whrCategory = 'Riesgo alto';
+                                    } else {
+                                        if ($attentionData->whr < 0.80) $whrCategory = 'Normal';
+                                        elseif ($attentionData->whr < 0.85) $whrCategory = 'Riesgo moderado';
+                                        else $whrCategory = 'Riesgo alto';
+                                    }
+                                @endphp
+                                <span style="font-size: 9px; color: #6b7280;">({{ $whrCategory }})</span>
+                            @else
+                                -
+                            @endif
+                        </td>
                         <td><strong>ICT (Cintura/Talla)</strong></td>
-                        <td class="text-center">{{ $attentionData->wht ? number_format($attentionData->wht, 3) : '-' }}</td>
+                        <td class="text-center">
+                            @if($attentionData->wht)
+                                {{ number_format($attentionData->wht, 3) }}
+                                @php
+                                    if ($attentionData->wht < 0.40) $whtCategory = 'Bajo peso';
+                                    elseif ($attentionData->wht < 0.50) $whtCategory = 'Normal';
+                                    elseif ($attentionData->wht < 0.60) $whtCategory = 'Sobrepeso';
+                                    else $whtCategory = 'Obesidad';
+                                @endphp
+                                <span style="font-size: 9px; color: #6b7280;">({{ $whtCategory }})</span>
+                            @else
+                                -
+                            @endif
+                        </td>
                     </tr>
                     <tr>
                         <td><strong>Índice de Complexión</strong></td>
