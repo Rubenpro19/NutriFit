@@ -875,6 +875,20 @@
                                         class="material-symbols-outlined text-6xl text-green-600 dark:text-green-400 mb-2">check_circle</span>
                                     <p class="text-sm text-gray-600 dark:text-gray-400">Cita completada exitosamente</p>
                                 </div>
+
+                                <!-- Botones PDF -->
+                                @if($appointment->attention)
+                                    <a href="{{ route('paciente.attentions.pdf.download', $appointment) }}"
+                                        class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-rose-500 text-white font-semibold py-3 px-4 rounded-xl hover:from-red-600 hover:to-rose-600 transition shadow-md mb-3">
+                                        <span class="material-symbols-outlined">download</span>
+                                        Descargar PDF
+                                    </a>
+                                    <a href="{{ route('paciente.attentions.pdf.view', $appointment) }}" target="_blank"
+                                        class="w-full flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-4 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition mb-3">
+                                        <span class="material-symbols-outlined">visibility</span>
+                                        Ver PDF
+                                    </a>
+                                @endif
                             @endif
 
                             <a href="{{ route('paciente.appointments.index') }}"
