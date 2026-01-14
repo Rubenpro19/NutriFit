@@ -10,6 +10,7 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\NutricionistaController;
 use App\Http\Controllers\PacienteController;
 use App\Http\Controllers\AttentionController;
+use App\Http\Controllers\AttentionPdfController;
 use App\Http\Controllers\SocialiteController;
 use App\Http\Controllers\ContactController;
 
@@ -106,6 +107,10 @@ Route::middleware(['auth', 'verified', 'role:nutricionista'])->prefix('nutricion
     Route::get('/citas/{appointment}/atender', [AttentionController::class, 'create'])->name('attentions.create');
     Route::post('/citas/{appointment}/atender', [AttentionController::class, 'store'])->name('attentions.store');
     
+    // PDF de atención
+    Route::get('/citas/{appointment}/pdf', [AttentionPdfController::class, 'download'])->name('attentions.pdf.download');
+    Route::get('/citas/{appointment}/pdf/ver', [AttentionPdfController::class, 'view'])->name('attentions.pdf.view');
+    
     // Perfil
     Route::get('/perfil', function() {
         return view('nutricionista.profile');
@@ -131,6 +136,10 @@ Route::middleware(['auth', 'verified', 'role:paciente', 'password.changed'])->pr
     Route::get('/citas', [PacienteController::class, 'appointments'])->name('appointments.index');
     Route::get('/citas/{appointment}', [PacienteController::class, 'showAppointment'])->name('appointments.show');
     Route::post('/citas/{appointment}/cancelar', [PacienteController::class, 'cancelAppointment'])->name('appointments.cancel');
+    
+    // PDF de atención (para pacientes)
+    Route::get('/citas/{appointment}/pdf', [AttentionPdfController::class, 'download'])->name('attentions.pdf.download');
+    Route::get('/citas/{appointment}/pdf/ver', [AttentionPdfController::class, 'view'])->name('attentions.pdf.view');
     
     // Historial clínico
     Route::get('/historial', [PacienteController::class, 'history'])->name('history');

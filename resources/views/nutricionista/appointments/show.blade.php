@@ -1013,10 +1013,28 @@
                             </div>
                         </div>
                     @elseif($appointment->appointmentState->name === 'completada')
-                        <div class="text-center py-4">
+                        <div class="text-center py-4 mb-4">
                             <span class="material-symbols-outlined text-6xl text-green-600 dark:text-green-400 mb-2">check_circle</span>
                             <p class="text-sm text-gray-600 dark:text-gray-400">Esta cita ya fue completada</p>
                         </div>
+
+                        @if($appointment->attention && $appointment->attention->attentionData)
+                            <!-- Botones de PDF -->
+                            <div class="space-y-3">
+                                <a href="{{ route('nutricionista.attentions.pdf.download', $appointment) }}" 
+                                   class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-red-500 to-rose-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-red-600 hover:to-rose-700 transition shadow-lg">
+                                    <span class="material-symbols-outlined">picture_as_pdf</span>
+                                    Descargar PDF
+                                </a>
+                                
+                                <a href="{{ route('nutricionista.attentions.pdf.view', $appointment) }}" 
+                                   target="_blank"
+                                   class="w-full flex items-center justify-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-4 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition border border-gray-300 dark:border-gray-600">
+                                    <span class="material-symbols-outlined">visibility</span>
+                                    Ver PDF
+                                </a>
+                            </div>
+                        @endif
                     @else
                         <div class="text-center py-4">
                             <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600 mb-2">info</span>
