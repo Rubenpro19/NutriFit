@@ -724,6 +724,12 @@ document.addEventListener('DOMContentLoaded', function() {
             totalDisplay.textContent = Math.round(totalEquivalentKcal) + ' kcal';
         }
 
+        // Guardar total de calorías en campo oculto
+        const totalCaloriesInput = document.getElementById('total_calories_equivalents');
+        if (totalCaloriesInput) {
+            totalCaloriesInput.value = Math.round(totalEquivalentKcal);
+        }
+
         // Actualizar comparación de calorías con objetivo
         updateCaloriesComparison(totalEquivalentKcal);
 
@@ -869,6 +875,11 @@ document.addEventListener('DOMContentLoaded', function() {
         const fatPercent = Math.round((macros.fat.kcal / targetCalories) * 100);
         const carbsPercent = 100 - proteinPercent - fatPercent;
 
+        // Guardar porcentajes en campos ocultos
+        document.getElementById('protein_percentage').value = proteinPercent;
+        document.getElementById('fat_percentage').value = fatPercent;
+        document.getElementById('carbs_percentage').value = carbsPercent;
+
         // Actualizar textos de porcentajes y calorías
         document.getElementById('protein-percent-display').textContent = '(' + proteinPercent + '%)';
         document.getElementById('protein-kcal-display').textContent = macros.protein.kcal + ' cal';
@@ -952,7 +963,197 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 });
 
-// Protección contra múltiples envíos del formulario
+/**
+ * ========================================
+ * SISTEMA DE AUTOGUARDADO DE BORRADORES
+ * ========================================
+ */
+
+// ID único del borrador basado en la cita (viene de window.appointmentId)
+let DRAFT_KEY = '';
+let DRAFT_TIMESTAMP_KEY = '';
+
+// Elementos del formulario a guardar
+const formFields = [
+    'weight-input', 'weight-unit', 'height', 'waist', 'hip', 'neck', 'wrist',
+    'arm_contracted', 'arm_relaxed', 'thigh', 'calf', 'activity_level',
+    'nutrition_goal', 'diagnosis', 'recommendations',
+    // Equivalentes
+    'eq_cereales', 'eq_verduras', 'eq_frutas', 'eq_lacteo', 'eq_animal',
+    'eq_aceites', 'eq_grasas_prot', 'eq_leguminosas'
+];
+
+// Función para guardar borrador
+function saveDraft() {
+    const draftData = {};
+    let hasData = false;
+
+    formFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field && field.value) {
+            draftData[fieldId] = field.value;
+            hasData = true;
+        }
+    });
+
+    if (hasData) {
+        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
+        localStorage.setItem(DRAFT_TIMESTAMP_KEY, new Date().toISOString());
+        updateDraftIndicator();
+    }
+}
+
+// Función para cargar borrador
+function loadDraft() {
+    const draftData = localStorage.getItem(DRAFT_KEY);
+
+    if (draftData) {
+        try {
+            const data = JSON.parse(draftData);
+            let loadedAny = false;
+
+            formFields.forEach(fieldId => {
+                const field = document.getElementById(fieldId);
+                // Solo cargar si el campo está vacío (no tiene old() de Laravel)
+                if (field && data[fieldId] !== undefined) {
+                    // Para campos que ya tienen valor de old(), no sobrescribir
+                    if (!field.value || field.value === field.defaultValue) {
+                        field.value = data[fieldId];
+                        loadedAny = true;
+                    }
+                }
+            });
+
+            if (loadedAny) {
+                updateDraftIndicator();
+                // Disparar evento change en los campos para recalcular
+                const heightField = document.getElementById('height');
+                if (heightField) {
+                    heightField.dispatchEvent(new Event('input', { bubbles: true }));
+                }
+
+                // Disparar change en los selects también
+                const activityLevel = document.getElementById('activity_level');
+                const nutritionGoal = document.getElementById('nutrition_goal');
+                if (activityLevel) activityLevel.dispatchEvent(new Event('change', { bubbles: true }));
+                if (nutritionGoal) nutritionGoal.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        } catch (e) {
+            console.error('Error al cargar borrador:', e);
+        }
+    }
+}
+
+// Función para actualizar el indicador visual
+function updateDraftIndicator() {
+    const indicator = document.getElementById('draft-indicator');
+    const timestamp = localStorage.getItem(DRAFT_TIMESTAMP_KEY);
+
+    if (timestamp) {
+        const date = new Date(timestamp);
+        const now = new Date();
+        const diffMinutes = Math.floor((now - date) / 60000);
+
+        let timeText = '';
+        if (diffMinutes < 1) {
+            timeText = 'hace unos segundos';
+        } else if (diffMinutes < 60) {
+            timeText = `hace ${diffMinutes} minuto${diffMinutes > 1 ? 's' : ''}`;
+        } else {
+            const hours = Math.floor(diffMinutes / 60);
+            timeText = `hace ${hours} hora${hours > 1 ? 's' : ''}`;
+        }
+
+        document.getElementById('draft-timestamp').textContent = `(${timeText})`;
+        indicator.classList.remove('hidden');
+    }
+}
+
+// Función para limpiar borrador (llamada desde el modal)
+function clearDraftConfirmed() {
+    localStorage.removeItem(DRAFT_KEY);
+    localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+    document.getElementById('draft-indicator').classList.add('hidden');
+
+    // Mostrar notificación de éxito
+    const notification = document.createElement('div');
+    notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2';
+    notification.innerHTML = '<span class="material-symbols-outlined">check_circle</span><span>Borrador eliminado correctamente</span>';
+    document.body.appendChild(notification);
+
+    // Animación de salida
+    setTimeout(() => {
+        notification.style.opacity = '0';
+        notification.style.transform = 'translateX(100%)';
+        notification.style.transition = 'all 0.3s ease-in-out';
+    }, 2500);
+
+    setTimeout(() => notification.remove(), 3000);
+}
+
+// Exponer la función globalmente para que Alpine.js pueda acceder a ella
+window.clearDraftConfirmed = clearDraftConfirmed;
+
+// Autoguardar cada vez que cambia un campo (con debounce)
+let saveTimeout;
+let formSubmitted = false; // Bandera para evitar guardar después de enviar
+
+function debouncedSave() {
+    // No guardar si el formulario ya fue enviado
+    if (formSubmitted) return;
+    
+    clearTimeout(saveTimeout);
+    saveTimeout = setTimeout(saveDraft, 1000); // Guardar 1 segundo después del último cambio
+}
+
+// Inicializar sistema de borradores cuando el DOM esté listo
+document.addEventListener('DOMContentLoaded', function() {
+    // Configurar claves de localStorage con el ID de la cita
+    if (window.appointmentId) {
+        DRAFT_KEY = `attention_draft_${window.appointmentId}`;
+        DRAFT_TIMESTAMP_KEY = `attention_draft_timestamp_${window.appointmentId}`;
+    }
+
+    // Cargar borrador al iniciar
+    loadDraft();
+
+    // Agregar listeners a todos los campos
+    formFields.forEach(fieldId => {
+        const field = document.getElementById(fieldId);
+        if (field) {
+            field.addEventListener('input', debouncedSave);
+            field.addEventListener('change', debouncedSave);
+        }
+    });
+
+    // Limpiar borrador al enviar el formulario exitosamente
+    const attentionForm = document.getElementById('attention-form');
+    if (attentionForm) {
+        attentionForm.addEventListener('submit', function(e) {
+            // Marcar que el formulario fue enviado
+            formSubmitted = true;
+            
+            // Limpiar el borrador cuando se envía el formulario
+            localStorage.removeItem(DRAFT_KEY);
+            localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
+            
+            // Ocultar el indicador
+            const indicator = document.getElementById('draft-indicator');
+            if (indicator) {
+                indicator.classList.add('hidden');
+            }
+        });
+    }
+
+    // Actualizar timestamp cada minuto
+    setInterval(updateDraftIndicator, 60000);
+});
+
+/**
+ * ========================================
+ * PROTECCIÓN CONTRA MÚLTIPLES ENVÍOS
+ * ========================================
+ */
 const form = document.getElementById('attention-form');
 const submitBtn = document.getElementById('submit-btn');
 const cancelBtn = document.getElementById('cancel-btn');

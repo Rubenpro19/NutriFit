@@ -812,13 +812,144 @@
                             </div>
 
                             <!-- Botones de Acción -->
-                            <div class="mt-6" x-data="{ showConfirmModal: false, submitting: false }">
+                            <div class="mt-6" x-data="{ 
+                                showConfirmModal: false, 
+                                submitting: false,
+                                showValidationToast: false,
+                                validationError: '',
+                                
+                                validateBeforeSave() {
+                                    // Obtener valores de calorías
+                                    const totalCaloriesText = document.getElementById('total_kcal_equivalents').textContent;
+                                    const totalCaloriesEq = parseFloat(totalCaloriesText.replace(/[^\d.]/g, '')) || 0;
+                                    const targetCalories = parseFloat(document.getElementById('target_calories').value) || 0;
+                                    
+                                    // Obtener valores de macronutrientes
+                                    const totalProtein = parseFloat(document.getElementById('total_protein_equivalents').textContent.replace('g', '')) || 0;
+                                    const totalFat = parseFloat(document.getElementById('total_fat_equivalents').textContent.replace('g', '')) || 0;
+                                    const totalCarbs = parseFloat(document.getElementById('total_carbs_equivalents').textContent.replace('g', '')) || 0;
+                                    
+                                    const targetProtein = parseFloat(document.getElementById('protein_grams').value) || 0;
+                                    const targetFat = parseFloat(document.getElementById('fat_grams').value) || 0;
+                                    const targetCarbs = parseFloat(document.getElementById('carbs_grams').value) || 0;
+                                    
+                                    // Validar calorías (90-110%)
+                                    if (targetCalories > 0) {
+                                        const caloriesPercent = (totalCaloriesEq / targetCalories) * 100;
+                                        if (caloriesPercent < 90) {
+                                            this.validationError = `Las calorías equivalentes (${totalCaloriesEq.toFixed(0)} kcal) están por debajo del rango permitido. Debe estar entre 90% y 110% del objetivo (${targetCalories.toFixed(0)} kcal). Actualmente: ${caloriesPercent.toFixed(1)}%`;
+                                            return false;
+                                        }
+                                        if (caloriesPercent > 110) {
+                                            this.validationError = `Las calorías equivalentes (${totalCaloriesEq.toFixed(0)} kcal) exceden el rango permitido. Debe estar entre 90% y 110% del objetivo (${targetCalories.toFixed(0)} kcal). Actualmente: ${caloriesPercent.toFixed(1)}%`;
+                                            return false;
+                                        }
+                                    }
+                                    
+                                    // Validar proteínas (90-110%)
+                                    if (targetProtein > 0) {
+                                        const proteinPercent = (totalProtein / targetProtein) * 100;
+                                        if (proteinPercent < 90) {
+                                            this.validationError = `Las proteínas (${totalProtein.toFixed(1)}g) están por debajo del rango permitido. Debe estar entre 90% y 110% del objetivo (${targetProtein.toFixed(1)}g). Actualmente: ${proteinPercent.toFixed(1)}%`;
+                                            return false;
+                                        }
+                                        if (proteinPercent > 110) {
+                                            this.validationError = `Las proteínas (${totalProtein.toFixed(1)}g) exceden el rango permitido. Debe estar entre 90% y 110% del objetivo (${targetProtein.toFixed(1)}g). Actualmente: ${proteinPercent.toFixed(1)}%`;
+                                            return false;
+                                        }
+                                    }
+                                    
+                                    // Validar grasas (90-110%)
+                                    if (targetFat > 0) {
+                                        const fatPercent = (totalFat / targetFat) * 100;
+                                        if (fatPercent < 90) {
+                                            this.validationError = `Las grasas (${totalFat.toFixed(1)}g) están por debajo del rango permitido. Debe estar entre 90% y 110% del objetivo (${targetFat.toFixed(1)}g). Actualmente: ${fatPercent.toFixed(1)}%`;
+                                            return false;
+                                        }
+                                        if (fatPercent > 110) {
+                                            this.validationError = `Las grasas (${totalFat.toFixed(1)}g) exceden el rango permitido. Debe estar entre 90% y 110% del objetivo (${targetFat.toFixed(1)}g). Actualmente: ${fatPercent.toFixed(1)}%`;
+                                            return false;
+                                        }
+                                    }
+                                    
+                                    // Validar carbohidratos (90-110%)
+                                    if (targetCarbs > 0) {
+                                        const carbsPercent = (totalCarbs / targetCarbs) * 100;
+                                        if (carbsPercent < 90) {
+                                            this.validationError = `Los carbohidratos (${totalCarbs.toFixed(1)}g) están por debajo del rango permitido. Debe estar entre 90% y 110% del objetivo (${targetCarbs.toFixed(1)}g). Actualmente: ${carbsPercent.toFixed(1)}%`;
+                                            return false;
+                                        }
+                                        if (carbsPercent > 110) {
+                                            this.validationError = `Los carbohidratos (${totalCarbs.toFixed(1)}g) exceden el rango permitido. Debe estar entre 90% y 110% del objetivo (${targetCarbs.toFixed(1)}g). Actualmente: ${carbsPercent.toFixed(1)}%`;
+                                            return false;
+                                        }
+                                    }
+                                    
+                                    return true;
+                                },
+                                
+                                handleSaveClick() {
+                                    this.validationError = '';
+                                    if (this.validateBeforeSave()) {
+                                        this.showConfirmModal = true;
+                                    } else {
+                                        // Mostrar toast de error
+                                        this.showValidationToast = true;
+                                        setTimeout(() => this.showValidationToast = false, 6000);
+                                    }
+                                }
+                            }">
+                                <!-- Toast de Error de Validación -->
+                                <div x-show="showValidationToast" x-cloak
+                                    class="fixed top-20 right-4 z-50 max-w-md w-full sm:w-96"
+                                    style="display: none;">
+                                    <div x-transition:enter="transition ease-out duration-300 transform"
+                                         x-transition:enter-start="translate-x-full opacity-0"
+                                         x-transition:enter-end="translate-x-0 opacity-100"
+                                         x-transition:leave="transition ease-in duration-200 transform"
+                                         x-transition:leave-start="translate-x-0 opacity-100"
+                                         x-transition:leave-end="translate-x-full opacity-0"
+                                         class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl border-l-4 border-red-500 overflow-hidden">
+                                        
+                                        <div class="p-4">
+                                            <div class="flex items-start gap-3">
+                                                <!-- Icono -->
+                                                <div class="flex-shrink-0">
+                                                    <div class="bg-red-100 dark:bg-red-900/30 rounded-full p-2">
+                                                        <span class="material-symbols-outlined text-red-600 dark:text-red-400 text-2xl">error</span>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Contenido -->
+                                                <div class="flex-1 min-w-0">
+                                                    <h4 class="text-sm font-bold text-gray-900 dark:text-white mb-1">
+                                                        Error de Validación
+                                                    </h4>
+                                                    <p class="text-sm text-gray-600 dark:text-gray-400" x-text="validationError"></p>
+                                                </div>
+                                                
+                                                <!-- Botón Cerrar -->
+                                                <button @click="showValidationToast = false"
+                                                        class="flex-shrink-0 text-gray-400 hover:text-gray-600 dark:hover:text-gray-200 transition-colors">
+                                                    <span class="material-symbols-outlined">close</span>
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        <!-- Barra de progreso horizontal -->
+                                        <div class="h-1 bg-gray-200 dark:bg-gray-700">
+                                            <div class="h-full bg-red-500 transition-all duration-100" 
+                                                 style="width: 100%; animation: shrink 6s linear forwards;"></div>
+                                        </div>
+                                    </div>
+                                </div>
+
                                 <div class="flex gap-4">
                                     <a href="{{ route('nutricionista.appointments.show', $appointment) }}" id="cancel-btn"
                                         class="flex-1 text-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-6 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                                         Cancelar
                                     </a>
-                                    <button type="button" @click="showConfirmModal = true" id="submit-btn"
+                                    <button type="button" @click="handleSaveClick()" id="submit-btn"
                                         class="flex-1 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-700 hover:to-emerald-700 transition shadow-lg flex items-center justify-center gap-2">
                                         <span class="material-symbols-outlined" id="submit-icon">save</span>
                                         <span id="submit-text">Guardar Atención</span>
@@ -885,6 +1016,13 @@
                                         </div>
                                     </div>
                                 </div>
+
+                                <style>
+                                    @keyframes shrink {
+                                        from { width: 100%; }
+                                        to { width: 0%; }
+                                    }
+                                </style>
                             </div>
                         </form>
                     </div>
@@ -1042,178 +1180,9 @@
             <!-- Script para cálculos antropométricos completos -->
             @vite('resources/js/attention-calculator.js')
 
-            <!-- Script para autoguardado de borrador -->
+            <!-- Pasar ID de la cita al JavaScript -->
             <script>
-                // ID único del borrador basado en la cita
-                const DRAFT_KEY = 'attention_draft_{{ $appointment->id }}';
-                const DRAFT_TIMESTAMP_KEY = 'attention_draft_timestamp_{{ $appointment->id }}';
-
-                // Elementos del formulario a guardar
-                const formFields = [
-                    'weight-input', 'weight-unit', 'height', 'waist', 'hip', 'neck', 'wrist',
-                    'arm_contracted', 'arm_relaxed', 'thigh', 'calf', 'activity_level',
-                    'nutrition_goal', 'diagnosis', 'recommendations',
-                    // Equivalentes
-                    'eq_cereales', 'eq_verduras', 'eq_frutas', 'eq_lacteo', 'eq_animal',
-                    'eq_aceites', 'eq_grasas_prot', 'eq_leguminosas'
-                ];
-
-                // Función para guardar borrador
-                function saveDraft() {
-                    const draftData = {};
-                    let hasData = false;
-
-                    formFields.forEach(fieldId => {
-                        const field = document.getElementById(fieldId);
-                        if (field && field.value) {
-                            draftData[fieldId] = field.value;
-                            hasData = true;
-                        }
-                    });
-
-                    if (hasData) {
-                        localStorage.setItem(DRAFT_KEY, JSON.stringify(draftData));
-                        localStorage.setItem(DRAFT_TIMESTAMP_KEY, new Date().toISOString());
-                        updateDraftIndicator();
-                    }
-                }
-
-                // Función para cargar borrador
-                function loadDraft() {
-                    const draftData = localStorage.getItem(DRAFT_KEY);
-
-                    if (draftData) {
-                        try {
-                            const data = JSON.parse(draftData);
-                            let loadedAny = false;
-
-                            formFields.forEach(fieldId => {
-                                const field = document.getElementById(fieldId);
-                                // Solo cargar si el campo está vacío (no tiene old() de Laravel)
-                                if (field && data[fieldId] !== undefined) {
-                                    // Para campos que ya tienen valor de old(), no sobrescribir
-                                    if (!field.value || field.value === field.defaultValue) {
-                                        field.value = data[fieldId];
-                                        loadedAny = true;
-                                    }
-                                }
-                            });
-
-                            if (loadedAny) {
-                                updateDraftIndicator();
-                                // Disparar evento change en los campos para recalcular
-                                const heightField = document.getElementById('height');
-                                if (heightField) {
-                                    heightField.dispatchEvent(new Event('input', { bubbles: true }));
-                                }
-
-                                // Disparar change en los selects también
-                                const activityLevel = document.getElementById('activity_level');
-                                const nutritionGoal = document.getElementById('nutrition_goal');
-                                if (activityLevel) activityLevel.dispatchEvent(new Event('change', { bubbles: true }));
-                                if (nutritionGoal) nutritionGoal.dispatchEvent(new Event('change', { bubbles: true }));
-                            }
-                        } catch (e) {
-                            console.error('Error al cargar borrador:', e);
-                        }
-                    }
-                }
-
-                // Función para actualizar el indicador visual
-                function updateDraftIndicator() {
-                    const indicator = document.getElementById('draft-indicator');
-                    const timestamp = localStorage.getItem(DRAFT_TIMESTAMP_KEY);
-
-                    if (timestamp) {
-                        const date = new Date(timestamp);
-                        const now = new Date();
-                        const diffMinutes = Math.floor((now - date) / 60000);
-
-                        let timeText = '';
-                        if (diffMinutes < 1) {
-                            timeText = 'hace unos segundos';
-                        } else if (diffMinutes < 60) {
-                            timeText = `hace ${diffMinutes} minuto${diffMinutes > 1 ? 's' : ''}`;
-                        } else {
-                            const hours = Math.floor(diffMinutes / 60);
-                            timeText = `hace ${hours} hora${hours > 1 ? 's' : ''}`;
-                        }
-
-                        document.getElementById('draft-timestamp').textContent = `(${timeText})`;
-                        indicator.classList.remove('hidden');
-                    }
-                }
-
-                // Función para limpiar borrador (llamada desde el modal)
-                function clearDraftConfirmed() {
-                    localStorage.removeItem(DRAFT_KEY);
-                    localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
-                    document.getElementById('draft-indicator').classList.add('hidden');
-
-                    // Mostrar notificación de éxito
-                    const notification = document.createElement('div');
-                    notification.className = 'fixed top-20 right-4 bg-green-500 text-white px-6 py-3 rounded-xl shadow-lg z-50 flex items-center gap-2';
-                    notification.innerHTML = '<span class="material-symbols-outlined">check_circle</span><span>Borrador eliminado correctamente</span>';
-                    document.body.appendChild(notification);
-
-                    // Animación de salida
-                    setTimeout(() => {
-                        notification.style.opacity = '0';
-                        notification.style.transform = 'translateX(100%)';
-                        notification.style.transition = 'all 0.3s ease-in-out';
-                    }, 2500);
-
-                    setTimeout(() => notification.remove(), 3000);
-                }
-
-                // Exponer la función globalmente para que Alpine.js pueda acceder a ella
-                window.clearDraftConfirmed = clearDraftConfirmed;
-
-                // Autoguardar cada vez que cambia un campo (con debounce)
-                let saveTimeout;
-                let formSubmitted = false; // Bandera para evitar guardar después de enviar
-                
-                function debouncedSave() {
-                    // No guardar si el formulario ya fue enviado
-                    if (formSubmitted) return;
-                    
-                    clearTimeout(saveTimeout);
-                    saveTimeout = setTimeout(saveDraft, 1000); // Guardar 1 segundo después del último cambio
-                }
-
-                // Event listeners
-                document.addEventListener('DOMContentLoaded', function () {
-                    // Cargar borrador al iniciar
-                    loadDraft();
-
-                    // Agregar listeners a todos los campos
-                    formFields.forEach(fieldId => {
-                        const field = document.getElementById(fieldId);
-                        if (field) {
-                            field.addEventListener('input', debouncedSave);
-                            field.addEventListener('change', debouncedSave);
-                        }
-                    });
-
-                    // Limpiar borrador al enviar el formulario exitosamente
-                    document.getElementById('attention-form').addEventListener('submit', function (e) {
-                        // Marcar que el formulario fue enviado
-                        formSubmitted = true;
-                        
-                        // Limpiar el borrador cuando se envía el formulario
-                        localStorage.removeItem(DRAFT_KEY);
-                        localStorage.removeItem(DRAFT_TIMESTAMP_KEY);
-                        
-                        // Ocultar el indicador
-                        const indicator = document.getElementById('draft-indicator');
-                        if (indicator) {
-                            indicator.classList.add('hidden');
-                        }
-                    });
-                });
-
-                // Actualizar timestamp cada minuto
-                setInterval(updateDraftIndicator, 60000);
+                window.appointmentId = {{ $appointment->id }};
             </script>
 
             </div>
