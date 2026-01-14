@@ -3,6 +3,10 @@
 @section('title', 'Seleccionar Horario - NutriFit')
 
 @section('content')
+
+    <body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
+        @include('layouts.header')
+
 <style>
     .scrollbar-hide::-webkit-scrollbar {
         display: none;
@@ -12,10 +16,8 @@
         scrollbar-width: none;
     }
 </style>
-<body class="min-h-screen bg-gradient-to-br from-green-50 via-emerald-50 to-rose-50 dark:from-gray-900 dark:via-gray-800 dark:to-gray-900 flex flex-col">
-    @include('layouts.header')
 
-    <main class="flex-grow">
+<main class="flex-grow">
         <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <!-- Breadcrumb -->
         <nav class="mb-6 flex items-center gap-2 text-sm">
@@ -120,7 +122,9 @@
                         Detalles de la Cita
                     </h3>
                     
-                    <form method="POST" action="{{ route('paciente.booking.store', $nutricionista) }}" id="bookingForm" x-data="{ submitting: false }" @submit="submitting = true">
+                    <form method="POST" action="{{ route('paciente.booking.store', $nutricionista) }}" id="bookingForm" 
+                          x-data="{ submitting: false }" 
+                          @@submit.prevent="$dispatch('show-confirm-modal')">
                         @csrf
                         
                         <input type="hidden" name="date" id="selectedDate">
@@ -157,7 +161,7 @@
                             <label class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
                                 Tipo de Consulta <span class="text-red-500">*</span>
                             </label>
-                            <select name="appointment_type" required
+                            <select name="appointment_type" id="appointmentType" required onchange="validateForm()"
                                     class="w-full rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white px-4 py-3 focus:border-green-500 focus:outline-none focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
                                 <option value="">Selecciona el tipo de consulta</option>
                                 <option value="primera_vez">Primera vez</option>
@@ -191,7 +195,7 @@
 
                         <!-- Botón de Confirmar -->
                         <button type="submit" id="submitBtn" 
-                                :disabled="submitting"
+                                :disabled="submitting || !document.getElementById('selectedDate')?.value || !document.getElementById('appointmentType')?.value"
                                 disabled
                                 class="w-full rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 font-bold text-white text-lg transition-all hover:from-green-700 hover:to-emerald-700 hover:shadow-xl disabled:from-gray-300 disabled:to-gray-400 disabled:cursor-not-allowed disabled:shadow-none flex items-center justify-center gap-2 group">
                             <span class="material-symbols-outlined group-disabled:animate-none" x-show="!submitting">check_circle</span>
@@ -199,7 +203,7 @@
                                 <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
                                 <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                             </svg>
-                            <span id="btnText" x-text="submitting ? 'Confirmando...' : (document.getElementById('selectedDate').value ? 'Confirmar Cita' : 'Selecciona un horario')"></span>
+                            <span id="btnText">Selecciona un horario</span>
                         </button>
                     </form>
                 </div>
@@ -291,10 +295,138 @@
         </div>
     </main>
 
+    <!-- Modal de Confirmación de Cita -->
+    <div x-data="confirmModal()" 
+         @@show-confirm-modal.window="showModal = true"
+         id="bookingModal" 
+         x-show="showModal" 
+         x-cloak
+         class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+         @@click.self="showModal = false"
+         @@keydown.escape.window="showModal = false"
+         style="display: none;">
+        <div @@click.away="showModal = false"
+            class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-lg w-full p-6 transform transition-all"
+            x-transition:enter="transition ease-out duration-300"
+            x-transition:enter-start="opacity-0 scale-90"
+            x-transition:enter-end="opacity-100 scale-100"
+            x-transition:leave="transition ease-in duration-200"
+            x-transition:leave-start="opacity-100 scale-100"
+            x-transition:leave-end="opacity-0 scale-90">
+            
+            <div class="text-center mb-6">
+                <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-green-100 dark:bg-green-900/30 mb-4">
+                    <span class="material-symbols-outlined text-4xl text-green-600 dark:text-green-400">event_available</span>
+                </div>
+                <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                    ¿Confirmar esta cita?
+                </h3>
+                <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                    Verifica que todos los datos sean correctos
+                </p>
+            </div>
+
+            <!-- Detalles de la cita -->
+            <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 mb-6 border border-green-200 dark:border-green-700">
+                <div class="space-y-3">
+                    <!-- Nutricionista -->
+                    <div class="flex items-center gap-3 pb-3 border-b border-green-200 dark:border-green-700">
+                        @if($nutricionista->personalData?->profile_photo)
+                            <div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+                                <img src="{{ asset('storage/' . $nutricionista->personalData->profile_photo) }}" 
+                                     alt="{{ $nutricionista->name }}" 
+                                     class="w-full h-full object-cover">
+                            </div>
+                        @else
+                            <div class="w-12 h-12 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold flex-shrink-0">
+                                {{ $nutricionista->initials() }}
+                            </div>
+                        @endif
+                        <div>
+                            <p class="font-bold text-gray-900 dark:text-white">{{ $nutricionista->name }}</p>
+                            <p class="text-xs text-gray-600 dark:text-gray-400">Nutricionista Profesional</p>
+                        </div>
+                    </div>
+
+                    <!-- Fecha -->
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-green-600 dark:text-green-400">calendar_today</span>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Fecha</p>
+                            <p class="font-bold text-gray-900 dark:text-white" x-text="formatDate(document.getElementById('selectedDate')?.value || '')"></p>
+                        </div>
+                    </div>
+
+                    <!-- Hora -->
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-green-600 dark:text-green-400">schedule</span>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Hora</p>
+                            <p class="font-bold text-gray-900 dark:text-white" x-text="document.getElementById('selectedTime')?.value || ''"></p>
+                        </div>
+                    </div>
+
+                    <!-- Tipo de Consulta -->
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-green-600 dark:text-green-400">medical_services</span>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Tipo de consulta</p>
+                            <p class="font-bold text-gray-900 dark:text-white" x-text="getAppointmentTypeName(document.getElementById('appointmentType')?.value || '')"></p>
+                        </div>
+                    </div>
+
+                    <!-- Precio -->
+                    <div class="flex items-center gap-3">
+                        <span class="material-symbols-outlined text-green-600 dark:text-green-400">payments</span>
+                        <div>
+                            <p class="text-xs text-gray-500 dark:text-gray-400">Precio de consulta</p>
+                            <p class="font-bold text-gray-900 dark:text-white">${{ number_format($nutricionista->nutricionistaSettings?->consultation_price ?? 30.00, 2) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex gap-3">
+                <button type="button" @@click="showModal = false"
+                    class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                    Cancelar
+                </button>
+                <button type="button" 
+                    @@click="showModal = false; document.getElementById('bookingForm').submit();"
+                    class="flex-1 px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition flex items-center justify-center gap-2">
+                    <span class="material-symbols-outlined">check</span>
+                    Confirmar Cita
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script>
+        function confirmModal() {
+            return {
+                showModal: false,
+                formatDate(dateStr) {
+                    if (!dateStr) return '';
+                    const date = new Date(dateStr + 'T00:00:00');
+                    const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+                    const formatted = date.toLocaleDateString('es-ES', options);
+                    return formatted.charAt(0).toUpperCase() + formatted.slice(1);
+                },
+                getAppointmentTypeName(type) {
+                    const types = {
+                        'primera_vez': 'Primera Vez',
+                        'seguimiento': 'Seguimiento',
+                        'control': 'Control'
+                    };
+                    return types[type] || type;
+                }
+            }
+        }
+
         let selectedButton = null;
         let currentWeek = 0;
         const totalWeeks = {{ count($weeks) }};
+        let modalComponent = null;
 
         function selectSlot(date, time, button) {
             // Remover selección anterior
@@ -323,13 +455,33 @@
             document.getElementById('displayDate').textContent = formattedDate.charAt(0).toUpperCase() + formattedDate.slice(1);
             document.getElementById('displayTime').textContent = time;
             
-            // Habilitar botón y cambiar texto
-            const submitBtn = document.getElementById('submitBtn');
-            submitBtn.disabled = false;
+            // Validar y actualizar estado del botón
+            validateForm();
             
             // Scroll suave en móvil
             if (window.innerWidth < 1024) {
                 document.getElementById('bookingForm').scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        }
+
+        function validateForm() {
+            const hasDate = document.getElementById('selectedDate').value;
+            const hasTime = document.getElementById('selectedTime').value;
+            const hasAppointmentType = document.getElementById('appointmentType').value;
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            
+            // Habilitar botón solo si hay fecha, hora Y tipo de consulta
+            if (hasDate && hasTime && hasAppointmentType) {
+                submitBtn.disabled = false;
+                btnText.textContent = 'Confirmar Cita';
+            } else {
+                submitBtn.disabled = true;
+                if (!hasDate || !hasTime) {
+                    btnText.textContent = 'Selecciona un horario';
+                } else if (!hasAppointmentType) {
+                    btnText.textContent = 'Selecciona tipo de consulta';
+                }
             }
         }
 
@@ -376,6 +528,6 @@
         updateNavigationButtons();
     </script>
 
-    @include('layouts.footer')
-</body>
+        @include('layouts.footer')
+    </body>
 @endsection
