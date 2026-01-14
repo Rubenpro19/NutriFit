@@ -572,9 +572,6 @@ document.addEventListener('DOMContentLoaded', function() {
     /**
      * Calcula el plan nutricional basado en el objetivo
      */
-    /**
-     * Calcula el plan nutricional basado en el objetivo
-     */
     function calculateNutritionPlan(weight, tdee) {
         const goal = nutritionGoal.value;
         
@@ -593,6 +590,9 @@ document.addEventListener('DOMContentLoaded', function() {
         
         // Actualizar visualización de macros
         updateMacrosDisplay(macros, targetCalories);
+
+        // Recalcular comparaciones con equivalentes actuales
+        calculateEquivalentCalories();
     }
 
     /**
@@ -632,6 +632,21 @@ document.addEventListener('DOMContentLoaded', function() {
     };
 
     /**
+     * Gramos de macronutrientes por equivalente de cada grupo
+     * Basado en la tabla del Sistema de Equivalentes
+     */
+    const GROUP_MACROS = {
+        cereales: { protein: 2, carbs: 15, fat: 0.5 },
+        verduras: { protein: 2, carbs: 4, fat: 0 },
+        frutas: { protein: 0, carbs: 15, fat: 0 },
+        lacteo: { protein: 9, carbs: 12, fat: 3 },
+        animal: { protein: 7, carbs: 0, fat: 2 },
+        aceites: { protein: 0, carbs: 0, fat: 5 },
+        grasas_prot: { protein: 3, carbs: 3, fat: 5 },
+        leguminosas: { protein: 8, carbs: 20, fat: 1 }
+    };
+
+    /**
      * Calcula los macronutrientes según el protocolo Ripped Body
      */
     function calculateMacros(weight, targetCalories, goal) {
@@ -657,10 +672,13 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
     /**
-     * Calcula las calorías totales basadas en los equivalentes ingresados
+     * Calcula las calorías totales y macronutrientes basados en los equivalentes ingresados
      */
     function calculateEquivalentCalories() {
         let totalEquivalentKcal = 0;
+        let totalProtein = 0;
+        let totalCarbs = 0;
+        let totalFat = 0;
 
         // Iterar sobre cada grupo
         for (const [key, kcalPerEq] of Object.entries(GROUP_CALORIES)) {
@@ -682,14 +700,137 @@ document.addEventListener('DOMContentLoaded', function() {
                 
                 display.textContent = totalKcal;
                 totalEquivalentKcal += totalKcal;
+
+                // Sumar macronutrientes
+                const macros = GROUP_MACROS[key];
+                if (macros) {
+                    const groupProtein = equivalents * macros.protein;
+                    const groupCarbs = equivalents * macros.carbs;
+                    const groupFat = equivalents * macros.fat;
+                    
+                    totalProtein += groupProtein;
+                    totalCarbs += groupCarbs;
+                    totalFat += groupFat;
+
+                    // Actualizar tabla de macros por grupo
+                    updateGroupMacrosDisplay(key, groupProtein, groupCarbs, groupFat);
+                }
             }
         }
 
-        // Actualizar total
+        // Actualizar total de calorías
         const totalDisplay = document.getElementById('total_kcal_equivalents');
         if (totalDisplay) {
             totalDisplay.textContent = Math.round(totalEquivalentKcal) + ' kcal';
         }
+
+        // Actualizar comparación de calorías con objetivo
+        updateCaloriesComparison(totalEquivalentKcal);
+
+        // Actualizar totales de macronutrientes
+        updateEquivalentMacrosDisplay(totalProtein, totalCarbs, totalFat);
+    }
+
+    /**
+     * Actualiza la comparación de calorías con el objetivo
+     */
+    function updateCaloriesComparison(currentCalories) {
+        const targetCalories = parseFloat(document.getElementById('target_calories').value) || 0;
+        const targetDisplay = document.getElementById('target_calories_display');
+        const percentDisplay = document.getElementById('calories_percent');
+
+        if (targetDisplay && targetCalories > 0) {
+            targetDisplay.textContent = targetCalories + ' kcal';
+            
+            const percent = (currentCalories / targetCalories) * 100;
+            const percentText = Math.round(percent) + '%';
+            
+            if (percentDisplay) {
+                percentDisplay.textContent = percentText;
+                
+                // Cambiar color según el porcentaje
+                percentDisplay.className = 'text-sm font-bold px-3 py-1 rounded-full ';
+                if (Math.abs(percent - 100) <= 10) {
+                    percentDisplay.className += 'bg-green-100 dark:bg-green-800 text-green-800 dark:text-green-100';
+                } else if (percent > 100) {
+                    percentDisplay.className += 'bg-orange-100 dark:bg-orange-800 text-orange-800 dark:text-orange-100';
+                } else {
+                    percentDisplay.className += 'bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-100';
+                }
+            }
+        }
+    }
+
+    /**
+     * Actualiza la visualización de macros por grupo en la tabla
+     */
+    function updateGroupMacrosDisplay(group, protein, carbs, fat) {
+        const proteinCell = document.getElementById(`protein_${group}`);
+        const carbsCell = document.getElementById(`carbs_${group}`);
+        const fatCell = document.getElementById(`fat_${group}`);
+
+        if (proteinCell) proteinCell.textContent = protein.toFixed(1);
+        if (carbsCell) carbsCell.textContent = carbs.toFixed(1);
+        if (fatCell) fatCell.textContent = fat.toFixed(1);
+    }
+
+    /**
+     * Actualiza la visualización de los totales de macronutrientes de los equivalentes
+     */
+    function updateEquivalentMacrosDisplay(protein, carbs, fat) {
+        // Actualizar displays de totales
+        const proteinDisplay = document.getElementById('total_protein_equivalents');
+        const carbsDisplay = document.getElementById('total_carbs_equivalents');
+        const fatDisplay = document.getElementById('total_fat_equivalents');
+        
+        if (proteinDisplay) proteinDisplay.textContent = protein.toFixed(1) + 'g';
+        if (carbsDisplay) carbsDisplay.textContent = carbs.toFixed(1) + 'g';
+        if (fatDisplay) fatDisplay.textContent = fat.toFixed(1) + 'g';
+
+        // Obtener objetivos calculados
+        const targetProtein = parseFloat(document.getElementById('protein_grams').value) || 0;
+        const targetCarbs = parseFloat(document.getElementById('carbs_grams').value) || 0;
+        const targetFat = parseFloat(document.getElementById('fat_grams').value) || 0;
+
+        // Actualizar displays de objetivos
+        const targetProteinDisplay = document.getElementById('target_protein_display');
+        const targetCarbsDisplay = document.getElementById('target_carbs_display');
+        const targetFatDisplay = document.getElementById('target_fat_display');
+        
+        if (targetProteinDisplay) targetProteinDisplay.textContent = targetProtein + 'g';
+        if (targetCarbsDisplay) targetCarbsDisplay.textContent = targetCarbs + 'g';
+        if (targetFatDisplay) targetFatDisplay.textContent = targetFat + 'g';
+
+        // Actualizar comparación con objetivos
+        updateMacroComparison('protein', protein, targetProtein);
+        updateMacroComparison('carbs', carbs, targetCarbs);
+        updateMacroComparison('fat', fat, targetFat);
+    }
+
+    /**
+     * Actualiza la comparación entre macros ingresados y objetivos
+     */
+    function updateMacroComparison(macroType, current, target) {
+        const diffDisplay = document.getElementById(`diff_${macroType}`);
+        const percentDisplay = document.getElementById(`percent_${macroType}`);
+        
+        if (!diffDisplay || !percentDisplay || target === 0) return;
+
+        const diff = current - target;
+        const percent = (current / target) * 100;
+
+        // Actualizar diferencia
+        const diffText = diff >= 0 ? `+${diff.toFixed(1)}g` : `${diff.toFixed(1)}g`;
+        const diffColor = Math.abs(diff) <= target * 0.1 
+            ? 'text-green-600 dark:text-green-400' 
+            : (diff > 0 ? 'text-orange-600 dark:text-orange-400' : 'text-red-600 dark:text-red-400');
+        
+        diffDisplay.textContent = diffText;
+        diffDisplay.className = `text-sm font-semibold ${diffColor}`;
+
+        // Actualizar porcentaje
+        percentDisplay.textContent = Math.round(percent) + '%';
+        percentDisplay.className = `text-xs ${diffColor}`;
     }
 
     // Event listeners para los inputs de equivalentes

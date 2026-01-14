@@ -359,6 +359,11 @@
                     value="{{ old('carbs_percentage') }}">
                 <input type="hidden" id="total_calories_equivalents" name="total_calories_equivalents"
                     value="{{ old('total_calories_equivalents') }}">
+                            </div>
+
+                            <!-- Tus Resultados -->
+                            <div
+                                class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 mb-6">
                                 <div class="text-center mb-6">
                                     <h2
                                         class="text-2xl font-bold text-gray-900 dark:text-white flex items-center justify-center gap-2 mb-2">
@@ -635,15 +640,150 @@
                                     </div>
                                 </div>
 
-                                <!-- Total Calorías Equivalentes -->
-                                <div
-                                    class="mt-6 p-4 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-100 dark:border-emerald-800 flex justify-between items-center">
-                                    <span class="text-emerald-900 dark:text-emerald-100 font-semibold">Total Calorías
-                                        Equivalentes:</span>
-                                    <span id="total_kcal_equivalents"
-                                        class="text-xl font-bold text-emerald-600 dark:text-emerald-400">0 kcal</span>
+                                <!-- Total Calorías Equivalentes con Comparación -->
+                                <div class="mt-6 bg-emerald-50 dark:bg-emerald-900/20 rounded-xl border border-emerald-200 dark:border-emerald-700 p-4">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-emerald-900 dark:text-emerald-100 font-semibold">Total Calorías Equivalentes:</span>
+                                        <span id="total_kcal_equivalents" class="text-xl font-bold text-emerald-600 dark:text-emerald-400">0 kcal</span>
+                                    </div>
+                                    <div class="flex justify-between items-center pt-2 border-t border-emerald-200 dark:border-emerald-700">
+                                        <span class="text-sm text-emerald-800 dark:text-emerald-200">Objetivo de Calorías:</span>
+                                        <div class="flex items-center gap-3">
+                                            <span id="target_calories_display" class="text-lg font-semibold text-emerald-700 dark:text-emerald-300">--</span>
+                                            <span id="calories_percent" class="text-sm font-bold px-3 py-1 rounded-full bg-emerald-100 dark:bg-emerald-800 text-emerald-800 dark:text-emerald-100">--%</span>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+
+                            <!-- Desglose de Macronutrientes por Grupo -->
+                            <div
+                                class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 mt-6">
+                                <div class="bg-gray-50 dark:bg-gray-900/50 rounded-xl p-4 border border-gray-200 dark:border-gray-700">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-indigo-600">table_chart</span>
+                                        Desglose de Macronutrientes por Grupo
+                                    </h3>
+                                    <div class="overflow-x-auto">
+                                        <table class="w-full text-sm">
+                                            <thead>
+                                                <tr class="bg-gray-200 dark:bg-gray-800 border-b-2 border-gray-300 dark:border-gray-600">
+                                                    <th class="px-4 py-3 text-left font-bold text-gray-900 dark:text-white">GRUPO DE ALIMENTOS</th>
+                                                    <th class="px-4 py-3 text-center font-bold text-purple-700 dark:text-purple-400">PROTEÍNAS</th>
+                                                    <th class="px-4 py-3 text-center font-bold text-amber-700 dark:text-amber-400">GRASAS</th>
+                                                    <th class="px-4 py-3 text-center font-bold text-blue-700 dark:text-blue-400">CARBOHIDRATOS</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/50 transition">
+                                                    <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">CEREALES</td>
+                                                    <td class="px-4 py-2 text-center text-purple-600 dark:text-purple-400" id="protein_cereales">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-amber-600 dark:text-amber-400" id="fat_cereales">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-blue-600 dark:text-blue-400" id="carbs_cereales">0.0</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/50 transition">
+                                                    <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">VERDURAS</td>
+                                                    <td class="px-4 py-2 text-center text-purple-600 dark:text-purple-400" id="protein_verduras">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-amber-600 dark:text-amber-400" id="fat_verduras">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-blue-600 dark:text-blue-400" id="carbs_verduras">0.0</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/50 transition">
+                                                    <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">FRUTAS</td>
+                                                    <td class="px-4 py-2 text-center text-purple-600 dark:text-purple-400" id="protein_frutas">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-amber-600 dark:text-amber-400" id="fat_frutas">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-blue-600 dark:text-blue-400" id="carbs_frutas">0.0</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/50 transition">
+                                                    <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">LÁCTEO SEMIDESCREMADO</td>
+                                                    <td class="px-4 py-2 text-center text-purple-600 dark:text-purple-400" id="protein_lacteo">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-amber-600 dark:text-amber-400" id="fat_lacteo">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-blue-600 dark:text-blue-400" id="carbs_lacteo">0.0</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/50 transition">
+                                                    <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">O.A (Origen Animal)</td>
+                                                    <td class="px-4 py-2 text-center text-purple-600 dark:text-purple-400" id="protein_animal">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-amber-600 dark:text-amber-400" id="fat_animal">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-blue-600 dark:text-blue-400" id="carbs_animal">0.0</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/50 transition">
+                                                    <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">ACEITES</td>
+                                                    <td class="px-4 py-2 text-center text-purple-600 dark:text-purple-400" id="protein_aceites">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-amber-600 dark:text-amber-400" id="fat_aceites">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-blue-600 dark:text-blue-400" id="carbs_aceites">0.0</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/50 transition">
+                                                    <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">G.P (Grasas con Proteína)</td>
+                                                    <td class="px-4 py-2 text-center text-purple-600 dark:text-purple-400" id="protein_grasas_prot">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-amber-600 dark:text-amber-400" id="fat_grasas_prot">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-blue-600 dark:text-blue-400" id="carbs_grasas_prot">0.0</td>
+                                                </tr>
+                                                <tr class="hover:bg-gray-100 dark:hover:bg-gray-800/50 transition">
+                                                    <td class="px-4 py-2 font-medium text-gray-900 dark:text-white">LEGUMINOSAS</td>
+                                                    <td class="px-4 py-2 text-center text-purple-600 dark:text-purple-400" id="protein_leguminosas">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-amber-600 dark:text-amber-400" id="fat_leguminosas">0.0</td>
+                                                    <td class="px-4 py-2 text-center text-blue-600 dark:text-blue-400" id="carbs_leguminosas">0.0</td>
+                                                </tr>
+                                                <tr class="bg-gradient-to-r from-purple-100 via-amber-100 to-blue-100 dark:from-purple-900/30 dark:via-amber-900/30 dark:to-blue-900/30 border-t-2 border-gray-400 dark:border-gray-500">
+                                                    <td class="px-4 py-3 font-bold text-gray-900 dark:text-white text-base">TOTAL</td>
+                                                    <td class="px-4 py-3 text-center font-bold text-lg text-purple-700 dark:text-purple-300" id="total_protein_equivalents">0.0g</td>
+                                                    <td class="px-4 py-3 text-center font-bold text-lg text-amber-700 dark:text-amber-300" id="total_fat_equivalents">0.0g</td>
+                                                    <td class="px-4 py-3 text-center font-bold text-lg text-blue-700 dark:text-blue-300" id="total_carbs_equivalents">0.0g</td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+
+                                    <!-- Comparación con Objetivos integrada -->
+                                    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 pt-4 border-t-2 border-gray-300 dark:border-gray-600">
+                                        <!-- Proteínas -->
+                                        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 border border-purple-200 dark:border-purple-700">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-xs font-medium text-purple-900 dark:text-purple-100">Objetivo Proteínas:</span>
+                                                <span id="target_protein_display" class="text-sm font-bold text-purple-700 dark:text-purple-300">--g</span>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-xs text-purple-800 dark:text-purple-200">Diferencia:</span>
+                                                <div class="flex items-center gap-2">
+                                                    <span id="diff_protein" class="text-xs font-semibold">--</span>
+                                                    <span id="percent_protein" class="text-xs font-bold px-2 py-0.5 rounded-full bg-purple-200 dark:bg-purple-800">--%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Grasas -->
+                                        <div class="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-700">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-xs font-medium text-amber-900 dark:text-amber-100">Objetivo Grasas:</span>
+                                                <span id="target_fat_display" class="text-sm font-bold text-amber-700 dark:text-amber-300">--g</span>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-xs text-amber-800 dark:text-amber-200">Diferencia:</span>
+                                                <div class="flex items-center gap-2">
+                                                    <span id="diff_fat" class="text-xs font-semibold">--</span>
+                                                    <span id="percent_fat" class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-800">--%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- Carbohidratos -->
+                                        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-700">
+                                            <div class="flex justify-between items-center mb-1">
+                                                <span class="text-xs font-medium text-blue-900 dark:text-blue-100">Objetivo Carbohidratos:</span>
+                                                <span id="target_carbs_display" class="text-sm font-bold text-blue-700 dark:text-blue-300">--g</span>
+                                            </div>
+                                            <div class="flex justify-between items-center">
+                                                <span class="text-xs text-blue-800 dark:text-blue-200">Diferencia:</span>
+                                                <div class="flex items-center gap-2">
+                                                    <span id="diff_carbs" class="text-xs font-semibold">--</span>
+                                                    <span id="percent_carbs" class="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-200 dark:bg-blue-800">--%</span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Notas Clínicas -->
                             <div
                                 class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 mt-6">
                                 <h2
@@ -863,7 +1003,10 @@
                 const formFields = [
                     'weight-input', 'weight-unit', 'height', 'waist', 'hip', 'neck', 'wrist',
                     'arm_contracted', 'arm_relaxed', 'thigh', 'calf', 'activity_level',
-                    'nutrition_goal', 'diagnosis', 'recommendations'
+                    'nutrition_goal', 'diagnosis', 'recommendations',
+                    // Equivalentes
+                    'eq_cereales', 'eq_verduras', 'eq_frutas', 'eq_lacteo', 'eq_animal',
+                    'eq_aceites', 'eq_grasas_prot', 'eq_leguminosas'
                 ];
 
                 // Función para guardar borrador
