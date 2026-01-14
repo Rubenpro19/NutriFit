@@ -5,6 +5,7 @@ namespace App\Livewire\Nutricionista;
 use Livewire\Component;
 use Livewire\WithFileUploads;
 use App\Models\PersonalData;
+use App\Models\NutricionistaSettings;
 use App\Notifications\PasswordChangedNotification;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -19,6 +20,7 @@ class NutricionistaProfile extends Component
     public $phone = '';
     public $profile_photo;
     public $profile_photo_path = '';
+    public $consultation_price = 30.00;
 
     public $current_password = '';
     public $password = '';
@@ -33,6 +35,7 @@ class NutricionistaProfile extends Component
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:10',
             'profile_photo' => 'nullable|image|max:2048',
+            'consultation_price' => 'required|numeric|min:0|max:999999.99',
         ];
 
         if ($this->hasPassword) {
@@ -73,6 +76,11 @@ class NutricionistaProfile extends Component
             $this->phone = $user->personalData->phone ?? '';
             $this->profile_photo_path = $user->personalData->profile_photo ?? '';
         }
+
+        // Cargar precio de consulta
+        if ($user->nutricionistaSettings) {
+            $this->consultation_price = $user->nutricionistaSettings->consultation_price;
+        }
     }
 
     public function saveProfile()
@@ -81,6 +89,7 @@ class NutricionistaProfile extends Component
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:10',
             'profile_photo' => 'nullable|image|max:2048',
+            'consultation_price' => 'required|numeric|min:0|max:999999.99',
         ]);
 
         try {
@@ -116,6 +125,12 @@ class NutricionistaProfile extends Component
             }
 
             $this->profile_photo = null;
+
+            // Guardar o actualizar precio de consulta
+            NutricionistaSettings::updateOrCreate(
+                ['user_id' => $user->id],
+                ['consultation_price' => $this->consultation_price]
+            );
 
             return redirect()->to(route('nutricionista.profile'))->with('success', 'Tu perfil ha sido actualizado correctamente.');
         } catch (\Exception $e) {

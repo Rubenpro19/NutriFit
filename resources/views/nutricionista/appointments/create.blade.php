@@ -516,11 +516,15 @@
                                                     step="0.01"
                                                     min="0"
                                                     required
-                                                    value="30"
+                                                    value="{{ number_format($consultationPrice, 2, '.', '') }}"
                                                     placeholder="0.00"
                                                     class="w-full pl-7 sm:pl-8 pr-3 sm:pr-4 py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all"
                                                 >
                                             </div>
+                                            <p class="mt-2 text-xs text-gray-600 dark:text-gray-400 flex items-start gap-1.5">
+                                                <span class="material-symbols-outlined text-sm flex-shrink-0 mt-0.5">info</span>
+                                                <span>Puedes cambiar tu precio por defecto en <a href="{{ route('nutricionista.profile') }}" class="text-green-600 dark:text-green-400 hover:underline font-semibold">Mi Perfil</a></span>
+                                            </p>
                                         </div>
 
                                         <!-- Motivo -->

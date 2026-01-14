@@ -179,6 +179,30 @@
                         @error('phone') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                     </div>
 
+                    <!-- Precio de Consulta -->
+                    <div>
+                        <label for="consultation_price" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2 flex items-center gap-2">
+                            <span class="material-symbols-outlined text-lg">payments</span>
+                            Precio de Consulta ($) *
+                        </label>
+                        <div class="relative">
+                            <span class="absolute inset-y-0 left-0 flex items-center pl-4 text-gray-500 dark:text-gray-400 font-semibold">
+                                $
+                            </span>
+                            <input 
+                                type="number" 
+                                step="0.01" 
+                                min="0"
+                                max="999999.99"
+                                wire:model="consultation_price" 
+                                id="consultation_price"
+                                class="w-full pl-8 pr-4 py-3 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition"
+                                placeholder="30.00">
+                        </div>
+                        @error('consultation_price') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        <p class="mt-1 text-xs text-gray-500 dark:text-gray-400">Este precio se mostrará a los pacientes al agendar una cita contigo</p>
+                    </div>
+
                     <!-- Foto de Perfil -->
                     <div>
                         <label for="profile_photo" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">

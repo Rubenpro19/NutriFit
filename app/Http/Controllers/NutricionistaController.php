@@ -424,7 +424,9 @@ class NutricionistaController extends Controller
                 return $paciente;
             });
 
-        return view('nutricionista.appointments.create', compact('pacientes'));
+        $consultationPrice = auth()->user()->nutricionistaSettings?->consultation_price ?? 30.00;
+
+        return view('nutricionista.appointments.create', compact('pacientes', 'consultationPrice'));
     }
 
     /**

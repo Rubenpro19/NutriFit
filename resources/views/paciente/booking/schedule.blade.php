@@ -106,7 +106,9 @@
                                 <span class="material-symbols-outlined text-green-600 dark:text-green-400">payments</span>
                                 <span class="font-semibold text-gray-900 dark:text-white">Precio por consulta</span>
                             </div>
-                            <span class="text-2xl font-bold text-green-600 dark:text-green-400">$30.00</span>
+                            <span class="text-2xl font-bold text-green-600 dark:text-green-400">
+                                ${{ number_format($nutricionista->nutricionistaSettings?->consultation_price ?? 30.00, 2) }}
+                            </span>
                         </div>
                     </div>
                 </div>

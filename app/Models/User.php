@@ -85,6 +85,11 @@ class User extends Authenticatable implements MustVerifyEmail
         return $this->hasOne(PersonalData::class);
     }
 
+    public function nutricionistaSettings(): HasOne
+    {
+        return $this->hasOne(NutricionistaSettings::class);
+    }
+
     public function appointmentsAsPaciente(): HasMany
     {
         return $this->hasMany(Appointment::class, 'paciente_id');

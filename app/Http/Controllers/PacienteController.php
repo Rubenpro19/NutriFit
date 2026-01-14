@@ -217,7 +217,7 @@ class PacienteController extends Controller
             'appointment_state_id' => $pendienteState->id,
             'reason' => $request->reason,
             'appointment_type' => $request->appointment_type,
-            'price' => 30.00,
+            'price' => $nutricionista->nutricionistaSettings?->consultation_price ?? 30.00,
         ]);
 
         // Notificar al nutricionista sobre la nueva cita (en cola, inmediato)
