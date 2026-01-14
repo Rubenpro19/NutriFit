@@ -729,56 +729,44 @@
                                                     <td class="px-4 py-3 text-center font-bold text-lg text-amber-700 dark:text-amber-300" id="total_fat_equivalents">0.0g</td>
                                                     <td class="px-4 py-3 text-center font-bold text-lg text-blue-700 dark:text-blue-300" id="total_carbs_equivalents">0.0g</td>
                                                 </tr>
+                                                <!-- Fila informativa -->
+                                                <tr class="bg-indigo-50 dark:bg-indigo-900/20">
+                                                    <td colspan="4" class="px-4 py-2 text-center text-xs text-indigo-900 dark:text-indigo-100 border-t border-indigo-200 dark:border-indigo-700">
+                                                        <span class="material-symbols-outlined text-sm align-middle text-indigo-600 dark:text-indigo-400">info</span>
+                                                        Los valores de <span class="font-semibold">objetivo</span> corresponden a las <span class="font-semibold">Macros Diarias</span> mostradas en <span class="font-semibold text-indigo-700 dark:text-indigo-300">"TUS RESULTADOS"</span>
+                                                    </td>
+                                                </tr>
+                                                <!-- Fila de objetivos -->
+                                                <tr class="bg-gray-50 dark:bg-gray-800/50">
+                                                    <td class="px-4 py-3 font-semibold text-gray-900 dark:text-white text-sm">OBJETIVO (Macros Diarias)</td>
+                                                    <td class="px-4 py-3 text-center font-bold text-lg text-purple-700 dark:text-purple-300" id="target_protein_display">--g</td>
+                                                    <td class="px-4 py-3 text-center font-bold text-lg text-amber-700 dark:text-amber-300" id="target_fat_display">--g</td>
+                                                    <td class="px-4 py-3 text-center font-bold text-lg text-blue-700 dark:text-blue-300" id="target_carbs_display">--g</td>
+                                                </tr>
+                                                <!-- Fila de diferencia -->
+                                                <tr class="bg-gray-100 dark:bg-gray-700/50 border-b-2 border-gray-300 dark:border-gray-600">
+                                                    <td class="px-4 py-2 font-semibold text-gray-900 dark:text-white text-sm">DIFERENCIA</td>
+                                                    <td class="px-4 py-2 text-center">
+                                                        <div class="flex flex-col items-center gap-1">
+                                                            <span id="diff_protein" class="text-sm font-semibold text-purple-700 dark:text-purple-300">--</span>
+                                                            <span id="percent_protein" class="text-xs font-bold px-2 py-0.5 rounded-full bg-purple-200 dark:bg-purple-700 text-purple-800 dark:text-purple-200">--%</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-4 py-2 text-center">
+                                                        <div class="flex flex-col items-center gap-1">
+                                                            <span id="diff_fat" class="text-sm font-semibold text-amber-700 dark:text-amber-300">--</span>
+                                                            <span id="percent_fat" class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-700 text-amber-800 dark:text-amber-200">--%</span>
+                                                        </div>
+                                                    </td>
+                                                    <td class="px-4 py-2 text-center">
+                                                        <div class="flex flex-col items-center gap-1">
+                                                            <span id="diff_carbs" class="text-sm font-semibold text-blue-700 dark:text-blue-300">--</span>
+                                                            <span id="percent_carbs" class="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-200 dark:bg-blue-700 text-blue-800 dark:text-blue-200">--%</span>
+                                                        </div>
+                                                    </td>
+                                                </tr>
                                             </tbody>
                                         </table>
-                                    </div>
-
-                                    <!-- Comparación con Objetivos integrada -->
-                                    <div class="mt-4 grid grid-cols-1 md:grid-cols-3 gap-3 pt-4 border-t-2 border-gray-300 dark:border-gray-600">
-                                        <!-- Proteínas -->
-                                        <div class="bg-purple-50 dark:bg-purple-900/20 rounded-lg p-3 border border-purple-200 dark:border-purple-700">
-                                            <div class="flex justify-between items-center mb-1">
-                                                <span class="text-xs font-medium text-purple-900 dark:text-purple-100">Objetivo Proteínas:</span>
-                                                <span id="target_protein_display" class="text-sm font-bold text-purple-700 dark:text-purple-300">--g</span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-xs text-purple-800 dark:text-purple-200">Diferencia:</span>
-                                                <div class="flex items-center gap-2">
-                                                    <span id="diff_protein" class="text-xs font-semibold">--</span>
-                                                    <span id="percent_protein" class="text-xs font-bold px-2 py-0.5 rounded-full bg-purple-200 dark:bg-purple-800">--%</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Grasas -->
-                                        <div class="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-3 border border-amber-200 dark:border-amber-700">
-                                            <div class="flex justify-between items-center mb-1">
-                                                <span class="text-xs font-medium text-amber-900 dark:text-amber-100">Objetivo Grasas:</span>
-                                                <span id="target_fat_display" class="text-sm font-bold text-amber-700 dark:text-amber-300">--g</span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-xs text-amber-800 dark:text-amber-200">Diferencia:</span>
-                                                <div class="flex items-center gap-2">
-                                                    <span id="diff_fat" class="text-xs font-semibold">--</span>
-                                                    <span id="percent_fat" class="text-xs font-bold px-2 py-0.5 rounded-full bg-amber-200 dark:bg-amber-800">--%</span>
-                                                </div>
-                                            </div>
-                                        </div>
-
-                                        <!-- Carbohidratos -->
-                                        <div class="bg-blue-50 dark:bg-blue-900/20 rounded-lg p-3 border border-blue-200 dark:border-blue-700">
-                                            <div class="flex justify-between items-center mb-1">
-                                                <span class="text-xs font-medium text-blue-900 dark:text-blue-100">Objetivo Carbohidratos:</span>
-                                                <span id="target_carbs_display" class="text-sm font-bold text-blue-700 dark:text-blue-300">--g</span>
-                                            </div>
-                                            <div class="flex justify-between items-center">
-                                                <span class="text-xs text-blue-800 dark:text-blue-200">Diferencia:</span>
-                                                <div class="flex items-center gap-2">
-                                                    <span id="diff_carbs" class="text-xs font-semibold">--</span>
-                                                    <span id="percent_carbs" class="text-xs font-bold px-2 py-0.5 rounded-full bg-blue-200 dark:bg-blue-800">--%</span>
-                                                </div>
-                                            </div>
-                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -824,17 +812,78 @@
                             </div>
 
                             <!-- Botones de Acción -->
-                            <div class="mt-6">
+                            <div class="mt-6" x-data="{ showConfirmModal: false, submitting: false }">
                                 <div class="flex gap-4">
                                     <a href="{{ route('nutricionista.appointments.show', $appointment) }}" id="cancel-btn"
                                         class="flex-1 text-center bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-3 px-6 rounded-xl hover:bg-gray-200 dark:hover:bg-gray-600 transition">
                                         Cancelar
                                     </a>
-                                    <button type="submit" id="submit-btn"
+                                    <button type="button" @click="showConfirmModal = true" id="submit-btn"
                                         class="flex-1 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-semibold py-3 px-6 rounded-xl hover:from-blue-700 hover:to-emerald-700 transition shadow-lg flex items-center justify-center gap-2">
                                         <span class="material-symbols-outlined" id="submit-icon">save</span>
                                         <span id="submit-text">Guardar Atención</span>
                                     </button>
+                                </div>
+
+                                <!-- Modal de Confirmación -->
+                                <div x-show="showConfirmModal" x-cloak
+                                    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/30 backdrop-blur-sm"
+                                    @click.self="!submitting && (showConfirmModal = false)"
+                                    @keydown.escape.window="!submitting && (showConfirmModal = false)">
+                                    <div @click.away="!submitting && (showConfirmModal = false)"
+                                        class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-md w-full p-6 transform transition-all"
+                                        x-transition:enter="transition ease-out duration-300"
+                                        x-transition:enter-start="opacity-0 scale-90" 
+                                        x-transition:enter-end="opacity-100 scale-100"
+                                        x-transition:leave="transition ease-in duration-200"
+                                        x-transition:leave-start="opacity-100 scale-100"
+                                        x-transition:leave-end="opacity-0 scale-90">
+
+                                        <div class="text-center mb-6">
+                                            <div class="mx-auto flex items-center justify-center h-16 w-16 rounded-full bg-blue-100 dark:bg-blue-900/30 mb-4">
+                                                <span class="material-symbols-outlined text-4xl text-blue-600 dark:text-blue-400" 
+                                                      :class="{ 'animate-spin': submitting }"
+                                                      x-text="submitting ? 'progress_activity' : 'info'"></span>
+                                            </div>
+                                            <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">
+                                                <span x-show="!submitting">¿Confirmar guardado de atención?</span>
+                                                <span x-show="submitting">Guardando atención...</span>
+                                            </h3>
+                                            <p class="text-gray-600 dark:text-gray-400 mb-3" x-show="!submitting">
+                                                Esta acción registrará permanentemente todos los datos de la atención médica del paciente.
+                                            </p>
+                                            <div class="bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-lg p-3" x-show="!submitting">
+                                                <p class="text-sm text-amber-800 dark:text-amber-200 flex items-center justify-center gap-2">
+                                                    <span class="material-symbols-outlined text-base">warning</span>
+                                                    <span class="font-semibold">Una vez guardada, la atención no podrá ser editada.</span>
+                                                </p>
+                                            </div>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400" x-show="submitting">
+                                                Por favor espere mientras se guardan los datos...
+                                            </p>
+                                        </div>
+
+                                        <div class="flex gap-3">
+                                            <button type="button" 
+                                                @click="showConfirmModal = false"
+                                                :disabled="submitting"
+                                                :class="submitting ? 'opacity-50 cursor-not-allowed' : 'hover:bg-gray-200 dark:hover:bg-gray-600'"
+                                                class="flex-1 px-4 py-3 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold rounded-lg transition">
+                                                Cancelar
+                                            </button>
+                                            <button type="button" 
+                                                @click="submitting = true; document.getElementById('attention-form').submit()"
+                                                :disabled="submitting"
+                                                :class="submitting ? 'opacity-75 cursor-not-allowed' : 'hover:from-blue-700 hover:to-emerald-700'"
+                                                class="flex-1 px-4 py-3 bg-gradient-to-r from-blue-600 to-emerald-600 text-white font-semibold rounded-lg transition flex items-center justify-center gap-2">
+                                                <span class="material-symbols-outlined text-base" :class="{ 'animate-spin': submitting }">
+                                                    <span x-show="!submitting">check_circle</span>
+                                                    <span x-show="submitting">progress_activity</span>
+                                                </span>
+                                                <span x-text="submitting ? 'Guardando...' : 'Sí, guardar'"></span>
+                                            </button>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </form>
