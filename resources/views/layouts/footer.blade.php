@@ -17,20 +17,20 @@
 
             {{-- Información de Contacto --}}
             <div class="flex flex-wrap items-center justify-center gap-6 text-sm">
-                <a href="mailto:contacto@nutrifit.ec" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
+                <a href="mailto:nutifit2026@gmail.com" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
                     <span class="material-symbols-outlined text-base">mail</span>
-                    contacto@nutrifit.ec
+                    nutifit2026@gmail.com
                 </a>
                 <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
-                <a href="tel:+593987654321" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
+                <a href="https://wa.me/593984668389" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
                     <span class="material-symbols-outlined text-base">phone</span>
-                    +593 98 765 4321
+                    +593 98 466 8389
                 </a>
                 <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
-                <span class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                <a href="https://www.google.com/maps/search/?api=1&query=Santa+Ana,+Manabí,+Ecuador" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
                     <span class="material-symbols-outlined text-base">location_on</span>
                     Santa Ana, Manabí
-                </span>
+                </a>
             </div>
         </div>
     </div>

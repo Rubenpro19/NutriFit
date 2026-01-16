@@ -61,9 +61,15 @@
                         <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
                             <!-- Info del Nutricionista -->
                             <div class="flex items-start gap-4 flex-1">
-                                <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0">
-                                    {{ substr($appointment->nutricionista->name, 0, 1) }}
-                                </div>
+                                @if($appointment->nutricionista->personalData?->profile_photo)
+                                    <img src="{{ asset('storage/' . $appointment->nutricionista->personalData->profile_photo) }}" 
+                                         alt="{{ $appointment->nutricionista->name }}"
+                                         class="w-16 h-16 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600 flex-shrink-0">
+                                @else
+                                    <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-emerald-500 rounded-full flex items-center justify-center text-white font-bold text-xl flex-shrink-0 border-2 border-gray-200 dark:border-gray-600">
+                                        {{ substr($appointment->nutricionista->name, 0, 1) }}
+                                    </div>
+                                @endif
                                 <div class="flex-1">
                                     <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-1">
                                         {{ $appointment->nutricionista->name }}

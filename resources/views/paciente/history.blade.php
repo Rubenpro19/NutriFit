@@ -566,8 +566,21 @@
                                     @endif
                                 </div>
                                 @if($attention->nutricionista)
-                                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600 text-xs text-gray-500 dark:text-gray-400">
-                                    Atendido por: <span class="font-medium">{{ $attention->nutricionista->name }}</span>
+                                <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
+                                    <div class="flex items-center gap-2">
+                                        @if($attention->nutricionista->personalData?->profile_photo)
+                                            <img src="{{ asset('storage/' . $attention->nutricionista->personalData->profile_photo) }}" 
+                                                 alt="{{ $attention->nutricionista->name }}"
+                                                 class="w-8 h-8 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600">
+                                        @else
+                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-xs font-bold border-2 border-gray-200 dark:border-gray-600">
+                                                {{ strtoupper(substr($attention->nutricionista->name, 0, 1)) }}
+                                            </div>
+                                        @endif
+                                        <div class="text-xs text-gray-500 dark:text-gray-400">
+                                            Atendido por: <span class="font-medium text-gray-700 dark:text-gray-300">{{ $attention->nutricionista->name }}</span>
+                                        </div>
+                                    </div>
                                 </div>
                                 @endif
                                 <div class="mt-3">
@@ -604,8 +617,23 @@
                                             <div class="text-sm font-medium text-gray-900 dark:text-white">{{ $attention->created_at->format('d/m/Y') }}</div>
                                             <div class="text-xs text-gray-500 dark:text-gray-400">{{ $attention->created_at->format('H:i') }}</div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-700 dark:text-gray-300">
-                                            {{ $attention->nutricionista?->name ?? '-' }}
+                                        <td class="px-6 py-4 whitespace-nowrap">
+                                            @if($attention->nutricionista)
+                                                <div class="flex items-center gap-3">
+                                                    @if($attention->nutricionista->personalData?->profile_photo)
+                                                        <img src="{{ asset('storage/' . $attention->nutricionista->personalData->profile_photo) }}" 
+                                                             alt="{{ $attention->nutricionista->name }}"
+                                                             class="w-10 h-10 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600">
+                                                    @else
+                                                        <div class="w-10 h-10 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white font-bold border-2 border-gray-200 dark:border-gray-600">
+                                                            {{ strtoupper(substr($attention->nutricionista->name, 0, 1)) }}
+                                                        </div>
+                                                    @endif
+                                                    <span class="text-sm text-gray-700 dark:text-gray-300 font-medium">{{ $attention->nutricionista->name }}</span>
+                                                </div>
+                                            @else
+                                                <span class="text-sm text-gray-400">-</span>
+                                            @endif
                                         </td>
                                         <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900 dark:text-white font-semibold">
                                             {{ $data->weight }} kg
