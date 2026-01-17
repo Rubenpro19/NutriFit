@@ -27,7 +27,7 @@
                     +593 98 466 8389
                 </a>
                 <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
-                <a href="https://www.google.com/maps/search/?api=1&query=Santa+Ana,+Manabí,+Ecuador" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
+                <a href="https://www.google.com/maps?q=-1.205192,-80.372294" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
                     <span class="material-symbols-outlined text-base">location_on</span>
                     Santa Ana, Manabí
                 </a>
