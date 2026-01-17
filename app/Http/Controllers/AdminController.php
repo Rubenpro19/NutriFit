@@ -350,4 +350,12 @@ class AdminController extends Controller
 
         return view('admin.settings.index', compact('roles', 'userStates', 'appointmentStates'));
     }
+
+    /**
+     * Configuración del sistema (datos de contacto)
+     */
+    public function systemSettings()
+    {
+        return view('admin.settings');
+    }
 }

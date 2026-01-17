@@ -31,7 +31,8 @@
                     </flux:navlist.group>
                     <flux:navlist.group :heading="__('Sistema')" class="flex flex-col gap-2">
                         <flux:navlist.item icon="chart-bar" :href="route('admin.reports.index')" :current="request()->routeIs('admin.reports.*')" wire:navigate>{{ __('Reportes') }}</flux:navlist.item>
-                        <flux:navlist.item icon="cog" :href="route('profile.edit')" :current="request()->routeIs('profile.edit')" wire:navigate>{{ __('Configuración') }}</flux:navlist.item>
+                        <flux:navlist.item icon="cog-6-tooth" :href="route('admin.system-settings.index')" :current="request()->routeIs('admin.system-settings.*')" wire:navigate>{{ __('Configuración del Sistema') }}</flux:navlist.item>
+                        <flux:navlist.item icon="cog" :href="route('profile.edit')" :current="request()->routeIs('profile.edit')" wire:navigate>{{ __('Mi Perfil') }}</flux:navlist.item>
                     </flux:navlist.group>
                 @endif
             </flux:navlist>

@@ -2,6 +2,10 @@
 
 @section('title', 'Contacto - NutriFit')
 
+@php
+    $settings = system_settings();
+@endphp
+
 @section('content')
 <body class="min-h-screen flex flex-col bg-gradient-to-br from-[#e9fcd9] to-[#d4f4dd] text-gray-900 dark:from-gray-900 dark:to-gray-800 dark:text-white">
 
@@ -141,10 +145,11 @@
                 <!-- SIDEBAR: MAPA + HORARIOS (2 columnas) -->
                 <div class="lg:col-span-2 space-y-6">
                     <!-- Mapa -->
+                    @if($settings?->latitud && $settings?->longitud)
                     <div class="rounded-2xl bg-white dark:bg-gray-800 p-4 shadow-xl border border-gray-200 dark:border-gray-700 overflow-hidden">
                         <div class="rounded-xl overflow-hidden">
                             <iframe 
-                                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3987.268689!2d-80.372294!3d-1.205192!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMcKwMTInMTguNyJTIDgwwrAyMicyMC4zIlc!5e0!3m2!1ses!2sec!4v1705000000000!5m2!1ses!2sec" 
+                                src="https://www.google.com/maps/embed?pb=!1m17!1m12!1m3!1d3987.268689!2d{{ $settings->longitud }}!3d{{ $settings->latitud }}!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m2!1m1!2zMcKwMTInMTguNyJTIDgwwrAyMicyMC4zIlc!5e0!3m2!1ses!2sec" 
                                 width="100%" 
                                 height="200" 
                                 style="border:0;" 
@@ -154,13 +159,14 @@
                                 class="w-full">
                             </iframe>
                         </div>
-                        <a href="https://www.google.com/maps?q=-1.205192,-80.372294" 
+                        <a href="{{ $settings->google_maps_url }}" 
                            target="_blank"
                            class="mt-3 flex items-center justify-center gap-2 text-sm text-green-600 dark:text-green-400 hover:text-green-700 dark:hover:text-green-300 transition font-medium">
                             <span class="material-symbols-outlined text-base">open_in_new</span>
                             Abrir en Google Maps
                         </a>
                     </div>
+                    @endif
 
                     <!-- Horarios de atención -->
                     <div class="rounded-2xl bg-gradient-to-br from-green-50 to-emerald-50 dark:from-gray-800 dark:to-gray-800 p-6 shadow-xl border border-green-200 dark:border-gray-700">
@@ -202,34 +208,40 @@
             <div class="container mx-auto px-4">
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-6 lg:gap-8 max-w-5xl mx-auto">
                     <!-- Email -->
-                    <a href="mailto:nutifit2026@gmail.com" class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    @if($settings?->email_contacto)
+                    <a href="mailto:{{ $settings->email_contacto }}" class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-green-100 dark:bg-green-900/40 mb-4 group-hover:scale-110 transition-transform">
                             <span class="material-symbols-outlined text-3xl text-green-600 dark:text-green-400">mail</span>
                         </div>
                         <h3 class="font-semibold text-gray-900 dark:text-white mb-2 text-lg">Email</h3>
-                        <p class="text-sm text-green-600 dark:text-green-400 text-center font-medium">nutifit2026@gmail.com</p>
+                        <p class="text-sm text-green-600 dark:text-green-400 text-center font-medium">{{ $settings->email_contacto }}</p>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Respuesta en 24-48 horas</p>
                     </a>
+                    @endif
 
                     <!-- WhatsApp -->
-                    <a href="https://wa.me/593984668389" target="_blank" class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    @if($settings?->telefono)
+                    <a href="{{ $settings->whatsapp_url }}" target="_blank" class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-emerald-100 dark:bg-emerald-900/40 mb-4 group-hover:scale-110 transition-transform">
                             <span class="material-symbols-outlined text-3xl text-emerald-600 dark:text-emerald-400">chat</span>
                         </div>
                         <h3 class="font-semibold text-gray-900 dark:text-white mb-2 text-lg">WhatsApp</h3>
-                        <p class="text-sm text-emerald-600 dark:text-emerald-400 font-medium">+593 98 466 8389</p>
+                        <p class="text-sm text-emerald-600 dark:text-emerald-400 font-medium">{{ $settings->telefono_formateado }}</p>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Atención inmediata</p>
                     </a>
+                    @endif
 
                     <!-- Ubicación -->
-                    <a href="https://www.google.com/maps?q=-1.205192,-80.372294" target="_blank" class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
+                    @if($settings?->direccion && $settings?->google_maps_url)
+                    <a href="{{ $settings->google_maps_url }}" target="_blank" class="group flex flex-col items-center p-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 hover:shadow-xl hover:-translate-y-1 transition-all duration-300">
                         <div class="flex h-16 w-16 items-center justify-center rounded-full bg-purple-100 dark:bg-purple-900/40 mb-4 group-hover:scale-110 transition-transform">
                             <span class="material-symbols-outlined text-3xl text-purple-600 dark:text-purple-400">location_on</span>
                         </div>
                         <h3 class="font-semibold text-gray-900 dark:text-white mb-2 text-lg">Ubicación</h3>
-                        <p class="text-sm text-purple-600 dark:text-purple-400 text-center font-medium">Santa Ana, Manabí</p>
+                        <p class="text-sm text-purple-600 dark:text-purple-400 text-center font-medium">{{ $settings->direccion }}</p>
                         <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Ver en el mapa</p>
                     </a>
+                    @endif
                 </div>
             </div>
         </div>
@@ -335,5 +347,3 @@
 
 </body>
 @endsection
-
-

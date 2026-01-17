@@ -13,7 +13,7 @@
             <div class="container mx-auto px-4 text-center">
                 <h1 class="mb-4 text-4xl font-bold lg:text-5xl">Sobre Nosotros</h1>
                 <p class="mx-auto max-w-2xl text-lg text-green-100">
-                    Conoce nuestra historia, misión y el equipo que hace posible tu transformación hacia una vida más saludable
+                    Conoce nuestra plataforma y cómo facilitamos el acceso a servicios de nutrición profesional
                 </p>
             </div>
         </div>
@@ -26,14 +26,15 @@
                     <h2 class="mb-4 text-3xl font-bold text-green-900 dark:text-green-400">Nuestra Historia</h2>
                     <div class="space-y-4 text-lg leading-relaxed text-gray-700 dark:text-gray-300">
                         <p>
-                            NutriFit nació con una visión clara: hacer que la nutrición profesional sea accesible para todos. 
-                            Fundada en 2024, nuestra plataforma conecta a personas que buscan mejorar su salud con nutricionistas 
-                            certificados y experimentados.
+                            NutriFit nació en 2026 con el objetivo de simplificar la gestión de consultas nutricionales. 
+                            Nuestra plataforma digital facilita la conexión entre pacientes y profesionales de la nutrición, 
+                            optimizando el proceso de agendamiento y seguimiento.
                         </p>
                         <p>
-                            Creemos que una buena nutrición es la base de una vida plena y saludable. Por eso, hemos desarrollado 
-                            una plataforma intuitiva que facilita la comunicación entre pacientes y profesionales, permitiendo 
-                            un seguimiento personalizado y efectivo.
+                            Entendemos que el acceso a servicios de nutrición debe ser sencillo y eficiente. Por eso, 
+                            desarrollamos una herramienta que centraliza la gestión de citas, historiales y comunicación, 
+                            permitiendo a los profesionales ofrecer un mejor servicio y a los pacientes gestionar su salud 
+                            de manera más cómoda.
                         </p>
                     </div>
                 </div>
@@ -51,9 +52,9 @@
                             <h3 class="text-2xl font-bold text-green-900 dark:text-green-400">Nuestra Misión</h3>
                         </div>
                         <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                            Proporcionar una plataforma digital confiable y fácil de usar que conecte a personas con 
-                            nutricionistas profesionales, facilitando el acceso a asesoría nutricional de calidad y 
-                            promoviendo hábitos alimenticios saludables que mejoren la calidad de vida de nuestros usuarios.
+                            Facilitar la gestión de consultas nutricionales mediante una plataforma digital sencilla e intuitiva, 
+                            que optimice la comunicación entre profesionales y pacientes, permitiendo un seguimiento organizado 
+                            y accesible del proceso nutricional.
                         </p>
                     </div>
 
@@ -64,9 +65,9 @@
                             <h3 class="text-2xl font-bold text-blue-900 dark:text-blue-400">Nuestra Visión</h3>
                         </div>
                         <p class="text-gray-700 dark:text-gray-300 leading-relaxed">
-                            Ser la plataforma líder en Ecuador para la gestión de consultas nutricionales, reconocida por 
-                            nuestra innovación tecnológica, compromiso con la salud y la excelencia en el servicio que 
-                            brindamos tanto a pacientes como a profesionales de la nutrición.
+                            Convertirnos en una herramienta de referencia para la gestión de consultas nutricionales, 
+                            destacando por nuestra facilidad de uso, confiabilidad y el valor que aportamos tanto a 
+                            profesionales como a pacientes en el cuidado de su salud.
                         </p>
                     </div>
                 </div>
@@ -100,7 +101,7 @@
                     </div>
                     <h4 class="mb-2 text-lg font-semibold text-blue-900 dark:text-blue-400">Profesionalismo</h4>
                     <p class="text-sm text-gray-600 dark:text-gray-300">
-                        Trabajamos solo con nutricionistas certificados y comprometidos con la excelencia en su práctica.
+                        Facilitamos el trabajo de profesionales comprometidos con brindar un servicio de calidad.
                     </p>
                 </div>
 
@@ -127,43 +128,13 @@
                 </div>
             </div>
         </div>
-
-        <!-- ESTADÍSTICAS -->
-        <div class="bg-gradient-to-r from-green-700 to-green-900 py-16 text-white">
-            <div class="container mx-auto px-4">
-                <div class="mb-12 text-center">
-                    <h2 class="mb-4 text-3xl font-bold">Nuestro Impacto</h2>
-                    <p class="text-green-100">Números que reflejan nuestro compromiso</p>
-                </div>
-
-                <div class="grid gap-8 md:grid-cols-4">
-                    <div class="text-center">
-                        <div class="mb-2 text-5xl font-bold">500+</div>
-                        <div class="text-green-200">Pacientes Atendidos</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="mb-2 text-5xl font-bold">25+</div>
-                        <div class="text-green-200">Nutricionistas Certificados</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="mb-2 text-5xl font-bold">1,200+</div>
-                        <div class="text-green-200">Consultas Realizadas</div>
-                    </div>
-                    <div class="text-center">
-                        <div class="mb-2 text-5xl font-bold">95%</div>
-                        <div class="text-green-200">Satisfacción del Cliente</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- LLAMADO A LA ACCIÓN -->
         <div class="container mx-auto px-4 py-16">
             <div class="mx-auto max-w-3xl rounded-2xl bg-gradient-to-br from-green-50 to-green-100 dark:from-green-900/30 dark:to-green-800/30 dark:border dark:border-green-700 p-8 text-center shadow-xl">
                 <span class="material-symbols-outlined mb-4 text-6xl text-green-700 dark:text-green-400">rocket_launch</span>
                 <h2 class="mb-4 text-3xl font-bold text-green-900 dark:text-green-400">¿Listo para comenzar?</h2>
                 <p class="mb-6 text-lg text-gray-700 dark:text-gray-300">
-                    Únete a cientos de personas que ya están transformando su salud con NutriFit
+                    Comienza tu camino hacia una mejor salud con NutriFit
                 </p>
                 <div class="flex flex-col gap-4 sm:flex-row sm:justify-center">
                     @guest

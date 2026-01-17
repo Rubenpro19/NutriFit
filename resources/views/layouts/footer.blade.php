@@ -1,4 +1,7 @@
 {{-- FOOTER --}}
+@php
+    $settings = system_settings();
+@endphp
 <footer class="mt-auto border-t border-gray-200 bg-gray-50 dark:border-gray-800 dark:bg-gray-900">
     <div class="container mx-auto px-4 py-4">
         <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
@@ -17,20 +20,31 @@
 
             {{-- Información de Contacto --}}
             <div class="flex flex-wrap items-center justify-center gap-6 text-sm">
-                <a href="mailto:nutifit2026@gmail.com" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
-                    <span class="material-symbols-outlined text-base">mail</span>
-                    nutifit2026@gmail.com
-                </a>
-                <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
-                <a href="https://wa.me/593984668389" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
-                    <span class="material-symbols-outlined text-base">phone</span>
-                    +593 98 466 8389
-                </a>
-                <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
-                <a href="https://www.google.com/maps?q=-1.205192,-80.372294" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
-                    <span class="material-symbols-outlined text-base">location_on</span>
-                    Santa Ana, Manabí
-                </a>
+                @if($settings?->email_contacto)
+                    <a href="mailto:{{ $settings->email_contacto }}" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
+                        <span class="material-symbols-outlined text-base">mail</span>
+                        {{ $settings->email_contacto }}
+                    </a>
+                    <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
+                @endif
+                @if($settings?->telefono)
+                    <a href="{{ $settings->whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
+                        <span class="material-symbols-outlined text-base">phone</span>
+                        {{ $settings->telefono_formateado }}
+                    </a>
+                    <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
+                @endif
+                @if($settings?->direccion && $settings?->google_maps_url)
+                    <a href="{{ $settings->google_maps_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
+                        <span class="material-symbols-outlined text-base">location_on</span>
+                        {{ $settings->direccion }}
+                    </a>
+                @elseif($settings?->direccion)
+                    <span class="flex items-center gap-2 text-gray-600 dark:text-gray-300">
+                        <span class="material-symbols-outlined text-base">location_on</span>
+                        {{ $settings->direccion }}
+                    </span>
+                @endif
             </div>
         </div>
     </div>

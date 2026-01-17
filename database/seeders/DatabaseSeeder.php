@@ -18,6 +18,7 @@ class DatabaseSeeder extends Seeder
             RoleSeeder::class,
             UserStateSeeder::class,
             AppointmentStateSeeder::class,
+            SystemSettingSeeder::class,
         ]);
 
         // 🔹 Obtenemos los roles

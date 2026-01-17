@@ -74,6 +74,9 @@ Route::middleware(['auth', 'verified', 'role:administrador'])->prefix('administr
     // Reportes y configuración
     Route::get('/reports', [AdminController::class, 'reports'])->name('reports.index');
     Route::get('/settings', [AdminController::class, 'settings'])->name('settings.index');
+    
+    // Configuración del sistema (datos de contacto)
+    Route::get('/system-settings', [AdminController::class, 'systemSettings'])->name('system-settings.index');
 });
 
 
