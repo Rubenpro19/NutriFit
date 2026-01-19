@@ -26,6 +26,10 @@ Route::get('/contacto', function () {
     return view('contact');
 })->name('contact');
 
+Route::get('/politica-de-privacidad', function () {
+    return view('privacy');
+})->name('privacy');
+
 Route::post('/contacto/enviar', [ContactController::class, 'send'])->name('contact.send');
 
 Route::middleware(['auth'])->group(function () {
