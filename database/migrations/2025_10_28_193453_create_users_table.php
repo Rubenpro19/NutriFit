@@ -21,6 +21,9 @@ return new class extends Migration
             // Relaciones
             $table->foreignId('role_id')->default(3)->constrained('roles')->onDelete('restrict');
             $table->foreignId('user_state_id')->default(1)->constrained('user_states')->nullOnDelete();
+            // Consentimiento de datos personales (LOPD Ecuador)
+            $table->boolean('data_consent')->default(false);
+            $table->timestamp('data_consent_at')->nullable();
             $table->timestamps();
         });
 

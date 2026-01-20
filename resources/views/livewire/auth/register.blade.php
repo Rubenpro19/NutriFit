@@ -53,6 +53,29 @@
                 viewable
             />
 
+            <!-- Data Protection Consent (LOPD Ecuador) -->
+            <div class="flex items-start gap-3">
+                <input
+                    type="checkbox"
+                    name="data_consent"
+                    id="data_consent"
+                    required
+                    class="mt-1 h-4 w-4 rounded border-zinc-300 text-primary-600 focus:ring-primary-500 dark:border-zinc-600 dark:bg-zinc-800"
+                    {{ old('data_consent') ? 'checked' : '' }}
+                />
+                <label for="data_consent" class="text-sm text-zinc-600 dark:text-zinc-400">
+                    Acepto el tratamiento de mis datos personales conforme a la
+                    <a href="{{ route('privacy') }}" target="_blank" class="text-primary-600 hover:text-primary-500 underline dark:text-primary-400">Ley Orgánica de Protección de Datos Personales del Ecuador</a>
+                    y la
+                    <a href="{{ route('privacy') }}" target="_blank" class="text-primary-600 hover:text-primary-500 underline dark:text-primary-400">Política de Privacidad</a>
+                    de NutriFit.
+                    <span class="text-red-500">*</span>
+                </label>
+            </div>
+            @error('data_consent')
+                <p class="text-sm text-red-500 -mt-4">{{ $message }}</p>
+            @enderror
+
             <div class="flex items-center justify-end">
                 <flux:button type="submit" variant="primary" class="w-full" x-bind:disabled="submitting">
                     <span x-show="!submitting">{{ __('Crear cuenta') }}</span>

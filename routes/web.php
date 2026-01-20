@@ -160,3 +160,5 @@ Route::middleware(['auth', 'verified', 'role:paciente', 'password.changed'])->pr
 //Rutas para iniciar sesión con Google
 Route::get('auth/google', [SocialiteController::class, 'redirectToGoogle'])->name('google.login');
 Route::get('auth/google/callback', [SocialiteController::class, 'handleGoogleCallback']);
+Route::get('auth/google/consent', [SocialiteController::class, 'showConsentForm'])->name('google.consent');
+Route::post('auth/google/consent', [SocialiteController::class, 'processConsent'])->name('google.consent.process');

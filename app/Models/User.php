@@ -36,6 +36,8 @@ class User extends Authenticatable implements MustVerifyEmail
         'password',
         'role_id',
         'user_state_id',
+        'data_consent',
+        'data_consent_at',
     ];
 
     protected $hidden = [
@@ -50,6 +52,8 @@ class User extends Authenticatable implements MustVerifyEmail
         return [
             'email_verified_at' => 'datetime',
             'password' => 'hashed',
+            'data_consent' => 'boolean',
+            'data_consent_at' => 'datetime',
         ];
     }
 
