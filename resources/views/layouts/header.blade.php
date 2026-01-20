@@ -46,11 +46,11 @@
                         <span class="material-symbols-outlined text-lg">mail</span>
                         Contacto
                     </a>
-                    <a href="{{ route('privacy') }}" 
+                    {{--<a href="{{ route('privacy') }}" 
                        class="flex items-center gap-1.5 rounded-lg px-3 py-2 text-sm font-medium text-gray-700 transition hover:bg-gray-100 hover:text-green-600 dark:text-gray-300 dark:hover:bg-gray-800 dark:hover:text-green-500 {{ request()->routeIs('privacy') ? 'bg-green-50 text-green-600 dark:bg-green-900/20 dark:text-green-500' : '' }}">
                         <span class="material-symbols-outlined text-lg">shield</span>
                         Privacidad
-                    </a>
+                    </a>--}}
                 </nav>
             @endif
 
