@@ -124,7 +124,7 @@
                     
                     <form method="POST" action="{{ route('paciente.booking.store', $nutricionista) }}" id="bookingForm" 
                           x-data="{ submitting: false }" 
-                          @@submit.prevent="$dispatch('show-confirm-modal')">
+                          @@submit.prevent="$dispatch('show-confirm-modal', { date: document.getElementById('selectedDate').value, time: document.getElementById('selectedTime').value, appointmentType: document.getElementById('appointmentType').value })">
                         @csrf
                         
                         <input type="hidden" name="date" id="selectedDate">
@@ -297,7 +297,7 @@
 
     <!-- Modal de Confirmación de Cita -->
     <div x-data="confirmModal()" 
-         @@show-confirm-modal.window="showModal = true"
+         @@show-confirm-modal.window="openModal($event.detail)"
          id="bookingModal" 
          x-show="showModal" 
          x-cloak
@@ -353,7 +353,7 @@
                         <span class="material-symbols-outlined text-green-600 dark:text-green-400">calendar_today</span>
                         <div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">Fecha</p>
-                            <p class="font-bold text-gray-900 dark:text-white" x-text="formatDate(document.getElementById('selectedDate')?.value || '')"></p>
+                            <p class="font-bold text-gray-900 dark:text-white" x-text="formattedDate"></p>
                         </div>
                     </div>
 
@@ -362,7 +362,7 @@
                         <span class="material-symbols-outlined text-green-600 dark:text-green-400">schedule</span>
                         <div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">Hora</p>
-                            <p class="font-bold text-gray-900 dark:text-white" x-text="document.getElementById('selectedTime')?.value || ''"></p>
+                            <p class="font-bold text-gray-900 dark:text-white" x-text="selectedTime"></p>
                         </div>
                     </div>
 
@@ -371,7 +371,7 @@
                         <span class="material-symbols-outlined text-green-600 dark:text-green-400">medical_services</span>
                         <div>
                             <p class="text-xs text-gray-500 dark:text-gray-400">Tipo de consulta</p>
-                            <p class="font-bold text-gray-900 dark:text-white" x-text="getAppointmentTypeName(document.getElementById('appointmentType')?.value || '')"></p>
+                            <p class="font-bold text-gray-900 dark:text-white" x-text="appointmentTypeName"></p>
                         </div>
                     </div>
 
@@ -405,6 +405,19 @@
         function confirmModal() {
             return {
                 showModal: false,
+                selectedDate: '',
+                selectedTime: '',
+                appointmentType: '',
+                formattedDate: '',
+                appointmentTypeName: '',
+                openModal(detail) {
+                    this.selectedDate = detail?.date || document.getElementById('selectedDate')?.value || '';
+                    this.selectedTime = detail?.time || document.getElementById('selectedTime')?.value || '';
+                    this.appointmentType = detail?.appointmentType || document.getElementById('appointmentType')?.value || '';
+                    this.formattedDate = this.formatDate(this.selectedDate);
+                    this.appointmentTypeName = this.getAppointmentTypeName(this.appointmentType);
+                    this.showModal = true;
+                },
                 formatDate(dateStr) {
                     if (!dateStr) return '';
                     const date = new Date(dateStr + 'T00:00:00');
