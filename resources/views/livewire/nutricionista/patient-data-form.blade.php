@@ -115,6 +115,7 @@
                         type="date" 
                         id="birth_date"
                         wire:model="birth_date"
+                        min="{{ now()->subYears(120)->format('Y-m-d') }}"
                         max="{{ date('Y-m-d') }}"
                         @if($isReadOnly) disabled @endif
                         class="w-full px-3 sm:px-4 py-2.5 text-sm sm:text-base rounded-lg border-2 border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 transition-all @error('birth_date') border-red-500 @enderror @if($isReadOnly) bg-gray-100 dark:bg-gray-900 cursor-not-allowed @endif"

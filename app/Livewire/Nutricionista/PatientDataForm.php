@@ -24,7 +24,7 @@ class PatientDataForm extends Component
     {
         return [
             'gender' => 'required|in:male,female,other',
-            'birth_date' => 'required|date|before:today',
+            'birth_date' => 'required|date|before:today|after:' . now()->subYears(120)->format('Y-m-d'),
             'cedula' => 'nullable|numeric|digits_between:6,20|unique:personal_data,cedula,' . ($this->patient->personalData?->id ?? 'NULL'),
             'phone' => 'nullable|numeric|digits:10',
             'address' => 'nullable|string|max:255',
@@ -37,6 +37,7 @@ class PatientDataForm extends Component
         'birth_date.required' => 'La fecha de nacimiento es obligatoria.',
         'birth_date.date' => 'La fecha de nacimiento debe ser una fecha válida.',
         'birth_date.before' => 'La fecha de nacimiento debe ser anterior a hoy.',
+        'birth_date.after' => 'La fecha de nacimiento no puede ser mayor a 120 años atrás.',
         'cedula.numeric' => 'La cédula solo debe contener números.',
         'cedula.digits_between' => 'La cédula debe tener entre 6 y 20 dígitos.',
         'cedula.unique' => 'Esta cédula ya está registrada.',
