@@ -47,11 +47,12 @@ class PacienteController extends Controller
             ->take(10)
             ->get();
 
-        // Lista de nutricionistas disponibles
+        // Lista de nutricionistas disponibles (solo habilitados clínicamente)
         $nutricionistas = User::whereHas('role', fn($q) => $q->where('name', 'nutricionista'))
-            ->whereHas('userState', fn($q) => $q->where('name', 'activo'))
+            ->with('userState')
             ->withCount('schedules')
-            ->get();
+            ->get()
+            ->filter(fn($n) => $n->estaHabilitadoClinicamente());
 
         return view('paciente.dashboard', compact('stats', 'nextAppointment', 'recentAppointments', 'nutricionistas'));
     }
@@ -61,10 +62,12 @@ class PacienteController extends Controller
      */
     public function showBooking()
     {
+        // Lista de nutricionistas habilitados clínicamente
         $nutricionistas = User::whereHas('role', fn($q) => $q->where('name', 'nutricionista'))
-            ->whereHas('userState', fn($q) => $q->where('name', 'activo'))
+            ->with('userState')
             ->withCount('schedules')
-            ->get();
+            ->get()
+            ->filter(fn($n) => $n->estaHabilitadoClinicamente());
 
         return view('paciente.booking.index', compact('nutricionistas'));
     }
@@ -75,6 +78,12 @@ class PacienteController extends Controller
     public function selectSchedule(User $nutricionista)
     {
         $paciente = auth()->user();
+
+        // Verificar que el nutricionista esté habilitado clínicamente
+        if (!$nutricionista->estaHabilitadoClinicamente()) {
+            return redirect()->route('paciente.booking.index')
+                ->with('error', 'Este nutricionista no está disponible en este momento.');
+        }
 
         // VALIDACIÓN: Verificar si el paciente ya tiene una cita pendiente (con cualquier nutricionista)
         $hasActiveAppointment = Appointment::where('paciente_id', $paciente->id)
@@ -169,6 +178,12 @@ class PacienteController extends Controller
     public function storeAppointment(Request $request, User $nutricionista)
     {
         $paciente = auth()->user();
+
+        // Verificar que el nutricionista esté habilitado clínicamente
+        if (!$nutricionista->estaHabilitadoClinicamente()) {
+            return redirect()->route('paciente.booking.index')
+                ->with('error', 'Este nutricionista no está disponible en este momento.');
+        }
 
         // VALIDACIÓN: Verificar nuevamente si el paciente ya tiene una cita activa (con cualquier nutricionista)
         $hasActiveAppointment = Appointment::where('paciente_id', $paciente->id)
