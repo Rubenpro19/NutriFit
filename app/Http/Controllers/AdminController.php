@@ -100,12 +100,28 @@ class AdminController extends Controller
             $validated['password'] = Hash::make($validated['password']);
         }
 
+        // Detectar cambio de estado para enviar notificación
+        $previousStateId = $user->user_state_id;
+        $newStateId = $validated['user_state_id'];
+        
         $user->update([
             'name' => $validated['name'],
             'email' => $validated['email'],
             'password' => $validated['password'] ?? $user->password,
             'user_state_id' => $validated['user_state_id'],
         ]);
+
+        // Enviar notificación si cambió el estado
+        if ($previousStateId !== $newStateId) {
+            $activeState = \App\Models\UserState::where('name', 'activo')->first();
+            $inactiveState = \App\Models\UserState::where('name', 'inactivo')->first();
+            
+            if ($newStateId === $inactiveState->id) {
+                $user->notify(new \App\Notifications\UserAccountDisabledNotification());
+            } elseif ($newStateId === $activeState->id) {
+                $user->notify(new \App\Notifications\UserAccountEnabledNotification());
+            }
+        }
 
         // Actualizar datos personales si es paciente y hay datos de género o fecha de nacimiento
         if ($user->isPaciente() && ($request->filled('gender') || $request->filled('birth_date'))) {
@@ -139,9 +155,11 @@ class AdminController extends Controller
 
         if ($user->user_state_id === $activeState->id) {
             $user->update(['user_state_id' => $inactiveState->id]);
+            $user->notify(new \App\Notifications\UserAccountDisabledNotification());
             $message = 'Usuario desactivado';
         } else {
             $user->update(['user_state_id' => $activeState->id]);
+            $user->notify(new \App\Notifications\UserAccountEnabledNotification());
             $message = 'Usuario activado';
         }
 
