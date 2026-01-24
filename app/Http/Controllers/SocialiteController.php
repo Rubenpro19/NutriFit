@@ -25,7 +25,12 @@ class SocialiteController extends Controller
             $user = User::where('email', $googleUser->getEmail())->first();
 
             if ($user) {
-                // Usuario existe, iniciar sesión directamente
+                // Verificar si el usuario está inactivo
+                if ($user->isInactive()) {
+                    return redirect('/login')->with('error', 'Tu cuenta está inactiva. Por favor, contacta al administrador.');
+                }
+                
+                // Usuario existe y está activo, iniciar sesión directamente
                 Auth::login($user, true);
                 return redirect()->route('paciente.dashboard');
             }

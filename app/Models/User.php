@@ -147,6 +147,41 @@ class User extends Authenticatable implements MustVerifyEmail
     }
 
     /**
+     * Determina si el usuario está habilitado para recibir atención clínica.
+     * Un usuario está habilitado si:
+     * - Su estado es activo (user_state_id === 1)
+     * - Su email está verificado
+     * 
+     * Este método centraliza la lógica de habilitación para evitar repetición
+     * de condiciones en vistas y controladores.
+     * 
+     * @return bool
+     */
+    public function estaHabilitadoClinicamente(): bool
+    {
+        return $this->isActive() && $this->hasVerifiedEmail();
+    }
+
+    /**
+     * Obtiene el motivo por el cual el usuario NO está habilitado clínicamente.
+     * Retorna null si el usuario está habilitado.
+     * 
+     * @return string|null
+     */
+    public function motivoInhabilitacion(): ?string
+    {
+        if ($this->isInactive()) {
+            return 'Usuario inactivo';
+        }
+        
+        if (!$this->hasVerifiedEmail()) {
+            return 'Email no verificado';
+        }
+        
+        return null;
+    }
+
+    /**
      * Send the email verification notification.
      */
     public function sendEmailVerificationNotification()

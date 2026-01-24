@@ -409,7 +409,7 @@ class NutricionistaController extends Controller
     public function createAppointment()
     {
         $pacientes = User::whereHas('role', fn($q) => $q->where('name', 'paciente'))
-            ->with(['personalData'])
+            ->with(['personalData', 'userState'])
             ->orderBy('name')
             ->get()
             ->map(function($paciente) {
@@ -443,6 +443,15 @@ class NutricionistaController extends Controller
         // Solo rechazamos si el usuario no es paciente.
         if (!$paciente->role || $paciente->role->name !== 'paciente') {
             return response()->json(['error' => 'Paciente no válido'], 403);
+        }
+
+        // Verificar si el paciente está habilitado clínicamente
+        if (!$paciente->estaHabilitadoClinicamente()) {
+            $motivo = $paciente->motivoInhabilitacion();
+            return response()->json([
+                'error' => "No se puede asignar cita a este paciente: {$motivo}",
+                'motivo_inhabilitacion' => $motivo
+            ], 403);
         }
 
         // Verificar que el paciente no tenga citas pendientes con NINGÚN nutricionista
@@ -613,6 +622,12 @@ class NutricionistaController extends Controller
         $paciente = User::findOrFail($validated['paciente_id']);
         if (!$paciente->role || $paciente->role->name !== 'paciente') {
             return back()->with('error', 'El usuario seleccionado no es un paciente válido.');
+        }
+
+        // Verificar si el paciente está habilitado clínicamente
+        if (!$paciente->estaHabilitadoClinicamente()) {
+            $motivo = $paciente->motivoInhabilitacion();
+            return back()->with('error', "No se puede asignar cita a este paciente: {$motivo}");
         }
 
         // Verificar que el paciente no tenga citas pendientes con NINGÚN nutricionista

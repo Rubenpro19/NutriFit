@@ -137,14 +137,32 @@
                             </div>
 
                             <!-- Estado Badge -->
-                            <span class="px-3 py-1 text-xs font-semibold rounded-full {{ $patient->isActive() ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-400' : 'bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300' }}">
-                                {{ ucfirst($patient->userState->name) }}
-                            </span>
+                            <div class="flex flex-col items-end gap-1">
+                                <span class="px-3 py-1 text-xs font-semibold rounded-full {{ $patient->isActive() ? 'bg-green-100 text-green-800 dark:bg-green-900/50 dark:text-green-400' : 'bg-gray-200 text-gray-700 dark:bg-gray-600 dark:text-gray-300' }}">
+                                    {{ ucfirst($patient->userState->name) }}
+                                </span>
+                                @if(!$patient->estaHabilitadoClinicamente())
+                                    <span class="px-2 py-0.5 text-xs font-medium rounded-full bg-red-100 text-red-800 dark:bg-red-900/30 dark:text-red-300 flex items-center gap-1">
+                                        <span class="material-symbols-outlined text-xs">block</span>
+                                        No habilitado
+                                    </span>
+                                @endif
+                            </div>
                         </div>
 
                         <!-- Nombre y Email -->
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">{{ $patient->name }}</h3>
                         <p class="text-sm text-gray-600 dark:text-gray-400 truncate">{{ $patient->email }}</p>
+                        
+                        <!-- Motivo de Inhabilitación -->
+                        @if(!$patient->estaHabilitadoClinicamente())
+                            <div class="mt-3 p-2 bg-red-50 dark:bg-red-900/20 rounded-lg border border-red-200 dark:border-red-800">
+                                <p class="text-xs text-red-800 dark:text-red-300 flex items-center gap-1">
+                                    <span class="material-symbols-outlined text-sm">info</span>
+                                    {{ $patient->motivoInhabilitacion() }}
+                                </p>
+                            </div>
+                        @endif
                     </div>
 
                     <!-- Información del Paciente -->

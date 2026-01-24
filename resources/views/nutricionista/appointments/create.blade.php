@@ -180,6 +180,13 @@
                                             <div class="flex-1 min-w-0">
                                                 <p class="font-semibold text-sm sm:text-base text-gray-900 dark:text-white truncate" x-text="paciente.name"></p>
                                                 <p class="text-xs text-gray-600 dark:text-gray-400 truncate" x-text="paciente.email"></p>
+                                                <!-- Badge de estado -->
+                                                <template x-if="!paciente.habilitado_clinicamente">
+                                                    <span class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
+                                                        <span class="material-symbols-outlined text-xs">block</span>
+                                                        <span x-text="paciente.motivo_inhabilitacion"></span>
+                                                    </span>
+                                                </template>
                                             </div>
                                             <span x-show="selectedPatientId === paciente.id" class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
                                         </div>
@@ -710,6 +717,9 @@
                         'name' => $p->name,
                         'email' => $p->email,
                         'initials' => $p->initials(),
+                        'habilitado_clinicamente' => $p->estaHabilitadoClinicamente(),
+                        'motivo_inhabilitacion' => $p->motivoInhabilitacion(),
+                        'estado' => $p->userState?->name,
                     ];
                     // Solo incluir profile_photo si tiene un valor válido
                     if ($p->personalData?->profile_photo) {
@@ -769,6 +779,14 @@
 
                     // Buscar el paciente en la lista local
                     this.selectedPatient = this.allPatients.find(p => p.id === patientId);
+
+                    // Verificar si el paciente está habilitado clínicamente
+                    if (this.selectedPatient && !this.selectedPatient.habilitado_clinicamente) {
+                        this.hasError = true;
+                        this.errorMessage = `No se puede asignar cita: ${this.selectedPatient.motivo_inhabilitacion}. El paciente debe estar activo y con email verificado.`;
+                        this.loading = false;
+                        return;
+                    }
 
                     try {
                         const response = await fetch(`/nutricionista/citas/asignar/${patientId}/horarios`);
