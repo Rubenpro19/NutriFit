@@ -36,7 +36,7 @@ class DatabaseSeeder extends Seeder
         User::create([
             'name' => 'Administrador',
             'email' => 'admin@gmail.com',
-            'password' => Hash::make(env('ADMIN_PASSWORD')),
+            'password' => Hash::make(env('ADMIN_PASSWORD', 'NutriAdmin123')),
             'role_id' => $adminRole->id,
             'user_state_id' => $activoState->id,
             'email_verified_at' => now(),
