@@ -143,12 +143,19 @@ class UserProfile extends Component
     {
         // Validar contraseña
         $rules = [];
+        $messages = [];
+        
         if ($this->hasPassword) {
             $rules['current_password'] = 'required|string';
+            $messages['current_password.required'] = 'Debes ingresar tu contraseña actual para cambiarla.';
         }
+        
         $rules['password'] = 'required|string|min:8|confirmed';
+        $messages['password.required'] = 'La nueva contraseña es obligatoria.';
+        $messages['password.min'] = 'La nueva contraseña debe tener al menos 8 caracteres.';
+        $messages['password.confirmed'] = 'Las contraseñas no coinciden.';
 
-        $this->validate($rules);
+        $this->validate($rules, $messages);
 
         try {
             $user = Auth::user();
