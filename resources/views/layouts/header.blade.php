@@ -232,11 +232,6 @@
                         <span class="material-symbols-outlined text-lg">mail</span>
                         Contacto
                     </a>
-                    <a href="{{ route('privacy') }}" 
-                       class="flex items-center gap-2 rounded-lg px-4 py-3 text-sm font-medium text-gray-700 transition hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-800 {{ request()->routeIs('privacy') ? 'bg-green-50 text-green-600 dark:bg-green-900/20' : '' }}">
-                        <span class="material-symbols-outlined text-lg">shield</span>
-                        Privacidad
-                    </a>
                 @endif
                 
                 @if (Route::has('login'))
