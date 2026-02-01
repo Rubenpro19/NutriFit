@@ -49,38 +49,38 @@
                                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Tu Próxima Cita</h2>
                             </div>
 
-                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-6">
-                                <div class="flex items-start gap-4 mb-6">
+                            <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-4 sm:p-6">
+                                <div class="flex items-start gap-3 sm:gap-4 mb-4 sm:mb-6">
                                     @if($nextAppointment->nutricionista->personalData?->profile_photo)
-                                        <div class="w-20 h-20 rounded-full overflow-hidden shadow-lg flex-shrink-0">
+                                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden shadow-lg flex-shrink-0">
                                             <img src="{{ asset('storage/' . $nextAppointment->nutricionista->personalData->profile_photo) }}" 
                                                  alt="{{ $nextAppointment->nutricionista->name }}" 
                                                  class="w-full h-full object-cover">
                                         </div>
                                     @else
-                                        <div class="w-20 h-20 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold text-2xl flex-shrink-0 shadow-lg">
+                                        <div class="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 flex items-center justify-center text-white font-bold text-xl sm:text-2xl flex-shrink-0 shadow-lg">
                                             {{ $nextAppointment->nutricionista->initials() }}
                                         </div>
                                     @endif
-                                    <div class="flex-1">
-                                        <h3 class="font-bold text-2xl text-gray-900 dark:text-white mb-1">
+                                    <div class="flex-1 min-w-0">
+                                        <h3 class="font-bold text-lg sm:text-2xl text-gray-900 dark:text-white mb-1 truncate">
                                             {{ $nextAppointment->nutricionista->name }}
                                         </h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 mb-2">Nutricionista Profesional</p>
-                                        <div class="flex items-center gap-2 text-sm text-gray-500 dark:text-gray-500">
-                                            <span class="material-symbols-outlined text-lg">email</span>
-                                            {{ $nextAppointment->nutricionista->email }}
+                                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 mb-2">Nutricionista Profesional</p>
+                                        <div class="flex items-center gap-2 text-xs sm:text-sm text-gray-500 dark:text-gray-500">
+                                            <span class="material-symbols-outlined text-base sm:text-lg flex-shrink-0">email</span>
+                                            <span class="truncate">{{ $nextAppointment->nutricionista->email }}</span>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="grid sm:grid-cols-2 gap-4 mb-6">
-                                    <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow">
-                                        <div class="flex items-center gap-3 mb-2">
-                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">calendar_today</span>
+                                <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 sm:gap-4 mb-4 sm:mb-6">
+                                    <div class="bg-white dark:bg-gray-700 rounded-xl p-3 sm:p-4 shadow">
+                                        <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-xl sm:text-2xl">calendar_today</span>
                                             <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Fecha</p>
                                         </div>
-                                        <p class="font-bold text-lg text-gray-900 dark:text-white">
+                                        <p class="font-bold text-base sm:text-lg text-gray-900 dark:text-white break-words">
                                             {{ \Carbon\Carbon::parse($nextAppointment->start_time)->locale('es')->isoFormat('dddd, D [de] MMMM') }}
                                         </p>
                                         <p class="text-sm text-gray-600 dark:text-gray-400">
@@ -88,12 +88,12 @@
                                         </p>
                                     </div>
 
-                                    <div class="bg-white dark:bg-gray-700 rounded-xl p-4 shadow">
-                                        <div class="flex items-center gap-3 mb-2">
-                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400">schedule</span>
+                                    <div class="bg-white dark:bg-gray-700 rounded-xl p-3 sm:p-4 shadow">
+                                        <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                                            <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-xl sm:text-2xl">schedule</span>
                                             <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">Hora</p>
                                         </div>
-                                        <p class="font-bold text-lg text-gray-900 dark:text-white">
+                                        <p class="font-bold text-base sm:text-lg text-gray-900 dark:text-white">
                                             {{ \Carbon\Carbon::parse($nextAppointment->start_time)->format('h:i A') }}
                                         </p>
                                         <p class="text-sm text-gray-600 dark:text-gray-400">Duración: 45 min</p>
@@ -101,23 +101,23 @@
                                 </div>
 
                                 @if ($nextAppointment->reason)
-                                    <div class="bg-white dark:bg-gray-700 rounded-xl p-4 mb-6 shadow">
+                                    <div class="bg-white dark:bg-gray-700 rounded-xl p-3 sm:p-4 mb-4 sm:mb-6 shadow">
                                         <p class="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase mb-2">Motivo de consulta</p>
-                                        <p class="text-gray-900 dark:text-white">{{ $nextAppointment->reason }}</p>
+                                        <p class="text-sm sm:text-base text-gray-900 dark:text-white break-words">{{ $nextAppointment->reason }}</p>
                                     </div>
                                 @endif
 
-                                <div class="flex flex-col sm:flex-row gap-3">
+                                <div class="flex flex-col sm:flex-row gap-2 sm:gap-3">
                                     <a href="{{ route('paciente.appointments.show', $nextAppointment) }}"
-                                        class="flex-1 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 text-center font-bold text-white transition hover:from-green-700 hover:to-emerald-700 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
-                                        <span class="material-symbols-outlined">visibility</span>
-                                        Ver Detalles Completos
+                                        class="flex-1 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-4 sm:px-6 py-3 sm:py-4 text-center text-sm sm:text-base font-bold text-white transition hover:from-green-700 hover:to-emerald-700 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                                        <span class="material-symbols-outlined text-xl">visibility</span>
+                                        <span class="truncate">Ver Detalles</span>
                                     </a>
                                     <div x-data="{ showModal: false, submitting: false }" class="flex-1">
                                         <button type="button" @click="showModal = true"
-                                            class="w-full rounded-xl bg-red-600 px-6 py-4 text-center font-bold text-white transition hover:bg-red-700 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
-                                            <span class="material-symbols-outlined">cancel</span>
-                                            Cancelar Cita
+                                            class="w-full rounded-xl bg-red-600 px-4 sm:px-6 py-3 sm:py-4 text-center text-sm sm:text-base font-bold text-white transition hover:bg-red-700 flex items-center justify-center gap-2 shadow-lg hover:shadow-xl">
+                                            <span class="material-symbols-outlined text-xl">cancel</span>
+                                            <span class="truncate">Cancelar Cita</span>
                                         </button>
 
                                         <!-- Modal de Confirmación -->
