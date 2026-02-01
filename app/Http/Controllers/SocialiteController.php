@@ -32,6 +32,16 @@ class SocialiteController extends Controller
                 
                 // Usuario existe y está activo, iniciar sesión directamente
                 Auth::login($user, true);
+                
+                // Redirigir según el rol del usuario
+                if ($user->isAdmin()) {
+                    return redirect()->route('admin.dashboard');
+                }
+
+                if ($user->isNutricionista()) {
+                    return redirect()->route('nutricionista.dashboard');
+                }
+
                 return redirect()->route('paciente.dashboard');
             }
 

@@ -35,7 +35,7 @@ class DatabaseSeeder extends Seeder
         // Administrador
         User::create([
             'name' => 'Administrador',
-            'email' => 'admin@gmail.com',
+            'email' => 'nutifit2026@gmail.com',
             'password' => Hash::make(env('ADMIN_PASSWORD', 'NutriAdmin123')),
             'role_id' => $adminRole->id,
             'user_state_id' => $activoState->id,
