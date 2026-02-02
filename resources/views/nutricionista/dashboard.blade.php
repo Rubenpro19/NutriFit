@@ -358,8 +358,8 @@
                                             
                                             <div class="border-l-4 @if($isToday) border-blue-500 @elseif($isTomorrow) border-green-500 @else border-cyan-500 @endif pl-3 sm:pl-6">
                                                 {{-- Encabezado de la Fecha --}}
-                                                <div class="mb-3 sm:mb-4">
-                                                    <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                                                <div class="mb-4 sm:mb-4">
+                                                    <div class="flex items-center gap-2.5 sm:gap-3 mb-2.5">
                                                         <div class="@if($isToday) bg-blue-100 dark:bg-blue-900/30 @elseif($isTomorrow) bg-green-100 dark:bg-green-900/30 @else bg-cyan-100 dark:bg-cyan-900/30 @endif rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 flex-shrink-0">
                                                             <p class="text-xl sm:text-2xl font-bold @if($isToday) text-blue-600 dark:text-blue-400 @elseif($isTomorrow) text-green-600 dark:text-green-400 @else text-cyan-600 dark:text-cyan-400 @endif">
                                                                 {{ $dateCarbon->format('d') }}
@@ -391,12 +391,12 @@
                                                 </div>
 
                                                 {{-- Lista de Citas del Día --}}
-                                                <div class="space-y-3 sm:space-y-0 sm:grid sm:gap-4 md:grid-cols-2">
+                                                <div class="space-y-4 sm:space-y-0 sm:grid sm:gap-4 md:grid-cols-2">
                                         @foreach($appointments as $appointment)
-                                            <div class="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800/50 rounded-lg sm:rounded-xl border-2 border-gray-200 dark:border-gray-600 p-3 sm:p-4 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-200">
+                                            <div class="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800/50 rounded-lg sm:rounded-xl border-2 border-gray-200 dark:border-gray-600 p-4 sm:p-4 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-200">
                                                 {{-- Header con hora --}}
-                                                <div class="flex items-start justify-between mb-2.5 sm:mb-3">
-                                                    <div class="flex items-center gap-1.5 sm:gap-2">
+                                                <div class="flex items-start justify-between mb-3 sm:mb-3">
+                                                    <div class="flex items-center gap-2 sm:gap-2.5">
                                                         <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-lg sm:text-2xl flex-shrink-0">schedule</span>
                                                         <div>
                                                             <p class="font-bold text-gray-900 dark:text-white text-sm sm:text-base">
@@ -417,7 +417,7 @@
                                                 </div>
 
                                                 {{-- Información del Paciente --}}
-                                                <div class="flex items-center gap-2 sm:gap-3 mb-2.5 sm:mb-3 pb-2.5 sm:pb-3 border-b border-gray-200 dark:border-gray-600">
+                                                <div class="flex items-center gap-3 sm:gap-3 mb-3 sm:mb-3 pb-3 sm:pb-3 border-b border-gray-200 dark:border-gray-600">
                                                     <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                                                         @if($appointment->paciente->personalData?->profile_photo)
                                                             <img src="{{ asset('storage/' . $appointment->paciente->personalData->profile_photo) }}" 
@@ -440,23 +440,23 @@
                                                 </div>
 
                                                 {{-- Detalles de la Cita --}}
-                                                <div class="space-y-1.5 sm:space-y-2 mb-2.5 sm:mb-3">
+                                                <div class="space-y-2 sm:space-y-2 mb-3 sm:mb-3">
                                                     @if($appointment->appointment_type)
-                                                        <div class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                                                        <div class="flex items-center gap-2 sm:gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
                                                             <span class="material-symbols-outlined text-sm sm:text-base text-blue-600 dark:text-blue-400 flex-shrink-0">medical_services</span>
                                                             <span class="font-medium truncate">{{ ucfirst(str_replace('_', ' ', $appointment->appointment_type)) }}</span>
                                                         </div>
                                                     @endif
 
                                                     @if($appointment->reason)
-                                                        <div class="flex items-start gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                                                        <div class="flex items-start gap-2 sm:gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
                                                             <span class="material-symbols-outlined text-sm sm:text-base text-blue-600 dark:text-blue-400 flex-shrink-0">description</span>
                                                             <span class="line-clamp-2">{{ $appointment->reason }}</span>
                                                         </div>
                                                     @endif
 
                                                     @if($appointment->price)
-                                                        <div class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                                                        <div class="flex items-center gap-2 sm:gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
                                                             <span class="material-symbols-outlined text-sm sm:text-base text-green-600 dark:text-green-400 flex-shrink-0">payments</span>
                                                             <span class="font-semibold">Pago: ${{ number_format($appointment->price, 2) }}</span>
                                                         </div>
@@ -465,7 +465,7 @@
 
                                                 {{-- Botón de Acción --}}
                                                 <a href="{{ route('nutricionista.appointments.show', $appointment) }}" 
-                                                class="flex items-center justify-center gap-1.5 sm:gap-2 w-full rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:from-blue-700 hover:to-cyan-700 group-hover:shadow-md">
+                                                class="flex items-center justify-center gap-2 sm:gap-2 w-full rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-4 sm:px-4 py-2.5 sm:py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:from-blue-700 hover:to-cyan-700 group-hover:shadow-md">
                                                     <span class="material-symbols-outlined text-base sm:text-lg">assignment</span>
                                                     Gestionar Cita
                                                 </a>
