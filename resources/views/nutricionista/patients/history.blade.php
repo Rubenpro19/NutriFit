@@ -64,34 +64,36 @@
                         <div class="p-6">
                     
                     <!-- Foto y Nombre -->
-                    <div class="flex items-center gap-4 mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
-                        <div class="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 shadow-lg {{ $patient->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
-                             @if($patient->personalData?->profile_photo) @click="showPhotoModal = true" @endif>
-                            @if($patient->personalData?->profile_photo)
-                                <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
-                                     alt="{{ $patient->name }}" 
-                                     class="w-full h-full object-cover">
-                            @else
-                                <div class="w-full h-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-3xl font-bold">
-                                    {{ $patient->initials() }}
-                                </div>
-                            @endif
+                    <div class="mb-6 pb-4 border-b border-gray-200 dark:border-gray-700">
+                        <div class="flex flex-col sm:flex-row items-start sm:items-center gap-4">
+                            <div class="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0 shadow-lg {{ $patient->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
+                                 @if($patient->personalData?->profile_photo) @click="showPhotoModal = true" @endif>
+                                @if($patient->personalData?->profile_photo)
+                                    <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
+                                         alt="{{ $patient->name }}" 
+                                         class="w-full h-full object-cover">
+                                @else
+                                    <div class="w-full h-full bg-gradient-to-br from-emerald-400 to-emerald-600 flex items-center justify-center text-white text-3xl font-bold">
+                                        {{ $patient->initials() }}
+                                    </div>
+                                @endif
+                            </div>
+                            <div class="flex-1 min-w-0">
+                                <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
+                                    {{ $patient->name }}
+                                </h3>
+                                <p class="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-1">
+                                    <span class="material-symbols-outlined text-sm">email</span>
+                                    <span class="truncate">{{ $patient->email }}</span>
+                                </p>
+                            </div>
+                            <!-- Botón para ver perfil del paciente -->
+                            <a href="{{ route('nutricionista.patients.show', $patient) }}" 
+                               class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-sm font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg flex-shrink-0">
+                                <span class="material-symbols-outlined text-base">person</span>
+                                Ver Perfil Completo
+                            </a>
                         </div>
-                        <div class="flex-1">
-                            <h3 class="text-lg font-semibold text-gray-900 dark:text-white">
-                                {{ $patient->name }}
-                            </h3>
-                            <p class="text-sm text-gray-600 dark:text-gray-400 flex items-center gap-1 mt-1">
-                                <span class="material-symbols-outlined text-sm">email</span>
-                                {{ $patient->email }}
-                            </p>
-                        </div>
-                        <!-- Botón para ver perfil del paciente -->
-                        <a href="{{ route('nutricionista.patients.show', $patient) }}" 
-                           class="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 text-white text-sm font-semibold rounded-lg transition-all duration-200 shadow-md hover:shadow-lg">
-                            <span class="material-symbols-outlined text-base">person</span>
-                            Ver Perfil Completo
-                        </a>
                     </div>
 
                     <!-- Grid de Información -->
