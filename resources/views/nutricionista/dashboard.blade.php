@@ -284,18 +284,18 @@
             </div>
 
             {{-- Todas las Citas Pendientes (Próximas 4 Semanas) --}}
-            <div class="mt-8 rounded-2xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                <div class="bg-gradient-to-r from-blue-600 to-green-600 px-6 py-5 rounded-t-2xl">
-                    <div class="flex items-center justify-between">
-                        <div>
-                            <h2 class="text-2xl font-bold text-white flex items-center gap-2">
-                                <span class="material-symbols-outlined text-3xl">calendar_month</span>
+            <div class="mt-6 sm:mt-8 rounded-xl sm:rounded-2xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                <div class="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-4 sm:py-5 rounded-t-xl sm:rounded-t-2xl">
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
+                        <div class="flex-1">
+                            <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
+                                <span class="material-symbols-outlined text-2xl sm:text-3xl">calendar_month</span>
                                 Agenda Completa
                             </h2>
-                            <p class="text-blue-100 text-sm mt-1">Todas tus citas pendientes de las próximas 4 semanas</p>
+                            <p class="text-blue-100 text-xs sm:text-sm mt-1">Todas tus citas pendientes de las próximas 4 semanas</p>
                         </div>
-                        <div class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
-                            <p class="text-sm text-white font-medium">Total: {{ $upcomingAppointments->flatten()->count() }} citas</p>
+                        <div class="bg-white/20 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex-shrink-0">
+                            <p class="text-xs sm:text-sm text-white font-medium">Total: {{ $upcomingAppointments->flatten()->count() }} citas</p>
                         </div>
                     </div>
                 </div>
@@ -317,30 +317,30 @@
                                 @endphp
 
                                 {{-- Encabezado de Semana --}}
-                                <div class="border-2 @if($isCurrentWeek) border-blue-500 dark:border-blue-400 @else border-gray-300 dark:border-gray-600 @endif rounded-xl overflow-hidden">
-                                    <div class="@if($isCurrentWeek) bg-gradient-to-r from-blue-500 to-cyan-500 @else bg-gradient-to-r from-gray-500 to-gray-600 @endif px-6 py-4">
-                                        <div class="flex items-center justify-between">
-                                            <div class="flex items-center gap-3">
-                                                <div class="bg-white/20 backdrop-blur-sm rounded-lg p-2">
-                                                    <span class="material-symbols-outlined text-white text-2xl">calendar_view_week</span>
+                                <div class="border-2 @if($isCurrentWeek) border-blue-500 dark:border-blue-400 @else border-gray-300 dark:border-gray-600 @endif rounded-lg sm:rounded-xl overflow-hidden">
+                                    <div class="@if($isCurrentWeek) bg-gradient-to-r from-blue-500 to-cyan-500 @else bg-gradient-to-r from-gray-500 to-gray-600 @endif px-4 sm:px-6 py-3 sm:py-4">
+                                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 sm:gap-0">
+                                            <div class="flex items-center gap-2 sm:gap-3">
+                                                <div class="bg-white/20 backdrop-blur-sm rounded-lg p-1.5 sm:p-2">
+                                                    <span class="material-symbols-outlined text-white text-xl sm:text-2xl">calendar_view_week</span>
                                                 </div>
                                                 <div>
-                                                    <h3 class="text-xl font-bold text-white flex items-center gap-2">
-                                                        Semana {{ $weekNumber }}
+                                                    <h3 class="text-lg sm:text-xl font-bold text-white flex flex-wrap items-center gap-1.5 sm:gap-2">
+                                                        <span>Semana {{ $weekNumber }}</span>
                                                         @if($isCurrentWeek)
-                                                            <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-white/30 backdrop-blur-sm">
-                                                                <span class="material-symbols-outlined text-sm mr-1">schedule</span>
+                                                            <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-white/30 backdrop-blur-sm">
+                                                                <span class="material-symbols-outlined text-xs sm:text-sm mr-1">schedule</span>
                                                                 Semana Actual
                                                             </span>
                                                         @endif
                                                     </h3>
-                                                    <p class="text-white/90 text-sm">
+                                                    <p class="text-white/90 text-xs sm:text-sm">
                                                         {{ $weekStart->locale('es')->isoFormat('D [de] MMMM') }} - {{ $weekEnd->locale('es')->isoFormat('D [de] MMMM, YYYY') }}
                                                     </p>
                                                 </div>
                                             </div>
-                                            <div class="bg-white/20 backdrop-blur-sm px-4 py-2 rounded-lg">
-                                                <p class="text-sm text-white font-medium">
+                                            <div class="bg-white/20 backdrop-blur-sm px-3 sm:px-4 py-1.5 sm:py-2 rounded-lg flex-shrink-0">
+                                                <p class="text-xs sm:text-sm text-white font-medium">
                                                     {{ $weekAppointments->flatten()->count() }} {{ $weekAppointments->flatten()->count() === 1 ? 'cita' : 'citas' }}
                                                 </p>
                                             </div>
@@ -348,7 +348,7 @@
                                     </div>
 
                                     {{-- Días de la semana --}}
-                                    <div class="p-6 space-y-6">
+                                    <div class="p-3 sm:p-6 space-y-4 sm:space-y-6">
                                         @foreach($weekAppointments as $date => $appointments)
                                             @php
                                                 $dateCarbon = \Carbon\Carbon::parse($date);
@@ -356,34 +356,34 @@
                                                 $isTomorrow = $dateCarbon->isTomorrow();
                                             @endphp
                                             
-                                            <div class="border-l-4 @if($isToday) border-blue-500 @elseif($isTomorrow) border-green-500 @else border-cyan-500 @endif pl-6">
+                                            <div class="border-l-4 @if($isToday) border-blue-500 @elseif($isTomorrow) border-green-500 @else border-cyan-500 @endif pl-3 sm:pl-6">
                                                 {{-- Encabezado de la Fecha --}}
-                                                <div class="mb-4">
-                                                    <div class="flex items-center gap-3 mb-2">
-                                                        <div class="@if($isToday) bg-blue-100 dark:bg-blue-900/30 @elseif($isTomorrow) bg-green-100 dark:bg-green-900/30 @else bg-cyan-100 dark:bg-cyan-900/30 @endif rounded-lg px-4 py-2">
-                                                            <p class="text-2xl font-bold @if($isToday) text-blue-600 dark:text-blue-400 @elseif($isTomorrow) text-green-600 dark:text-green-400 @else text-cyan-600 dark:text-cyan-400 @endif">
+                                                <div class="mb-3 sm:mb-4">
+                                                    <div class="flex items-center gap-2 sm:gap-3 mb-2">
+                                                        <div class="@if($isToday) bg-blue-100 dark:bg-blue-900/30 @elseif($isTomorrow) bg-green-100 dark:bg-green-900/30 @else bg-cyan-100 dark:bg-cyan-900/30 @endif rounded-lg px-3 sm:px-4 py-1.5 sm:py-2 flex-shrink-0">
+                                                            <p class="text-xl sm:text-2xl font-bold @if($isToday) text-blue-600 dark:text-blue-400 @elseif($isTomorrow) text-green-600 dark:text-green-400 @else text-cyan-600 dark:text-cyan-400 @endif">
                                                                 {{ $dateCarbon->format('d') }}
                                                             </p>
                                                             <p class="text-xs font-medium @if($isToday) text-blue-600 dark:text-blue-400 @elseif($isTomorrow) text-green-600 dark:text-green-400 @else text-cyan-600 dark:text-cyan-400 @endif uppercase">
                                                                 {{ $dateCarbon->format('M') }}
                                                             </p>
                                                         </div>
-                                                        <div>
-                                                            <h3 class="text-xl font-bold text-gray-900 dark:text-white capitalize">
-                                                                {{ $dateCarbon->locale('es')->isoFormat('dddd, D [de] MMMM') }}
+                                                        <div class="flex-1 min-w-0">
+                                                            <h3 class="text-base sm:text-xl font-bold text-gray-900 dark:text-white capitalize break-words">
+                                                                <span class="block sm:inline">{{ $dateCarbon->locale('es')->isoFormat('dddd, D [de] MMMM') }}</span>
                                                                 @if($isToday)
-                                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 ml-2">
-                                                                        <span class="material-symbols-outlined text-sm mr-1">today</span>
+                                                                    <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-blue-100 text-blue-800 dark:bg-blue-900/30 dark:text-blue-400 mt-1 sm:mt-0 sm:ml-2">
+                                                                        <span class="material-symbols-outlined text-xs sm:text-sm mr-1">today</span>
                                                                         Hoy
                                                                     </span>
                                                                 @elseif($isTomorrow)
-                                                                    <span class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 ml-2">
-                                                                        <span class="material-symbols-outlined text-sm mr-1">event</span>
+                                                                    <span class="inline-flex items-center px-2 sm:px-3 py-0.5 sm:py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400 mt-1 sm:mt-0 sm:ml-2">
+                                                                        <span class="material-symbols-outlined text-xs sm:text-sm mr-1">event</span>
                                                                         Mañana
                                                                     </span>
                                                                 @endif
                                                             </h3>
-                                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                                            <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400">
                                                                 {{ $appointments->count() }} {{ $appointments->count() === 1 ? 'cita programada' : 'citas programadas' }}
                                                             </p>
                                                         </div>
@@ -391,15 +391,15 @@
                                                 </div>
 
                                                 {{-- Lista de Citas del Día --}}
-                                                <div class="grid gap-4 md:grid-cols-2">
+                                                <div class="space-y-3 sm:space-y-0 sm:grid sm:gap-4 md:grid-cols-2">
                                         @foreach($appointments as $appointment)
-                                            <div class="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800/50 rounded-xl border-2 border-gray-200 dark:border-gray-600 p-4 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-200">
+                                            <div class="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800/50 rounded-lg sm:rounded-xl border-2 border-gray-200 dark:border-gray-600 p-3 sm:p-4 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-200">
                                                 {{-- Header con hora --}}
-                                                <div class="flex items-start justify-between mb-3">
-                                                    <div class="flex items-center gap-2">
-                                                        <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">schedule</span>
+                                                <div class="flex items-start justify-between mb-2.5 sm:mb-3">
+                                                    <div class="flex items-center gap-1.5 sm:gap-2">
+                                                        <span class="material-symbols-outlined text-blue-600 dark:text-blue-400 text-lg sm:text-2xl flex-shrink-0">schedule</span>
                                                         <div>
-                                                            <p class="font-bold text-gray-900 dark:text-white">
+                                                            <p class="font-bold text-gray-900 dark:text-white text-sm sm:text-base">
                                                                 {{ \Carbon\Carbon::parse($appointment->start_time)->format('h:i A') }}
                                                             </p>
                                                             <p class="text-xs text-gray-500 dark:text-gray-400">
@@ -407,7 +407,7 @@
                                                             </p>
                                                         </div>
                                                     </div>
-                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium
+                                                    <span class="inline-flex items-center px-2 sm:px-2.5 py-0.5 sm:py-1 rounded-full text-xs font-medium flex-shrink-0
                                                         @if($appointment->appointmentState->name === 'confirmada') bg-green-100 text-green-800 dark:bg-green-900/30 dark:text-green-400
                                                         @elseif($appointment->appointmentState->name === 'pendiente') bg-yellow-100 text-yellow-800 dark:bg-yellow-900/30 dark:text-yellow-400
                                                         @else bg-gray-100 text-gray-800 dark:bg-gray-900/30 dark:text-gray-400
@@ -417,20 +417,20 @@
                                                 </div>
 
                                                 {{-- Información del Paciente --}}
-                                                <div class="flex items-center gap-3 mb-3 pb-3 border-b border-gray-200 dark:border-gray-600">
-                                                    <div class="w-12 h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
+                                                <div class="flex items-center gap-2 sm:gap-3 mb-2.5 sm:mb-3 pb-2.5 sm:pb-3 border-b border-gray-200 dark:border-gray-600">
+                                                    <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                                                         @if($appointment->paciente->personalData?->profile_photo)
                                                             <img src="{{ asset('storage/' . $appointment->paciente->personalData->profile_photo) }}" 
                                                                 alt="{{ $appointment->paciente->name }}" 
                                                                 class="w-full h-full object-cover">
                                                         @else
-                                                            <div class="w-full h-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-sm">
+                                                            <div class="w-full h-full bg-gradient-to-br from-blue-500 to-cyan-500 flex items-center justify-center text-white font-bold text-xs sm:text-sm">
                                                                 {{ $appointment->paciente->initials() }}
                                                             </div>
                                                         @endif
                                                     </div>
                                                     <div class="flex-1 min-w-0">
-                                                        <p class="font-semibold text-gray-900 dark:text-white truncate">
+                                                        <p class="font-semibold text-gray-900 dark:text-white text-sm sm:text-base truncate">
                                                             {{ $appointment->paciente->name }}
                                                         </p>
                                                         <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
@@ -440,24 +440,24 @@
                                                 </div>
 
                                                 {{-- Detalles de la Cita --}}
-                                                <div class="space-y-2 mb-3">
+                                                <div class="space-y-1.5 sm:space-y-2 mb-2.5 sm:mb-3">
                                                     @if($appointment->appointment_type)
-                                                        <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                                                            <span class="material-symbols-outlined text-base text-blue-600 dark:text-blue-400">medical_services</span>
-                                                            <span class="font-medium">{{ ucfirst(str_replace('_', ' ', $appointment->appointment_type)) }}</span>
+                                                        <div class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                                                            <span class="material-symbols-outlined text-sm sm:text-base text-blue-600 dark:text-blue-400 flex-shrink-0">medical_services</span>
+                                                            <span class="font-medium truncate">{{ ucfirst(str_replace('_', ' ', $appointment->appointment_type)) }}</span>
                                                         </div>
                                                     @endif
 
                                                     @if($appointment->reason)
-                                                        <div class="flex items-start gap-2 text-sm text-gray-700 dark:text-gray-300">
-                                                            <span class="material-symbols-outlined text-base text-blue-600 dark:text-blue-400">description</span>
+                                                        <div class="flex items-start gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                                                            <span class="material-symbols-outlined text-sm sm:text-base text-blue-600 dark:text-blue-400 flex-shrink-0">description</span>
                                                             <span class="line-clamp-2">{{ $appointment->reason }}</span>
                                                         </div>
                                                     @endif
 
                                                     @if($appointment->price)
-                                                        <div class="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300">
-                                                            <span class="material-symbols-outlined text-base text-green-600 dark:text-green-400">payments</span>
+                                                        <div class="flex items-center gap-1.5 sm:gap-2 text-xs sm:text-sm text-gray-700 dark:text-gray-300">
+                                                            <span class="material-symbols-outlined text-sm sm:text-base text-green-600 dark:text-green-400 flex-shrink-0">payments</span>
                                                             <span class="font-semibold">Pago: ${{ number_format($appointment->price, 2) }}</span>
                                                         </div>
                                                     @endif
@@ -465,8 +465,8 @@
 
                                                 {{-- Botón de Acción --}}
                                                 <a href="{{ route('nutricionista.appointments.show', $appointment) }}" 
-                                                class="flex items-center justify-center gap-2 w-full rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-4 py-2.5 text-sm font-semibold text-white transition hover:from-blue-700 hover:to-cyan-700 group-hover:shadow-md">
-                                                    <span class="material-symbols-outlined text-lg">assignment</span>
+                                                class="flex items-center justify-center gap-1.5 sm:gap-2 w-full rounded-lg bg-gradient-to-r from-blue-600 to-cyan-600 px-3 sm:px-4 py-2 sm:py-2.5 text-xs sm:text-sm font-semibold text-white transition hover:from-blue-700 hover:to-cyan-700 group-hover:shadow-md">
+                                                    <span class="material-symbols-outlined text-base sm:text-lg">assignment</span>
                                                     Gestionar Cita
                                                 </a>
                                             </div>
