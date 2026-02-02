@@ -246,10 +246,10 @@
                                     </div>
                                     <div class="flex-1 min-w-0">
                                         <p class="text-sm text-gray-600 dark:text-gray-400 mb-1">Información del paciente:</p>
-                                        <p class="text-2xl font-bold text-gray-900 dark:text-white truncate" x-text="selectedPatient?.name"></p>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 truncate flex items-center gap-1 mt-1">
-                                            <span class="material-symbols-outlined text-base">email</span>
-                                            <span x-text="selectedPatient?.email"></span>
+                                        <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white break-words" x-text="selectedPatient?.name"></p>
+                                        <p class="text-xs sm:text-sm text-gray-600 dark:text-gray-400 flex items-start gap-1 mt-1 min-w-0">
+                                            <span class="material-symbols-outlined text-base flex-shrink-0">email</span>
+                                            <span class="break-all" x-text="selectedPatient?.email"></span>
                                         </p>
                                     </div>
                                 </div>
