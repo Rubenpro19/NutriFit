@@ -34,10 +34,9 @@ class PacienteController extends Controller
                 ->count(),
         ];
 
-        // Próxima cita
+        // Próxima cita (cualquier cita con estado pendiente)
         $nextAppointment = Appointment::where('paciente_id', $paciente->id)
             ->whereHas('appointmentState', fn($q) => $q->where('name', 'pendiente'))
-            ->where('start_time', '>', now())
             ->with(['nutricionista', 'appointmentState'])
             ->orderBy('start_time')
             ->first();
