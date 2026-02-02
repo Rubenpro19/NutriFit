@@ -10,13 +10,13 @@
         <main class="flex-grow">
             <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
             <!-- Header -->
-            <div class="mb-8 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-600 p-6 md:p-8 text-white shadow-lg">
-                <div class="flex items-center justify-between gap-4">
-                    <div>
-                        <h1 class="text-3xl font-bold mb-2">¡Hola, {{ auth()->user()->name }}!</h1>
-                        <p class="text-green-100">Bienvenido a tu panel de nutrición personalizada</p>
+            <div class="mb-8 rounded-2xl bg-gradient-to-r from-green-600 to-emerald-600 p-6 md:p-8 text-white shadow-lg overflow-hidden">
+                <div class="flex items-center justify-between gap-4 min-w-0">
+                    <div class="flex-1 min-w-0">
+                        <h1 class="text-2xl sm:text-3xl font-bold mb-2 break-words">¡Hola, {{ auth()->user()->name }}!</h1>
+                        <p class="text-sm sm:text-base text-green-100">Bienvenido a tu panel de nutrición personalizada</p>
                     </div>
-                    <div class="hidden sm:block">
+                    <div class="hidden sm:block flex-shrink-0">
                         <div class="w-16 h-16 rounded-full bg-white/20 backdrop-blur-sm flex items-center justify-center">
                             <span class="material-symbols-outlined text-4xl text-white">spa</span>
                         </div>
