@@ -455,22 +455,22 @@
                                          x-transition:enter="transition ease-out duration-300"
                                          x-transition:enter-start="opacity-0 transform scale-95"
                                          x-transition:enter-end="opacity-100 transform scale-100"
-                                         class="mt-4">
-                                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-3 sm:p-4 border-2 border-dashed border-green-300 dark:border-green-600">
+                                         class="mt-4 w-full">
+                                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-3 sm:p-4 border-2 border-dashed border-green-300 dark:border-green-600 overflow-hidden">
                                             <p class="text-sm font-semibold text-green-900 dark:text-green-200 mb-3 flex items-center gap-2">
                                                 <span class="material-symbols-outlined text-base">check_circle</span>
                                                 Horario seleccionado
                                             </p>
-                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                                                <div class="flex items-center gap-2 sm:gap-3 bg-white dark:bg-gray-700 px-3 py-2 sm:py-3 rounded-lg shadow-sm">
-                                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-lg sm:text-xl">calendar_today</span>
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                                                <div class="flex items-center gap-2 sm:gap-3 bg-white dark:bg-gray-700 px-3 py-2 sm:py-3 rounded-lg shadow-sm min-w-0">
+                                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-lg sm:text-xl flex-shrink-0">calendar_today</span>
                                                     <div class="flex-1 min-w-0">
                                                         <p class="text-xs text-gray-500 dark:text-gray-400">Fecha</p>
-                                                        <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : ''"></p>
+                                                        <p class="text-xs sm:text-sm font-bold text-gray-900 dark:text-white break-words" x-text="selectedDate ? new Date(selectedDate + 'T00:00:00').toLocaleDateString('es-ES', { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' }) : ''"></p>
                                                     </div>
                                                 </div>
-                                                <div class="flex items-center gap-2 sm:gap-3 bg-white dark:bg-gray-700 px-3 py-2 sm:py-3 rounded-lg shadow-sm">
-                                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-lg sm:text-xl">schedule</span>
+                                                <div class="flex items-center gap-2 sm:gap-3 bg-white dark:bg-gray-700 px-3 py-2 sm:py-3 rounded-lg shadow-sm min-w-0">
+                                                    <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-lg sm:text-xl flex-shrink-0">schedule</span>
                                                     <div class="flex-1 min-w-0">
                                                         <p class="text-xs text-gray-500 dark:text-gray-400">Hora</p>
                                                         <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="selectedTime"></p>
