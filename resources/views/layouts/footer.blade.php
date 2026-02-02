@@ -7,7 +7,7 @@
         <div class="flex flex-col items-center justify-between gap-4 md:flex-row">
             {{-- Logo y Copyright --}}
             <div class="flex items-center gap-3">
-                <div class="flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-emerald-600">
+                <div class="hidden md:flex h-8 w-8 items-center justify-center rounded-lg bg-gradient-to-br from-green-500 to-emerald-600">
                     <span class="material-symbols-outlined text-lg text-white">eco</span>
                 </div>
                 <div class="text-center md:text-left">
