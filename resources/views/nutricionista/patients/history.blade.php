@@ -150,8 +150,7 @@
             <div x-show="showPhotoModal" 
                  @click.away="showPhotoModal = false"
                  x-cloak
-                 class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
-                 style="display: none;">
+                 class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4">
                 <div @click.stop class="relative max-w-3xl max-h-[90vh]">
                     <button @click="showPhotoModal = false" 
                             class="absolute -top-4 -right-4 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10">
