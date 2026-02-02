@@ -166,7 +166,7 @@
                                         </div>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <h3 class="font-semibold text-base text-gray-900 dark:text-white truncate">
+                                        <h3 class="font-semibold text-base text-gray-900 dark:text-white break-words">
                                             {{ $nextAppointment->paciente->name }}
                                         </h3>
                                         <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
