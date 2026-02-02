@@ -391,7 +391,7 @@
                                                 </div>
 
                                                 {{-- Lista de Citas del Día --}}
-                                                <div class="space-y-4 sm:space-y-0 sm:grid sm:gap-4 md:grid-cols-2">
+                                                <div class="space-y-4 sm:space-y-0 sm:grid sm:grid-cols-1 sm:gap-4 md:grid-cols-2">
                                         @foreach($appointments as $appointment)
                                             <div class="group bg-gradient-to-br from-gray-50 to-white dark:from-gray-700/50 dark:to-gray-800/50 rounded-lg sm:rounded-xl border-2 border-gray-200 dark:border-gray-600 p-4 sm:p-4 hover:shadow-lg hover:border-blue-300 dark:hover:border-blue-500 transition-all duration-200">
                                                 {{-- Header con hora --}}
