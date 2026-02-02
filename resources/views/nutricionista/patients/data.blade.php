@@ -40,23 +40,23 @@
             </div>
         
             <!-- Información del Paciente -->
-            <div class="mb-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700" x-data="{ showPhotoModal: false }">
+            <div class="mb-6 bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700" x-data="{ showPhotoModal: false }">
                 <h2 class="text-xl font-semibold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                     <span class="material-symbols-outlined text-green-600 dark:text-green-400">person</span>
                     Información del Paciente
                 </h2>
                 
-                <div class="flex items-center gap-6">
+                <div class="flex flex-col sm:flex-row items-center sm:items-start gap-4 sm:gap-6">
                     <!-- Foto de Perfil -->
                     <div class="flex-shrink-0">
-                        <div class="w-24 h-24 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-4 border-green-100 dark:border-green-900 {{ $patient->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
+                        <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-4 border-green-100 dark:border-green-900 {{ $patient->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
                              @if($patient->personalData?->profile_photo) @click="showPhotoModal = true" @endif>
                             @if($patient->personalData?->profile_photo)
                                 <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
                                      alt="{{ $patient->name }}" 
                                      class="w-full h-full object-cover">
                             @else
-                                <div class="w-full h-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-3xl font-bold">
+                                <div class="w-full h-full bg-gradient-to-br from-green-500 to-emerald-500 flex items-center justify-center text-white text-2xl sm:text-3xl font-bold">
                                     {{ $patient->initials() }}
                                 </div>
                             @endif
@@ -64,47 +64,47 @@
                     </div>
 
                     <!-- Información Básica -->
-                    <div class="flex-1 grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div>
+                    <div class="flex-1 w-full grid grid-cols-1 md:grid-cols-2 gap-3 sm:gap-4">
+                        <div class="min-w-0">
                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Nombre Completo</p>
-                            <p class="font-semibold text-gray-900 dark:text-white">{{ $patient->name }}</p>
+                            <p class="font-semibold text-gray-900 dark:text-white text-sm sm:text-base break-words">{{ $patient->name }}</p>
                         </div>
                         
-                        <div>
+                        <div class="min-w-0">
                             <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Correo Electrónico</p>
-                            <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
-                                <span class="material-symbols-outlined text-sm text-green-600">email</span>
-                                {{ $patient->email }}
+                            <p class="font-semibold text-gray-900 dark:text-white flex items-start gap-1 text-sm sm:text-base">
+                                <span class="material-symbols-outlined text-sm text-green-600 flex-shrink-0 mt-0.5">email</span>
+                                <span class="break-all">{{ $patient->email }}</span>
                             </p>
                         </div>
 
                         @if($patient->personalData)
                             @if($patient->personalData->phone)
-                                <div>
+                                <div class="min-w-0">
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Teléfono</p>
-                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-sm text-green-600">phone</span>
-                                        {{ $patient->personalData->phone }}
+                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1 text-sm sm:text-base">
+                                        <span class="material-symbols-outlined text-sm text-green-600 flex-shrink-0">phone</span>
+                                        <span class="break-all">{{ $patient->personalData->phone }}</span>
                                     </p>
                                 </div>
                             @endif
 
                             @if($patient->personalData->date_of_birth)
-                                <div>
+                                <div class="min-w-0">
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Edad</p>
-                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-sm text-green-600">cake</span>
-                                        {{ \Carbon\Carbon::parse($patient->personalData->date_of_birth)->age }} años
+                                    <p class="font-semibold text-gray-900 dark:text-white flex flex-wrap items-center gap-1 text-sm sm:text-base">
+                                        <span class="material-symbols-outlined text-sm text-green-600 flex-shrink-0">cake</span>
+                                        <span>{{ \Carbon\Carbon::parse($patient->personalData->date_of_birth)->age }} años</span>
                                         <span class="text-xs text-gray-500">({{ \Carbon\Carbon::parse($patient->personalData->date_of_birth)->format('d/m/Y') }})</span>
                                     </p>
                                 </div>
                             @endif
 
                             @if($patient->personalData->gender)
-                                <div>
+                                <div class="min-w-0">
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Género</p>
-                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-sm text-green-600">
+                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1 text-sm sm:text-base">
+                                        <span class="material-symbols-outlined text-sm text-green-600 flex-shrink-0">
                                             {{ $patient->personalData->gender === 'male' ? 'male' : ($patient->personalData->gender === 'female' ? 'female' : 'transgender') }}
                                         </span>
                                         {{ $patient->personalData->gender === 'male' ? 'Masculino' : ($patient->personalData->gender === 'female' ? 'Femenino' : 'Otro') }}
@@ -113,11 +113,11 @@
                             @endif
 
                             @if($patient->personalData->address)
-                                <div class="md:col-span-2">
+                                <div class="md:col-span-2 min-w-0">
                                     <p class="text-xs text-gray-500 dark:text-gray-400 mb-1">Dirección</p>
-                                    <p class="font-semibold text-gray-900 dark:text-white flex items-center gap-1">
-                                        <span class="material-symbols-outlined text-sm text-green-600">location_on</span>
-                                        {{ $patient->personalData->address }}
+                                    <p class="font-semibold text-gray-900 dark:text-white flex items-start gap-1 text-sm sm:text-base">
+                                        <span class="material-symbols-outlined text-sm text-green-600 flex-shrink-0 mt-0.5">location_on</span>
+                                        <span class="break-words">{{ $patient->personalData->address }}</span>
                                     </p>
                                 </div>
                             @endif
