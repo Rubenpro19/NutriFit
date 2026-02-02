@@ -141,7 +141,7 @@
                     </div>
                 @else
                     {{-- Card de Próxima Cita (existente) --}}
-                    <div class="rounded-2xl border-2 border-blue-500 bg-white p-6 shadow-lg dark:border-blue-400 dark:bg-gray-800">
+                    <div class="rounded-2xl border-2 border-blue-500 bg-white p-6 shadow-lg dark:border-blue-400 dark:bg-gray-800 overflow-hidden">
                         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                             <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">upcoming</span>
                             Próxima Cita
@@ -150,26 +150,26 @@
                         @if($nextAppointment)
                         <div class="space-y-4">
                             {{-- Card del paciente --}}
-                            <div class="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-lg p-4">
-                                <div class="flex items-start gap-3 mb-4">
+                            <div class="bg-gradient-to-r from-blue-50 to-cyan-50 dark:from-blue-900/20 dark:to-cyan-900/20 rounded-lg p-4 overflow-hidden">
+                                <div class="flex items-center gap-3 mb-4">
                                     <div class="flex-shrink-0">
-                                        <div class="w-14 h-14 rounded-full overflow-hidden flex items-center justify-center">
+                                        <div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center">
                                             @if($nextAppointment->paciente->personalData?->profile_photo)
                                                 <img src="{{ asset('storage/' . $nextAppointment->paciente->personalData->profile_photo) }}" 
                                                      alt="{{ $nextAppointment->paciente->name }}" 
                                                      class="w-full h-full object-cover">
                                             @else
-                                                <div class="w-full h-full bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center text-white font-bold text-lg">
+                                                <div class="w-full h-full bg-gradient-to-br from-blue-600 to-cyan-600 flex items-center justify-center text-white font-bold text-base">
                                                     {{ $nextAppointment->paciente->initials() }}
                                                 </div>
                                             @endif
                                         </div>
                                     </div>
                                     <div class="flex-1 min-w-0">
-                                        <h3 class="font-semibold text-lg text-gray-900 dark:text-white truncate">
+                                        <h3 class="font-semibold text-base text-gray-900 dark:text-white truncate">
                                             {{ $nextAppointment->paciente->name }}
                                         </h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400 truncate">
+                                        <p class="text-xs text-gray-600 dark:text-gray-400 truncate">
                                             {{ $nextAppointment->paciente->email }}
                                         </p>
                                     </div>
@@ -178,23 +178,23 @@
                                 {{-- Detalles de la cita --}}
                                 <div class="space-y-2.5">
                                     <div class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                                        <span class="material-symbols-outlined text-lg text-blue-600 dark:text-blue-400">calendar_today</span>
-                                        <span class="text-sm font-medium">
+                                        <span class="material-symbols-outlined text-base text-blue-600 dark:text-blue-400 flex-shrink-0">calendar_today</span>
+                                        <span class="text-xs font-medium truncate">
                                             {{ \Carbon\Carbon::parse($nextAppointment->start_time)->locale('es')->isoFormat('dddd, D [de] MMMM, YYYY') }}
                                         </span>
                                     </div>
                                     
                                     <div class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                                        <span class="material-symbols-outlined text-lg text-blue-600 dark:text-blue-400">schedule</span>
-                                        <span class="text-sm font-medium">
+                                        <span class="material-symbols-outlined text-base text-blue-600 dark:text-blue-400 flex-shrink-0">schedule</span>
+                                        <span class="text-xs font-medium">
                                             {{ \Carbon\Carbon::parse($nextAppointment->start_time)->format('h:i A') }} - {{ \Carbon\Carbon::parse($nextAppointment->end_time)->format('h:i A') }}
                                         </span>
                                     </div>
 
                                     @if($nextAppointment->appointment_type)
                                         <div class="flex items-center gap-2 text-gray-700 dark:text-gray-300">
-                                            <span class="material-symbols-outlined text-lg text-blue-600 dark:text-blue-400">medical_services</span>
-                                            <span class="text-sm font-medium">
+                                            <span class="material-symbols-outlined text-base text-blue-600 dark:text-blue-400 flex-shrink-0">medical_services</span>
+                                            <span class="text-xs font-medium truncate">
                                                 {{ ucfirst(str_replace('_', ' ', $nextAppointment->appointment_type)) }}
                                             </span>
                                         </div>
@@ -202,10 +202,10 @@
 
                                     @if($nextAppointment->reason)
                                         <div class="flex items-start gap-2 text-gray-700 dark:text-gray-300 pt-2 border-t border-gray-200 dark:border-gray-600">
-                                            <span class="material-symbols-outlined text-lg text-blue-600 dark:text-blue-400">description</span>
-                                            <div class="flex-1">
+                                            <span class="material-symbols-outlined text-base text-blue-600 dark:text-blue-400 flex-shrink-0">description</span>
+                                            <div class="flex-1 min-w-0">
                                                 <span class="text-xs font-medium text-gray-500 dark:text-gray-400 block mb-1">Motivo:</span>
-                                                <span class="text-sm">{{ $nextAppointment->reason }}</span>
+                                                <span class="text-xs line-clamp-2">{{ $nextAppointment->reason }}</span>
                                             </div>
                                         </div>
                                     @endif
