@@ -43,8 +43,8 @@
                     <!-- Información del Paciente -->
                     <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg overflow-hidden border border-gray-200 dark:border-gray-700">
                         <div class="bg-gradient-to-r from-green-600 to-emerald-600 p-6">
-                            <div class="flex items-center space-x-4">
-                                <div class="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-4 border-white dark:border-gray-800 {{ $patient->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
+                            <div class="flex flex-col sm:flex-row items-center sm:items-center gap-4 sm:space-x-4">
+                                <div class="w-20 h-20 rounded-full overflow-hidden flex items-center justify-center shadow-lg border-4 border-white dark:border-gray-800 flex-shrink-0 {{ $patient->personalData?->profile_photo ? 'cursor-pointer hover:opacity-90 transition' : '' }}"
                                      @if($patient->personalData?->profile_photo) @click="showPhotoModal = true" @endif>
                                     @if($patient->personalData?->profile_photo)
                                         <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
@@ -56,14 +56,14 @@
                                         </div>
                                     @endif
                                 </div>
-                                <div class="flex-1">
-                                    <h2 class="text-2xl font-bold text-white mb-1">{{ $patient->name }}</h2>
-                                    <p class="text-green-100 flex items-center gap-2">
+                                <div class="flex-1 text-center sm:text-left min-w-0">
+                                    <h2 class="text-xl sm:text-2xl font-bold text-white mb-1 truncate">{{ $patient->name }}</h2>
+                                    <p class="text-green-100 flex items-center justify-center sm:justify-start gap-2 text-sm sm:text-base">
                                         <span class="material-symbols-outlined text-sm">email</span>
-                                        {{ $patient->email }}
+                                        <span class="truncate">{{ $patient->email }}</span>
                                     </p>
                                 </div>
-                                <span class="px-4 py-2 text-sm font-semibold rounded-full {{ $patient->isActive() ? 'bg-white text-green-600' : 'bg-gray-200 text-gray-700' }}">
+                                <span class="px-4 py-2 text-sm font-semibold rounded-full flex-shrink-0 {{ $patient->isActive() ? 'bg-white text-green-600' : 'bg-gray-200 text-gray-700' }}">
                                     {{ ucfirst($patient->userState->name) }}
                                 </span>
                             </div>
@@ -353,52 +353,50 @@
                         </div>
                     @endif
                 </div>
-            </div>
 
-            <!-- Modal de Foto de Perfil -->
-            <div x-show="showPhotoModal && {{ $patient->personalData?->profile_photo ? 'true' : 'false' }}"
-                 x-cloak
-                 @keydown.escape.window="showPhotoModal = false"
-                 class="fixed inset-0 z-50 flex items-center justify-center p-4"
-                 style="display: none;">
-                
-                <!-- Overlay -->
-                <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
-                
-                <!-- Modal Content -->
-                <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
-                     @click.stop>
+                <!-- Modal de Foto de Perfil -->
+                @if($patient->personalData?->profile_photo)
+                <div x-show="showPhotoModal"
+                     x-cloak
+                     @keydown.escape.window="showPhotoModal = false"
+                     class="fixed inset-0 z-50 flex items-center justify-center p-4">
                     
-                    <!-- Header -->
-                    <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
-                        <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                            <span class="material-symbols-outlined">photo_camera</span>
-                            Foto de Perfil - {{ $patient->name }}
-                        </h3>
-                        <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
-                            <span class="material-symbols-outlined">close</span>
-                        </button>
-                    </div>
+                    <!-- Overlay -->
+                    <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
                     
-                    <!-- Image -->
-                    <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
-                        @if($patient->personalData?->profile_photo)
+                    <!-- Modal Content -->
+                    <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                         @click.stop>
+                        
+                        <!-- Header -->
+                        <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                            <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                <span class="material-symbols-outlined">photo_camera</span>
+                                Foto de Perfil - {{ $patient->name }}
+                            </h3>
+                            <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
+                                <span class="material-symbols-outlined">close</span>
+                            </button>
+                        </div>
+                        
+                        <!-- Image -->
+                        <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
                             <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
                                  alt="{{ $patient->name }}"
                                  class="w-full h-auto rounded-lg">
-                        @endif
-                    </div>
-                    
-                    <!-- Footer -->
-                    <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
-                        <button type="button" @click="showPhotoModal = false" 
-                                class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
-                            Cerrar
-                        </button>
+                        </div>
+                        
+                        <!-- Footer -->
+                        <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
+                            <button type="button" @click="showPhotoModal = false" 
+                                    class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                Cerrar
+                            </button>
+                        </div>
                     </div>
                 </div>
+                @endif
             </div>
-        </div>
         </div>
     </main>
 
