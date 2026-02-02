@@ -80,11 +80,11 @@
                 </div>
             </div>
 
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
                 {{-- Próxima Cita o Configuración Requerida --}}
                 @if(!$hasSchedules)
                     {{-- Card de Configuración Requerida --}}
-                    <div class="rounded-2xl border-2 border-orange-500 bg-gradient-to-br from-orange-50 to-red-50 p-4 sm:p-6 shadow-xl dark:border-orange-400 dark:from-orange-900/20 dark:to-red-900/20">
+                    <div class="rounded-2xl border-2 border-orange-500 bg-gradient-to-br from-orange-50 to-red-50 p-4 sm:p-6 shadow-xl dark:border-orange-400 dark:from-orange-900/20 dark:to-red-900/20 w-full min-w-0 overflow-hidden">
                         <div class="text-center">
                             {{-- Icono animado --}}
                             <div class="mb-3 sm:mb-4 flex justify-center">
@@ -141,7 +141,7 @@
                     </div>
                 @else
                     {{-- Card de Próxima Cita (existente) --}}
-                    <div class="rounded-2xl border-2 border-blue-500 bg-white p-6 shadow-lg dark:border-blue-400 dark:bg-gray-800 overflow-hidden">
+                    <div class="rounded-2xl border-2 border-blue-500 bg-white p-4 sm:p-6 shadow-lg dark:border-blue-400 dark:bg-gray-800 w-full min-w-0 overflow-hidden">
                         <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                             <span class="material-symbols-outlined text-blue-600 dark:text-blue-400">upcoming</span>
                             Próxima Cita
@@ -241,14 +241,14 @@
                 @endif
 
                 {{-- Agenda para Hoy --}}
-                <div class="lg:col-span-2 rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                <div class="lg:col-span-2 rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800 w-full min-w-0 overflow-hidden">
                     <h2 class="mb-4 text-xl font-bold text-gray-900 dark:text-white">Agenda para Hoy</h2>
                     
                     @if($todayAppointments->count() > 0)
                         <div class="space-y-3">
                             @foreach($todayAppointments as $appointment)
-                                <div class="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-700">
-                                    <div class="flex items-center gap-3 flex-1">
+                                <div class="flex items-center justify-between rounded-lg border border-gray-200 bg-gray-50 p-4 dark:border-gray-700 dark:bg-gray-700 min-w-0 overflow-hidden">
+                                    <div class="flex items-center gap-3 flex-1 min-w-0">
                                         <div class="w-12 h-12 rounded-full overflow-hidden flex items-center justify-center flex-shrink-0">
                                             @if($appointment->paciente->personalData?->profile_photo)
                                                 <img src="{{ asset('storage/' . $appointment->paciente->personalData->profile_photo) }}" 
