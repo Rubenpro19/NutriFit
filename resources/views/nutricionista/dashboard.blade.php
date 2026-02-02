@@ -284,8 +284,8 @@
             </div>
 
             {{-- Todas las Citas Pendientes (Próximas 4 Semanas) --}}
-            <div class="mt-6 sm:mt-8 rounded-xl sm:rounded-2xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800">
-                <div class="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-4 sm:py-5 rounded-t-xl sm:rounded-t-2xl">
+            <div class="mt-6 sm:mt-8 rounded-xl sm:rounded-2xl border border-gray-200 bg-white shadow-lg dark:border-gray-700 dark:bg-gray-800 overflow-hidden">
+                <div class="bg-gradient-to-r from-blue-600 to-green-600 px-4 sm:px-6 py-4 sm:py-5">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-3">
                         <div class="flex-1">
                             <h2 class="text-xl sm:text-2xl font-bold text-white flex items-center gap-2">
