@@ -388,8 +388,8 @@
                                 <input type="hidden" name="appointment_time" x-model="selectedTime">
 
                                 <!-- Información del Paciente Seleccionado -->
-                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 mb-6 border border-green-200 dark:border-green-800 overflow-hidden">
-                                    <div class="flex items-center gap-4 mb-4 min-w-0" x-data="{ showPhotoModal: false }">
+                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-4 sm:p-6 mb-6 border border-green-200 dark:border-green-800" x-data="{ showPhotoModal: false }">
+                                    <div class="flex items-center gap-4 mb-0">
                                         <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                                             <template x-if="selectedPatient?.profile_photo">
                                                 <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
@@ -403,50 +403,10 @@
                                                 </div>
                                             </template>
                                         </div>
-                                        <div>
+                                        <div class="flex-1 min-w-0">
                                             <p class="text-sm text-gray-600 dark:text-gray-400">Asignando cita para:</p>
-                                            <p class="text-2xl font-bold text-gray-900 dark:text-white" x-text="selectedPatient?.name"></p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400" x-text="selectedPatient?.email"></p>
-                                        </div>
-
-                                        <!-- Modal de Foto de Perfil -->
-                                        <div x-show="showPhotoModal && selectedPatient?.profile_photo"
-                                             x-cloak
-                                             @keydown.escape.window="showPhotoModal = false"
-                                             class="fixed inset-0 z-50 flex items-center justify-center p-4"
-                                             style="display: none;">
-                                            
-                                            <!-- Overlay -->
-                                            <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
-                                            
-                                            <!-- Modal Content -->
-                                            <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
-                                                 @click.stop>
-                                                
-                                                <!-- Header -->
-                                                <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
-                                                    <h3 class="text-lg font-bold text-white flex items-center gap-2">
-                                                        <span class="material-symbols-outlined">photo_camera</span>
-                                                        Foto de Perfil
-                                                    </h3>
-                                                    <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
-                                                        <span class="material-symbols-outlined">close</span>
-                                                    </button>
-                                                </div>
-                                                
-                                                <!-- Image -->
-                                                <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
-                                            <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
-                                                </div>
-                                                
-                                                <!-- Footer -->
-                                                <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
-                                                    <button type="button" @click="showPhotoModal = false" 
-                                                            class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
-                                                        Cerrar
-                                                    </button>
-                                                </div>
-                                            </div>
+                                            <p class="text-xl sm:text-2xl font-bold text-gray-900 dark:text-white truncate" x-text="selectedPatient?.name"></p>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate" x-text="selectedPatient?.email"></p>
                                         </div>
                                     </div>
                                     
@@ -456,12 +416,12 @@
                                          x-transition:enter-start="opacity-0 transform scale-95"
                                          x-transition:enter-end="opacity-100 transform scale-100"
                                          class="mt-4 w-full">
-                                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-3 sm:p-4 border-2 border-dashed border-green-300 dark:border-green-600 overflow-hidden">
+                                        <div class="bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-xl p-3 sm:p-4 border-2 border-dashed border-green-300 dark:border-green-600">
                                             <p class="text-sm font-semibold text-green-900 dark:text-green-200 mb-3 flex items-center gap-2">
                                                 <span class="material-symbols-outlined text-base">check_circle</span>
                                                 Horario seleccionado
                                             </p>
-                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 w-full">
+                                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                                                 <div class="flex items-center gap-2 sm:gap-3 bg-white dark:bg-gray-700 px-3 py-2 sm:py-3 rounded-lg shadow-sm min-w-0">
                                                     <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-lg sm:text-xl flex-shrink-0">calendar_today</span>
                                                     <div class="flex-1 min-w-0">
@@ -476,6 +436,47 @@
                                                         <p class="text-sm font-bold text-gray-900 dark:text-white" x-text="selectedTime"></p>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <!-- Modal de Foto de Perfil -->
+                                    <div x-show="showPhotoModal && selectedPatient?.profile_photo"
+                                         x-cloak
+                                         @keydown.escape.window="showPhotoModal = false"
+                                         class="fixed inset-0 z-50 flex items-center justify-center p-4">
+                                        
+                                        <!-- Overlay -->
+                                        <div class="fixed inset-0 bg-black/60 dark:bg-black/80" @click="showPhotoModal = false"></div>
+                                        
+                                        <!-- Modal Content -->
+                                        <div class="relative bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden"
+                                             @click.stop>
+                                            
+                                            <!-- Header -->
+                                            <div class="bg-gradient-to-r from-green-600 to-emerald-600 px-6 py-4 flex items-center justify-between">
+                                                <h3 class="text-lg font-bold text-white flex items-center gap-2">
+                                                    <span class="material-symbols-outlined">photo_camera</span>
+                                                    Foto de Perfil
+                                                </h3>
+                                                <button type="button" @click="showPhotoModal = false" class="text-white hover:text-gray-200 transition">
+                                                    <span class="material-symbols-outlined">close</span>
+                                                </button>
+                                            </div>
+                                            
+                                            <!-- Image -->
+                                            <div class="p-6 overflow-auto max-h-[calc(90vh-140px)]">
+                                                <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
+                                                     :alt="selectedPatient?.name"
+                                                     class="w-full h-auto rounded-lg">
+                                            </div>
+                                            
+                                            <!-- Footer -->
+                                            <div class="bg-gray-50 dark:bg-gray-700 px-6 py-4 flex justify-end">
+                                                <button type="button" @click="showPhotoModal = false" 
+                                                        class="px-6 py-2 bg-gray-200 dark:bg-gray-600 text-gray-800 dark:text-gray-200 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-500 transition">
+                                                    Cerrar
+                                                </button>
                                             </div>
                                         </div>
                                     </div>
