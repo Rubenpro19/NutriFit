@@ -38,12 +38,12 @@
                 </div>
             @endif
 
-            <div class="grid gap-6 lg:grid-cols-3">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6 w-full">
                 {{-- Columna Principal --}}
-                <div class="lg:col-span-2 space-y-6">
+                <div class="lg:col-span-2 space-y-6 w-full min-w-0">
                     @if ($nextAppointment)
                         {{-- Próxima Cita --}}
-                        <div class="rounded-2xl border-2 border-green-500 bg-white p-6 shadow-lg dark:border-green-400 dark:bg-gray-800">
+                        <div class="rounded-2xl border-2 border-green-500 bg-white p-4 sm:p-6 shadow-lg dark:border-green-400 dark:bg-gray-800 w-full min-w-0 overflow-hidden">
                             <div class="flex items-center gap-2 mb-6">
                                 <span class="material-symbols-outlined text-green-600 dark:text-green-400 text-3xl">upcoming</span>
                                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white">Tu Próxima Cita</h2>
@@ -172,8 +172,8 @@
                         </div>
                     @else
                         {{-- Call to Action: Agendar Cita --}}
-                        <div class="rounded-2xl border-2 border-dashed border-green-300 dark:border-green-600 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-8 shadow-lg text-center">
-                            <div class="mb-6">
+                        <div class="rounded-2xl border-2 border-dashed border-green-300 dark:border-green-600 bg-gradient-to-br from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 p-4 sm:p-6 md:p-8 shadow-lg text-center w-full min-w-0 overflow-hidden">
+                            <div class="mb-4 sm:mb-6">
                                 <div class="inline-flex items-center justify-center w-24 h-24 rounded-full bg-gradient-to-br from-green-600 to-emerald-600 mb-4 shadow-lg">
                                     <span class="material-symbols-outlined text-5xl text-white">calendar_add_on</span>
                                 </div>
@@ -189,63 +189,63 @@
                             </div>
 
                             <a href="{{ route('paciente.booking.index') }}"
-                                class="inline-flex items-center gap-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-8 py-4 text-lg font-bold text-white transition hover:from-green-700 hover:to-emerald-700 shadow-xl hover:shadow-2xl hover:scale-105">
-                                <span class="material-symbols-outlined text-2xl">add_circle</span>
-                                Agendar Nueva Cita
+                                class="inline-flex items-center gap-2 sm:gap-3 rounded-xl bg-gradient-to-r from-green-600 to-emerald-600 px-4 sm:px-6 md:px-8 py-3 sm:py-4 text-sm sm:text-base md:text-lg font-bold text-white transition hover:from-green-700 hover:to-emerald-700 shadow-xl hover:shadow-2xl hover:scale-105">
+                                <span class="material-symbols-outlined text-lg sm:text-xl md:text-2xl">add_circle</span>
+                                <span class="truncate">Agendar Nueva Cita</span>
                             </a>
 
-                            <div class="mt-8 pt-6 border-t border-green-200 dark:border-green-700">
+                            <div class="mt-6 sm:mt-8 pt-4 sm:pt-6 border-t border-green-200 dark:border-green-700">
                                 
-                                <div class="relative">
+                                <div class="relative overflow-hidden">
                                     <!-- Línea de progreso -->
-                                    <div class="absolute top-6 left-0 right-0 h-0.5 bg-gradient-to-r from-green-300 via-blue-300 to-emerald-300 dark:from-green-700 dark:via-blue-700 dark:to-emerald-700" style="margin: 0 10%;"></div>
+                                    <div class="absolute top-5 sm:top-6 left-0 right-0 h-0.5 bg-gradient-to-r from-green-300 via-blue-300 to-emerald-300 dark:from-green-700 dark:via-blue-700 dark:to-emerald-700" style="margin: 0 10%;"></div>
                                     
-                                    <div class="relative flex items-start justify-between px-4">
+                                    <div class="relative flex items-start justify-between px-2 sm:px-4">
                                         <!-- Paso 1 -->
-                                        <div class="flex-1 text-center">
-                                            <div class="relative inline-flex items-center justify-center mb-3">
-                                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 flex items-center justify-center border-4 border-white dark:border-gray-800 relative z-10">
-                                                    <span class="text-2xl font-bold text-white">1</span>
+                                        <div class="flex-1 text-center min-w-0">
+                                            <div class="relative inline-flex items-center justify-center mb-2 sm:mb-3">
+                                                <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-green-500 to-green-600 dark:from-green-600 dark:to-green-700 flex items-center justify-center border-2 sm:border-4 border-white dark:border-gray-800 relative z-10">
+                                                    <span class="text-lg sm:text-xl md:text-2xl font-bold text-white">1</span>
                                                 </div>
                                             </div>
-                                            <div class="px-2">
-                                                <div class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-green-100 dark:bg-green-900/30 mb-2">
-                                                    <span class="material-symbols-outlined text-lg text-green-600 dark:text-green-400">search</span>
+                                            <div class="px-1 sm:px-2">
+                                                <div class="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-green-100 dark:bg-green-900/30 mb-1 sm:mb-2">
+                                                    <span class="material-symbols-outlined text-sm sm:text-lg text-green-600 dark:text-green-400">search</span>
                                                 </div>
-                                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Elige tu nutricionista</p>
-                                                <p class="text-[10px] text-gray-500 dark:text-gray-500">Explora perfiles</p>
+                                                <p class="text-[10px] sm:text-xs font-bold text-gray-700 dark:text-gray-300 mb-0.5 sm:mb-1 break-words">Elige tu nutricionista</p>
+                                                <p class="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-500 break-words">Explora perfiles</p>
                                             </div>
                                         </div>
                                         
                                         <!-- Paso 2 -->
-                                        <div class="flex-1 text-center">
-                                            <div class="relative inline-flex items-center justify-center mb-3">
-                                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center border-4 border-white dark:border-gray-800 relative z-10">
-                                                    <span class="text-2xl font-bold text-white">2</span>
+                                        <div class="flex-1 text-center min-w-0">
+                                            <div class="relative inline-flex items-center justify-center mb-2 sm:mb-3">
+                                                <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-blue-500 to-blue-600 dark:from-blue-600 dark:to-blue-700 flex items-center justify-center border-2 sm:border-4 border-white dark:border-gray-800 relative z-10">
+                                                    <span class="text-lg sm:text-xl md:text-2xl font-bold text-white">2</span>
                                                 </div>
                                             </div>
-                                            <div class="px-2">
-                                                <div class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 mb-2">
-                                                    <span class="material-symbols-outlined text-lg text-blue-600 dark:text-blue-400">event_available</span>
+                                            <div class="px-1 sm:px-2">
+                                                <div class="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-blue-100 dark:bg-blue-900/30 mb-1 sm:mb-2">
+                                                    <span class="material-symbols-outlined text-sm sm:text-lg text-blue-600 dark:text-blue-400">event_available</span>
                                                 </div>
-                                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Selecciona horario</p>
-                                                <p class="text-[10px] text-gray-500 dark:text-gray-500">Elige fecha y hora</p>
+                                                <p class="text-[10px] sm:text-xs font-bold text-gray-700 dark:text-gray-300 mb-0.5 sm:mb-1 break-words">Selecciona horario</p>
+                                                <p class="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-500 break-words">Elige fecha y hora</p>
                                             </div>
                                         </div>
                                         
                                         <!-- Paso 3 -->
-                                        <div class="flex-1 text-center">
-                                            <div class="relative inline-flex items-center justify-center mb-3">
-                                                <div class="w-14 h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 flex items-center justify-center border-4 border-white dark:border-gray-800 relative z-10">
-                                                    <span class="text-2xl font-bold text-white">3</span>
+                                        <div class="flex-1 text-center min-w-0">
+                                            <div class="relative inline-flex items-center justify-center mb-2 sm:mb-3">
+                                                <div class="w-10 h-10 sm:w-12 sm:h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-br from-emerald-500 to-emerald-600 dark:from-emerald-600 dark:to-emerald-700 flex items-center justify-center border-2 sm:border-4 border-white dark:border-gray-800 relative z-10">
+                                                    <span class="text-lg sm:text-xl md:text-2xl font-bold text-white">3</span>
                                                 </div>
                                             </div>
-                                            <div class="px-2">
-                                                <div class="inline-flex items-center justify-center w-10 h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 mb-2">
-                                                    <span class="material-symbols-outlined text-lg text-emerald-600 dark:text-emerald-400">check_circle</span>
+                                            <div class="px-1 sm:px-2">
+                                                <div class="inline-flex items-center justify-center w-8 h-8 sm:w-10 sm:h-10 rounded-lg bg-emerald-100 dark:bg-emerald-900/30 mb-1 sm:mb-2">
+                                                    <span class="material-symbols-outlined text-sm sm:text-lg text-emerald-600 dark:text-emerald-400">check_circle</span>
                                                 </div>
-                                                <p class="text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">¡Listo para tu cita!</p>
-                                                <p class="text-[10px] text-gray-500 dark:text-gray-500">Confirma tu reserva</p>
+                                                <p class="text-[10px] sm:text-xs font-bold text-gray-700 dark:text-gray-300 mb-0.5 sm:mb-1 break-words">¡Listo para tu cita!</p>
+                                                <p class="text-[9px] sm:text-[10px] text-gray-500 dark:text-gray-500 break-words">Confirma tu reserva</p>
                                             </div>
                                         </div>
                                     </div>
@@ -256,7 +256,7 @@
 
                     {{-- Últimas Citas --}}
                     @if ($recentAppointments->count() > 0)
-                        <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
+                        <div class="rounded-2xl border border-gray-200 bg-white p-4 sm:p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800 w-full min-w-0 overflow-hidden">
                             <div class="flex items-center justify-between mb-4">
                                 <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
                                     <span class="material-symbols-outlined text-green-600 dark:text-green-400">history</span>
@@ -306,7 +306,7 @@
                 </div>
 
                 {{-- Columna Lateral --}}
-                <div class="space-y-6">
+                <div class="space-y-6 w-full min-w-0">
                     {{-- Accesos Rápidos --}}
                     <div class="rounded-2xl border border-gray-200 bg-white p-6 shadow-lg dark:border-gray-700 dark:bg-gray-800">
                         <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
