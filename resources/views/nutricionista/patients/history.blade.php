@@ -143,24 +143,24 @@
                         </div>
                     </div>
                 </div>
+            </div>
 
-                <!-- Modal para ver foto ampliada -->
-                <div x-show="showPhotoModal" 
-                     @click.away="showPhotoModal = false"
-                     x-cloak
-                     class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
-                     style="display: none;">
-                    <div @click.stop class="relative max-w-3xl max-h-[90vh]">
-                        <button @click="showPhotoModal = false" 
-                                class="absolute -top-4 -right-4 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10">
-                            <span class="material-symbols-outlined text-gray-700 dark:text-gray-300">close</span>
-                        </button>
-                        @if($patient->personalData?->profile_photo)
-                            <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
-                                 alt="{{ $patient->name }}" 
-                                 class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
-                        @endif
-                    </div>
+            <!-- Modal para ver foto ampliada -->
+            <div x-show="showPhotoModal" 
+                 @click.away="showPhotoModal = false"
+                 x-cloak
+                 class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-75 p-4"
+                 style="display: none;">
+                <div @click.stop class="relative max-w-3xl max-h-[90vh]">
+                    <button @click="showPhotoModal = false" 
+                            class="absolute -top-4 -right-4 bg-white dark:bg-gray-800 rounded-full p-2 shadow-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors z-10">
+                        <span class="material-symbols-outlined text-gray-700 dark:text-gray-300">close</span>
+                    </button>
+                    @if($patient->personalData?->profile_photo)
+                        <img src="{{ asset('storage/' . $patient->personalData->profile_photo) }}" 
+                             alt="{{ $patient->name }}" 
+                             class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
+                    @endif
                 </div>
             </div>
 

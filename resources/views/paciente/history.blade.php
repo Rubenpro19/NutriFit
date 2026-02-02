@@ -567,7 +567,7 @@
                                 </div>
                                 @if($attention->nutricionista)
                                 <div class="mt-3 pt-3 border-t border-gray-200 dark:border-gray-600">
-                                    <div class="flex items-center gap-2">
+                                    <div class="flex items-center gap-2 min-w-0">
                                         @if($attention->nutricionista->personalData?->profile_photo)
                                             <img src="{{ asset('storage/' . $attention->nutricionista->personalData->profile_photo) }}" 
                                                  alt="{{ $attention->nutricionista->name }}"
@@ -578,7 +578,7 @@
                                             </div>
                                         @endif
                                         <div class="text-xs text-gray-500 dark:text-gray-400">
-                                            Atendido por: <span class="font-medium text-gray-700 dark:text-gray-300">{{ $attention->nutricionista->name }}</span>
+                                            Atendido por: <span class="font-medium text-gray-700 dark:text-gray-300 truncate block">{{ $attention->nutricionista->name }}</span>
                                         </div>
                                     </div>
                                 </div>
