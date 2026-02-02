@@ -262,13 +262,13 @@
                                         </div>
                                         <div class="flex-1 min-w-0">
                                             <p class="font-semibold text-gray-900 dark:text-white truncate">{{ $appointment->paciente->name }}</p>
-                                            <p class="text-sm text-gray-600 dark:text-gray-400">
+                                            <p class="text-sm text-gray-600 dark:text-gray-400 truncate">
                                                 {{ \Carbon\Carbon::parse($appointment->start_time)->format('h:i A') }} - {{ $appointment->appointment_type ? ucfirst(str_replace('_', ' ', $appointment->appointment_type)) : 'Consulta general' }}
                                             </p>
                                         </div>
                                     </div>
                                     <a href="{{ route('nutricionista.appointments.show', $appointment) }}" 
-                                       class="rounded-lg bg-white px-4 py-2 text-sm font-medium text-blue-600 transition hover:bg-gray-100 dark:bg-gray-600 dark:text-blue-400 dark:hover:bg-gray-500 flex-shrink-0">
+                                       class="rounded-lg bg-white px-4 py-2 text-sm font-medium text-blue-600 transition hover:bg-gray-100 dark:bg-gray-600 dark:text-blue-400 dark:hover:bg-gray-500 flex-shrink-0 ml-2">
                                         Gestionar
                                     </a>
                                 </div>
