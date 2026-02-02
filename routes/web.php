@@ -155,6 +155,7 @@ Route::middleware(['auth', 'verified', 'role:paciente', 'password.changed'])->pr
     
     // Perfil de usuario
     Route::get('/perfil', [PacienteController::class, 'profile'])->name('profile');
+    Route::post('/perfil/contrasena', [PacienteController::class, 'updatePassword'])->name('profile.update-password');
 });
 
 //Rutas para iniciar sesión con Google

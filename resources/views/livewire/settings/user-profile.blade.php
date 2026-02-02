@@ -315,14 +315,43 @@
                 </form>
             </div>
 
-            <!-- Cambiar Contraseña -->
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
+            <!-- Cambiar Contraseña (Formulario Tradicional - Sin Livewire) -->
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8" id="password-section">
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
                     <span class="material-symbols-outlined text-3xl">lock</span>
                     Cambiar Contraseña
                 </h2>
 
-                <form wire:submit.prevent="updatePassword">
+                @if ($errors->any())
+                    <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-600 dark:text-red-400 flex-shrink-0">error</span>
+                            <div class="flex-1">
+                                <h3 class="font-bold mb-1">Error al actualizar contraseña</h3>
+                                <ul class="list-disc list-inside space-y-1 text-sm">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                @endif
+
+                <form action="{{ route('paciente.profile.update-password') }}" method="POST" 
+                      x-data="{ 
+                          currentPassword: '', 
+                          password: '', 
+                          passwordConfirmation: '',
+                          get isValid() {
+                              @if($hasPassword)
+                                  return this.currentPassword.length >= 8 && this.password.length >= 8 && this.passwordConfirmation.length >= 8;
+                              @else
+                                  return this.password.length >= 8 && this.passwordConfirmation.length >= 8;
+                              @endif
+                          }
+                      }">
+                    @csrf
                     <div class="space-y-6">
                         @if($hasPassword)
                             <!-- Contraseña Actual -->
@@ -335,7 +364,11 @@
                                     <input 
                                         :type="showCurrentPassword ? 'text' : 'password'" 
                                         id="current_password"
-                                        wire:model="current_password"
+                                        name="current_password"
+                                        autocomplete="current-password"
+                                        required
+                                        x-model="currentPassword"
+                                        value="{{ old('current_password') }}"
                                         class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent @error('current_password') border-red-500 @enderror"
                                     >
                                     <button 
@@ -374,7 +407,11 @@
                                 <input 
                                     :type="showPassword ? 'text' : 'password'" 
                                     id="password"
-                                    wire:model="password"
+                                    name="password"
+                                    autocomplete="new-password"
+                                    required
+                                    minlength="8"
+                                    x-model="password"
                                     class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent @error('password') border-red-500 @enderror"
                                 >
                                 <button 
@@ -389,6 +426,9 @@
                             @error('password')
                                 <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                             @enderror
+                            <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                                Mínimo 8 caracteres
+                            </p>
                         </div>
 
                         <!-- Confirmar Nueva Contraseña -->
@@ -400,8 +440,12 @@
                             <div class="relative">
                                 <input 
                                     :type="showPasswordConfirmation ? 'text' : 'password'" 
+                                    required
+                                    minlength="8"
+                                    x-model="passwordConfirmation"
                                     id="password_confirmation"
-                                    wire:model="password_confirmation"
+                                    name="password_confirmation"
+                                    autocomplete="new-password"
                                     class="w-full px-4 py-3 pr-12 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent"
                                 >
                                 <button 
@@ -418,9 +462,11 @@
                         <!-- Botón Cambiar Contraseña -->
                         <div class="border-t dark:border-gray-700 pt-6">
                             <button type="submit" 
-                                    class="w-full flex items-center justify-center gap-2 rounded-lg bg-green-600 px-6 py-3 text-sm font-medium text-white hover:bg-green-700 focus:outline-none focus:ring-4 focus:ring-green-300 dark:bg-green-600 dark:hover:bg-green-700">
+                                    :disabled="!isValid"
+                                    :class="isValid ? 'bg-green-600 hover:bg-green-700 dark:bg-green-600 dark:hover:bg-green-700 cursor-pointer' : 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed opacity-60'"
+                                    class="w-full flex items-center justify-center gap-2 rounded-lg px-6 py-3 text-sm font-medium text-white focus:outline-none focus:ring-4 focus:ring-green-300 transition-all">
                                 <span class="material-symbols-outlined text-lg">lock</span>
-                                Actualizar Contraseña
+                                <span x-text="isValid ? 'Actualizar Contraseña' : 'Completa todos los campos (mínimo 8 caracteres)'"></span>
                             </button>
                         </div>
                     </div>
@@ -429,5 +475,15 @@
         </div>
     </div>
 
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const passwordSection = document.getElementById('password-section');
+                if (passwordSection) {
+                    passwordSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        </script>
+    @endif
 
 </div>
