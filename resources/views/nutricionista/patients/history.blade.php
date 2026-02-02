@@ -145,9 +145,8 @@
                         </div>
                     </div>
                 </div>
-            </div>
 
-            <!-- Modal para ver foto ampliada -->
+                <!-- Modal para ver foto ampliada -->
             <div x-show="showPhotoModal" 
                  @click.away="showPhotoModal = false"
                  x-cloak
@@ -164,6 +163,7 @@
                              class="max-w-full max-h-[90vh] rounded-lg shadow-2xl">
                     @endif
                 </div>
+            </div>
             </div>
 
             @if($attentions->isEmpty())
@@ -721,6 +721,7 @@
 @endsection
 
 @push('scripts')
+<script defer src="https://cdn.jsdelivr.net/npm/@alpinejs/collapse@3.x.x/dist/cdn.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', function() {

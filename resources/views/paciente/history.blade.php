@@ -571,14 +571,15 @@
                                         @if($attention->nutricionista->personalData?->profile_photo)
                                             <img src="{{ asset('storage/' . $attention->nutricionista->personalData->profile_photo) }}" 
                                                  alt="{{ $attention->nutricionista->name }}"
-                                                 class="w-8 h-8 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600">
+                                                 class="w-8 h-8 rounded-full object-cover border-2 border-gray-200 dark:border-gray-600 flex-shrink-0">
                                         @else
-                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-xs font-bold border-2 border-gray-200 dark:border-gray-600">
+                                            <div class="w-8 h-8 rounded-full bg-gradient-to-br from-green-500 to-emerald-600 flex items-center justify-center text-white text-xs font-bold border-2 border-gray-200 dark:border-gray-600 flex-shrink-0">
                                                 {{ strtoupper(substr($attention->nutricionista->name, 0, 1)) }}
                                             </div>
                                         @endif
-                                        <div class="text-xs text-gray-500 dark:text-gray-400">
-                                            Atendido por: <span class="font-medium text-gray-700 dark:text-gray-300 truncate block">{{ $attention->nutricionista->name }}</span>
+                                        <div class="text-xs text-gray-500 dark:text-gray-400 min-w-0 flex-1">
+                                            <span class="block">Atendido por:</span>
+                                            <span class="font-medium text-gray-700 dark:text-gray-300 truncate block">{{ $attention->nutricionista->name }}</span>
                                         </div>
                                     </div>
                                 </div>
