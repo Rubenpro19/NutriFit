@@ -169,7 +169,7 @@
                                         <h3 class="font-semibold text-lg text-gray-900 dark:text-white truncate">
                                             {{ $nextAppointment->paciente->name }}
                                         </h3>
-                                        <p class="text-sm text-gray-600 dark:text-gray-400">
+                                        <p class="text-sm text-gray-600 dark:text-gray-400 truncate">
                                             {{ $nextAppointment->paciente->email }}
                                         </p>
                                     </div>
