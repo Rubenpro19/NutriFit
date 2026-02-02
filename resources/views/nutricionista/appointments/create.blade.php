@@ -603,28 +603,28 @@
 
                                     <!-- Navegación de Semanas -->
                                     <div class="border-b border-gray-200 dark:border-gray-700 bg-gray-50 dark:bg-gray-900/30">
-                                        <div class="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4">
+                                        <div class="flex items-center justify-between px-3 sm:px-6 py-3 sm:py-4 gap-2">
                                             <button type="button" @click="changeWeek(-1)" :disabled="currentWeek === 0"
-                                                    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95">
+                                                    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 flex-shrink-0">
                                                 <span class="material-symbols-outlined text-lg sm:text-base">chevron_left</span>
                                                 <span class="hidden sm:inline">Anterior</span>
                                             </button>
                                             
-                                            <div class="flex gap-2 overflow-x-auto pb-2 flex-1 mx-2 sm:mx-4 justify-center scrollbar-hide">
+                                            <div class="flex gap-2 overflow-x-auto pb-2 flex-1 sm:justify-center scrollbar-hide">
                                                 <template x-for="(week, index) in weeks" :key="index">
                                                     <button type="button" @click="showWeek(index)"
                                                             :class="currentWeek === index 
                                                                 ? 'bg-gradient-to-r from-green-600 to-emerald-600 text-white shadow-lg scale-105' 
                                                                 : 'bg-white dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700 hover:shadow-md hover:scale-105'"
-                                                            class="flex-shrink-0 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all duration-200 active:scale-95">
+                                                            class="flex-shrink-0 px-3 sm:px-6 py-2 sm:py-3 rounded-lg font-semibold transition-all duration-200 active:scale-95 min-w-[80px] sm:min-w-0">
                                                         <div class="text-xs opacity-90 mb-1" x-text="'Sem ' + (index + 1)"></div>
-                                                        <div class="text-xs sm:text-sm font-bold" x-text="week.label"></div>
+                                                        <div class="text-xs sm:text-sm font-bold whitespace-nowrap" x-text="week.label"></div>
                                                     </button>
                                                 </template>
                                             </div>
 
                                             <button type="button" @click="changeWeek(1)" :disabled="currentWeek === weeks.length - 1"
-                                                    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95">
+                                                    class="flex items-center gap-1 sm:gap-2 px-2 sm:px-4 py-2 text-xs sm:text-sm font-semibold text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:scale-105 active:scale-95 flex-shrink-0">
                                                 <span class="hidden sm:inline">Siguiente</span>
                                                 <span class="material-symbols-outlined text-lg sm:text-base">chevron_right</span>
                                             </button>
