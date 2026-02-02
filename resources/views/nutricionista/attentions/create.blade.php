@@ -142,26 +142,26 @@
 
                             <!-- Datos Antropométricos -->
                             <div
-                                class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 border border-gray-200 dark:border-gray-700 mb-6">
+                                class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700 mb-6">
                                 <h2
-                                    class="text-xl font-semibold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
+                                    class="text-xl font-semibold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center gap-2">
                                     <span class="material-symbols-outlined text-emerald-600">straighten</span>
                                     Datos Antropométricos
                                 </h2>
 
-                                <div class="grid md:grid-cols-2 gap-6">
+                                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6">
                                     <!-- Peso -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="weight-input"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Peso <span class="text-red-500">*</span>
                                         </label>
                                         <div class="flex gap-2">
                                             <input type="number" step="0.01" id="weight-input" value="{{ old('weight') }}"
-                                                class="flex-1 px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('weight') border-red-500 @enderror"
+                                                class="flex-1 min-w-0 px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('weight') border-red-500 @enderror"
                                                 placeholder="70.5" required>
                                             <select id="weight-unit"
-                                                class="px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition">
+                                                class="px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition flex-shrink-0">
                                                 <option value="kg">kg</option>
                                                 <option value="lb">lb</option>
                                             </select>
@@ -174,14 +174,14 @@
                                     </div>
 
                                     <!-- Altura -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="height"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Altura (cm) <span class="text-red-500">*</span>
                                         </label>
                                         <input type="number" step="0.01" id="height" name="height"
                                             value="{{ old('height') }}"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('height') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('height') border-red-500 @enderror"
                                             placeholder="170" required>
                                         @error('height')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -189,13 +189,13 @@
                                     </div>
 
                                     <!-- Cintura -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="waist"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Cintura (cm) <span class="text-red-500">*</span>
                                         </label>
                                         <input type="number" step="0.01" id="waist" name="waist" value="{{ old('waist') }}"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('waist') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('waist') border-red-500 @enderror"
                                             placeholder="75" required>
                                         @error('waist')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -203,13 +203,13 @@
                                     </div>
 
                                     <!-- Cadera -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="hip"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Cadera (cm) <span class="text-red-500">*</span>
                                         </label>
                                         <input type="number" step="0.01" id="hip" name="hip" value="{{ old('hip') }}"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('hip') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('hip') border-red-500 @enderror"
                                             placeholder="95" required>
                                         @error('hip')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -217,13 +217,13 @@
                                     </div>
 
                                     <!-- Cuello -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="neck"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Cuello (cm) <span class="text-red-500">*</span>
                                         </label>
                                         <input type="number" step="0.01" id="neck" name="neck" value="{{ old('neck') }}"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('neck') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('neck') border-red-500 @enderror"
                                             placeholder="35" required>
                                         @error('neck')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -231,13 +231,13 @@
                                     </div>
 
                                     <!-- Muñeca -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="wrist"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Muñeca (cm) <span class="text-red-500">*</span>
                                         </label>
                                         <input type="number" step="0.01" id="wrist" name="wrist" value="{{ old('wrist') }}"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('wrist') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('wrist') border-red-500 @enderror"
                                             placeholder="16" required>
                                         @error('wrist')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -245,14 +245,14 @@
                                     </div>
 
                                     <!-- Brazo Contraído -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="arm_contracted"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Brazo Contraído (cm) <span class="text-red-500">*</span>
                                         </label>
                                         <input type="number" step="0.01" id="arm_contracted" name="arm_contracted"
                                             value="{{ old('arm_contracted') }}"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('arm_contracted') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('arm_contracted') border-red-500 @enderror"
                                             placeholder="35" required>
                                         @error('arm_contracted')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -260,14 +260,14 @@
                                     </div>
 
                                     <!-- Brazo Relajado -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="arm_relaxed"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Brazo Relajado (cm) <span class="text-red-500">*</span>
                                         </label>
                                         <input type="number" step="0.01" id="arm_relaxed" name="arm_relaxed"
                                             value="{{ old('arm_relaxed') }}"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('arm_relaxed') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('arm_relaxed') border-red-500 @enderror"
                                             placeholder="30" required>
                                         @error('arm_relaxed')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -275,13 +275,13 @@
                                     </div>
 
                                     <!-- Pierna -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="thigh"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Pierna (cm) <span class="text-red-500">*</span>
                                         </label>
                                         <input type="number" step="0.01" id="thigh" name="thigh" value="{{ old('thigh') }}"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('thigh') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('thigh') border-red-500 @enderror"
                                             placeholder="55" required>
                                         @error('thigh')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -289,13 +289,13 @@
                                     </div>
 
                                     <!-- Pantorrilla -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="calf"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Pantorrilla (cm) <span class="text-red-500">*</span>
                                         </label>
                                         <input type="number" step="0.01" id="calf" name="calf" value="{{ old('calf') }}"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('calf') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('calf') border-red-500 @enderror"
                                             placeholder="38" required>
                                         @error('calf')
                                             <p class="text-red-500 text-xs mt-1">{{ $message }}</p>
@@ -303,13 +303,13 @@
                                     </div>
 
                                     <!-- Nivel de Actividad Física -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="activity_level"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Nivel de Actividad Física <span class="text-red-500">*</span>
                                         </label>
                                         <select id="activity_level" name="activity_level"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('activity_level') border-red-500 @enderror"
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition @error('activity_level') border-red-500 @enderror"
                                             required>
                                             <option value="sedentary">Sedentario (poco o ningún ejercicio)</option>
                                             <option value="light">Ligero (ejercicio 1-3 días/semana)</option>
@@ -323,13 +323,13 @@
                                     </div>
 
                                     <!-- Objetivo Nutricional -->
-                                    <div>
+                                    <div class="min-w-0">
                                         <label for="nutrition_goal"
                                             class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
                                             Objetivo Nutricional <span class="text-red-500">*</span>
                                         </label>
                                         <select id="nutrition_goal" name="nutrition_goal"
-                                            class="w-full px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition">
+                                            class="w-full px-3 sm:px-4 py-3 bg-gray-50 dark:bg-gray-700 border border-gray-300 dark:border-gray-600 rounded-xl focus:ring-2 focus:ring-emerald-500 focus:border-transparent text-gray-900 dark:text-white transition">
                                             <option value="deficit">Pérdida de peso (déficit calórico)</option>
                                             <option value="maintenance" selected>Mantenimiento</option>
                                             <option value="surplus">Ganancia de masa (superávit calórico)</option>
