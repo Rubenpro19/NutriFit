@@ -18,7 +18,7 @@
                     <a href="{{ route('paciente.appointments.index') }}"
                         class="text-green-600 dark:text-green-400 hover:underline transition-colors">Mis Citas</a>
                     <span class="material-symbols-outlined text-gray-400 text-sm">chevron_right</span>
-                    <span class="text-gray-700 dark:text-gray-300 font-medium">Detalle</span>
+                    <span class="text-gray-700 dark:text-gray-300 font-medium">Detalle Cita</span>
                 </nav>
 
                 <!-- Header -->
@@ -85,19 +85,19 @@
                                         {{ $appointment->nutricionista->initials() }}
                                     </div>
                                 @endif
-                                <div class="flex-1">
-                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2">
+                                <div class="flex-1 min-w-0">
+                                    <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 break-words">
                                         {{ $appointment->nutricionista->name }}
                                     </h3>
                                     <div class="space-y-1 text-sm text-gray-600 dark:text-gray-400">
-                                        <div class="flex items-center gap-2">
-                                            <span class="material-symbols-outlined text-sm">email</span>
-                                            <span>{{ $appointment->nutricionista->email }}</span>
+                                        <div class="flex items-start gap-2 min-w-0">
+                                            <span class="material-symbols-outlined text-sm flex-shrink-0">email</span>
+                                            <span class="break-all">{{ $appointment->nutricionista->email }}</span>
                                         </div>
                                         @if($appointment->nutricionista->personalData && $appointment->nutricionista->personalData->phone)
-                                            <div class="flex items-center gap-2">
-                                                <span class="material-symbols-outlined text-sm">call</span>
-                                                <span>{{ $appointment->nutricionista->personalData->phone }}</span>
+                                            <div class="flex items-start gap-2 min-w-0">
+                                                <span class="material-symbols-outlined text-sm flex-shrink-0">call</span>
+                                                <span class="break-all">{{ $appointment->nutricionista->personalData->phone }}</span>
                                             </div>
                                         @endif
                                     </div>
