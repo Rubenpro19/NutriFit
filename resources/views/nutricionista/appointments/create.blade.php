@@ -126,9 +126,9 @@
         @endif
 
         <div x-data="appointmentAssignment()" x-init="init()">
-            <div class="grid lg:grid-cols-3 gap-6">
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
                     <!-- Columna Izquierda: Selección de Paciente -->
-                    <div class="lg:col-span-1">
+                    <div class="lg:col-span-1 w-full">
                         <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-4 sm:p-6 border border-gray-200 dark:border-gray-700 lg:sticky lg:top-6">
                             <h2 class="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-4 flex items-center gap-2">
                                 <span class="material-symbols-outlined text-green-600 dark:text-green-400">person_search</span>
@@ -166,7 +166,7 @@
                                         :class="selectedPatientId === paciente.id ? 'border-green-500 bg-green-50 dark:bg-green-900/20 shadow-md' : 'border-gray-200 dark:border-gray-700 hover:border-green-300 hover:shadow-sm'"
                                         class="w-full text-left p-3 sm:p-4 rounded-lg border-2 transition-all duration-200"
                                     >
-                                        <div class="flex items-center gap-3">
+                                        <div class="flex items-center gap-3 min-w-0">
                                             <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                                                 <template x-if="paciente.profile_photo">
                                                     <img :src="paciente.profile_photo ? '/storage/' + paciente.profile_photo : 'data:,'" :alt="paciente.name" class="w-full h-full object-cover">
@@ -184,11 +184,11 @@
                                                 <template x-if="!paciente.habilitado_clinicamente">
                                                     <span class="inline-flex items-center gap-1 mt-1 px-2 py-0.5 rounded-full text-xs font-medium bg-red-100 dark:bg-red-900/30 text-red-800 dark:text-red-300">
                                                         <span class="material-symbols-outlined text-xs">block</span>
-                                                        <span x-text="paciente.motivo_inhabilitacion"></span>
+                                                        <span class="truncate" x-text="paciente.motivo_inhabilitacion"></span>
                                                     </span>
                                                 </template>
                                             </div>
-                                            <span x-show="selectedPatientId === paciente.id" class="material-symbols-outlined text-green-600 dark:text-green-400">check_circle</span>
+                                            <span x-show="selectedPatientId === paciente.id" class="material-symbols-outlined text-green-600 dark:text-green-400 flex-shrink-0">check_circle</span>
                                         </div>
                                     </button>
                                 </template>
@@ -210,7 +210,7 @@
                     </div>
 
                     <!-- Columna Derecha: Horarios y Formulario -->
-                    <div class="lg:col-span-2">
+                    <div class="lg:col-span-2 w-full min-w-0">
                         <!-- Mensaje inicial -->
                         <div x-show="!selectedPatientId" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-12 text-center border border-gray-200 dark:border-gray-700">
                             <span class="material-symbols-outlined text-6xl text-gray-300 dark:text-gray-600 mb-4">arrow_back</span>
@@ -227,10 +227,10 @@
                         </div>
 
                         <!-- Mensaje cuando el paciente ya tiene una cita pendiente -->
-                        <div x-show="selectedPatientId && !loading && hasError" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 sm:p-12 border border-orange-200 dark:border-orange-800">
+                        <div x-show="selectedPatientId && !loading && hasError" class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-8 sm:p-12 border border-orange-200 dark:border-orange-800 w-full overflow-hidden">
                             <!-- Información del Paciente -->
-                            <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-600/50 rounded-2xl p-6 mb-6 border border-gray-200 dark:border-gray-600" x-data="{ showPhotoModal: false }">
-                                <div class="flex items-center gap-4">
+                            <div class="bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-700/50 dark:to-gray-600/50 rounded-2xl p-6 mb-6 border border-gray-200 dark:border-gray-600 overflow-hidden" x-data="{ showPhotoModal: false }">
+                                <div class="flex items-center gap-4 min-w-0">
                                     <div class="w-20 h-20 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden border-4 border-white dark:border-gray-800 shadow-lg">
                                         <template x-if="selectedPatient?.profile_photo">
                                             <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
@@ -380,16 +380,16 @@
                         </div>
 
                         <!-- Horarios Disponibles y Formulario -->
-                        <div x-show="selectedPatientId && !loading && !hasError && weeks.length > 0">
-                            <form method="POST" action="{{ route('nutricionista.appointments.store') }}" @submit="submitting = true">
+                        <div x-show="selectedPatientId && !loading && !hasError && weeks.length > 0" class="w-full overflow-hidden">
+                            <form method="POST" action="{{ route('nutricionista.appointments.store') }}" @submit="submitting = true" class="w-full">
                                 @csrf
                                 <input type="hidden" name="paciente_id" x-model="selectedPatientId">
                                 <input type="hidden" name="appointment_date" x-model="selectedDate">
                                 <input type="hidden" name="appointment_time" x-model="selectedTime">
 
                                 <!-- Información del Paciente Seleccionado -->
-                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 mb-6 border border-green-200 dark:border-green-800">
-                                    <div class="flex items-center gap-4 mb-4" x-data="{ showPhotoModal: false }">
+                                <div class="bg-gradient-to-r from-green-50 to-emerald-50 dark:from-green-900/20 dark:to-emerald-900/20 rounded-2xl p-6 mb-6 border border-green-200 dark:border-green-800 overflow-hidden">
+                                    <div class="flex items-center gap-4 mb-4 min-w-0" x-data="{ showPhotoModal: false }">
                                         <div class="w-16 h-16 rounded-full flex items-center justify-center flex-shrink-0 overflow-hidden">
                                             <template x-if="selectedPatient?.profile_photo">
                                                 <img :src="selectedPatient?.profile_photo ? '/storage/' + selectedPatient.profile_photo : 'data:,'" 
