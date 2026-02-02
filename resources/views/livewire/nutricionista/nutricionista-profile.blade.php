@@ -248,104 +248,149 @@
                 </form>
             </div>
 
-            <!-- Cambiar Contraseña -->
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8">
+            <!-- Cambiar Contraseña (Formulario Tradicional - Sin Livewire) -->
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-8" id="password-section">
                 <h2 class="text-2xl font-bold text-gray-900 dark:text-white mb-6 flex items-center gap-2">
                     <span class="material-symbols-outlined text-3xl">lock</span>
                     Cambiar Contraseña
                 </h2>
 
-                @if(session('password_error'))
-                    <div class="mb-6 bg-red-50 border border-red-200 rounded-lg p-4 dark:bg-red-900/20 dark:border-red-800">
-                        <div class="flex items-center gap-3">
-                            <span class="material-symbols-outlined text-red-600 dark:text-red-400">error</span>
-                            <p class="text-red-900 dark:text-red-300 font-semibold">{{ session('password_error') }}</p>
+                @if ($errors->any())
+                    <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg">
+                        <div class="flex items-start gap-3">
+                            <span class="material-symbols-outlined text-red-600 dark:text-red-400 flex-shrink-0">error</span>
+                            <div class="flex-1">
+                                <h3 class="font-bold mb-1">Error al actualizar contraseña</h3>
+                                <ul class="list-disc list-inside space-y-1 text-sm">
+                                    @foreach ($errors->all() as $error)
+                                        <li>{{ $error }}</li>
+                                    @endforeach
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 @endif
 
-                <form wire:submit.prevent="updatePassword" class="space-y-6">
-                    @if($hasPassword)
-                        <div x-data="{ showCurrentPassword: false }">
-                            <label for="current_password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                                Contraseña Actual *
+                <form action="{{ route('nutricionista.profile.update-password') }}" method="POST" 
+                      x-data="{ 
+                          currentPassword: '', 
+                          password: '', 
+                          passwordConfirmation: '',
+                          get isValid() {
+                              @if($hasPassword)
+                                  return this.currentPassword.length >= 8 && this.password.length >= 8 && this.passwordConfirmation.length >= 8;
+                              @else
+                                  return this.password.length >= 8 && this.passwordConfirmation.length >= 8;
+                              @endif
+                          }
+                      }">
+                    @csrf
+                    <div class="space-y-6">
+                        @if($hasPassword)
+                            <div x-data="{ showCurrentPassword: false }">
+                                <label for="current_password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                    Contraseña Actual *
+                                </label>
+                                <div class="relative">
+                                    <input 
+                                        :type="showCurrentPassword ? 'text' : 'password'" 
+                                        id="current_password"
+                                        name="current_password"
+                                        autocomplete="current-password"
+                                        required
+                                        x-model="currentPassword"
+                                        value="{{ old('current_password') }}"
+                                        class="w-full px-4 py-3 pr-12 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition @error('current_password') border-red-500 @enderror">
+                                    <button 
+                                        type="button"
+                                        @click="showCurrentPassword = !showCurrentPassword"
+                                        class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                                    >
+                                        <span class="material-symbols-outlined" x-show="!showCurrentPassword">visibility</span>
+                                        <span class="material-symbols-outlined" x-show="showCurrentPassword" x-cloak>visibility_off</span>
+                                    </button>
+                                </div>
+                                @error('current_password') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                            </div>
+                        @endif
+
+                        <div x-data="{ showPassword: false }">
+                            <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                Nueva Contraseña *
                             </label>
                             <div class="relative">
                                 <input 
-                                    :type="showCurrentPassword ? 'text' : 'password'" 
-                                    wire:model="current_password" 
-                                    id="current_password"
+                                    :type="showPassword ? 'text' : 'password'" 
+                                    id="password"
+                                    name="password"
+                                    autocomplete="new-password"
+                                    required
+                                    minlength="8"
+                                    x-model="password"
+                                    class="w-full px-4 py-3 pr-12 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition @error('password') border-red-500 @enderror">
+                                <button 
+                                    type="button"
+                                    @click="showPassword = !showPassword"
+                                    class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
+                                >
+                                    <span class="material-symbols-outlined" x-show="!showPassword">visibility</span>
+                                    <span class="material-symbols-outlined" x-show="showPassword" x-cloak>visibility_off</span>
+                                </button>
+                            </div>
+                            @error('password') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                            <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
+                                Mínimo 8 caracteres
+                            </p>
+                        </div>
+
+                        <div x-data="{ showPasswordConfirmation: false }">
+                            <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
+                                Confirmar Nueva Contraseña *
+                            </label>
+                            <div class="relative">
+                                <input 
+                                    :type="showPasswordConfirmation ? 'text' : 'password'" 
+                                    id="password_confirmation"
+                                    name="password_confirmation"
+                                    autocomplete="new-password"
+                                    required
+                                    minlength="8"
+                                    x-model="passwordConfirmation"
                                     class="w-full px-4 py-3 pr-12 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
                                 <button 
                                     type="button"
-                                    @click="showCurrentPassword = !showCurrentPassword"
+                                    @click="showPasswordConfirmation = !showPasswordConfirmation"
                                     class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
                                 >
-                                    <span class="material-symbols-outlined" x-show="!showCurrentPassword">visibility</span>
-                                    <span class="material-symbols-outlined" x-show="showCurrentPassword" x-cloak>visibility_off</span>
+                                    <span class="material-symbols-outlined" x-show="!showPasswordConfirmation">visibility</span>
+                                    <span class="material-symbols-outlined" x-show="showPasswordConfirmation" x-cloak>visibility_off</span>
                                 </button>
                             </div>
-                            @error('current_password') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
                         </div>
-                    @endif
 
-                    <div x-data="{ showPassword: false }">
-                        <label for="password" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            Nueva Contraseña *
-                        </label>
-                        <div class="relative">
-                            <input 
-                                :type="showPassword ? 'text' : 'password'" 
-                                wire:model="password" 
-                                id="password"
-                                class="w-full px-4 py-3 pr-12 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
-                            <button 
-                                type="button"
-                                @click="showPassword = !showPassword"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                            >
-                                <span class="material-symbols-outlined" x-show="!showPassword">visibility</span>
-                                <span class="material-symbols-outlined" x-show="showPassword" x-cloak>visibility_off</span>
-                            </button>
-                        </div>
-                        @error('password') <p class="mt-1 text-sm text-red-600 dark:text-red-400">{{ $message }}</p> @enderror
+                        <button 
+                            type="submit"
+                            :disabled="!isValid"
+                            :class="isValid ? 'bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 cursor-pointer' : 'bg-gray-400 dark:bg-gray-600 cursor-not-allowed opacity-60'"
+                            class="w-full text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2">
+                            <span class="material-symbols-outlined">lock_reset</span>
+                            <span x-text="isValid ? 'Actualizar Contraseña' : 'Completa todos los campos (mínimo 8 caracteres)'"></span>
+                        </button>
                     </div>
-
-                    <div x-data="{ showPasswordConfirmation: false }">
-                        <label for="password_confirmation" class="block text-sm font-semibold text-gray-700 dark:text-gray-300 mb-2">
-                            Confirmar Nueva Contraseña *
-                        </label>
-                        <div class="relative">
-                            <input 
-                                :type="showPasswordConfirmation ? 'text' : 'password'" 
-                                wire:model="password_confirmation" 
-                                id="password_confirmation"
-                                class="w-full px-4 py-3 pr-12 rounded-lg border-2 border-gray-300 dark:border-gray-600 dark:bg-gray-800 dark:text-white focus:border-green-500 focus:ring-2 focus:ring-green-200 dark:focus:ring-green-800 transition">
-                            <button 
-                                type="button"
-                                @click="showPasswordConfirmation = !showPasswordConfirmation"
-                                class="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 transition-colors"
-                            >
-                                <span class="material-symbols-outlined" x-show="!showPasswordConfirmation">visibility</span>
-                                <span class="material-symbols-outlined" x-show="showPasswordConfirmation" x-cloak>visibility_off</span>
-                            </button>
-                        </div>
-                    </div>
-
-                    <button 
-                        type="submit"
-                        wire:loading.attr="disabled"
-                        class="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-bold py-3 px-6 rounded-lg transition-all duration-200 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
-                        <span wire:loading.remove wire:target="updatePassword" class="material-symbols-outlined">lock_reset</span>
-                        <svg wire:loading wire:target="updatePassword" class="animate-spin h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
-                        <span wire:loading.remove wire:target="updatePassword">Actualizar Contraseña</span>
-                        <span wire:loading wire:target="updatePassword">Actualizando...</span>
-                    </button>
                 </form>
             </div>
         </div>
     </div>
+
+    @if ($errors->any())
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+                const passwordSection = document.getElementById('password-section');
+                if (passwordSection) {
+                    passwordSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+            });
+        </script>
+    @endif
+
 </div>

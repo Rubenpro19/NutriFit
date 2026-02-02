@@ -124,6 +124,7 @@ Route::middleware(['auth', 'verified', 'role:nutricionista'])->prefix('nutricion
     Route::get('/perfil', function() {
         return view('nutricionista.profile');
     })->name('profile');
+    Route::post('/perfil/contrasena', [NutricionistaController::class, 'updatePassword'])->name('profile.update-password');
 });
 
 // Panel paciente - Ruta para cambiar contraseña por defecto (sin middleware password.changed)

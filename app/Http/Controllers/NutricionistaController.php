@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Notifications\AppointmentCancelledByNutricionista;
+use App\Notifications\PasswordChangedNotification;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use App\Models\User;
 use App\Models\Appointment;
 use App\Models\NutricionistaSchedule;
@@ -190,6 +192,49 @@ class NutricionistaController extends Controller
         return redirect()
             ->route('nutricionista.appointments.show', $appointment)
             ->with('success', 'La cita ha sido cancelada exitosamente.');
+    }
+
+    /**
+     * Actualizar contraseña del nutricionista
+     */
+    public function updatePassword(Request $request)
+    {
+        $user = auth()->user();
+        
+        // Verificar si el usuario tiene contraseña que no sea la por defecto
+        $defaultPassword = \App\Http\Middleware\EnsurePasswordChanged::DEFAULT_PASSWORD;
+        $hasPassword = !empty($user->password) && !Hash::check($defaultPassword, $user->password);
+
+        // Validar
+        $rules = [];
+        if ($hasPassword) {
+            $rules['current_password'] = 'required|string';
+        }
+        $rules['password'] = 'required|string|min:8|confirmed';
+
+        $messages = [
+            'current_password.required' => 'Debes ingresar tu contraseña actual para cambiarla.',
+            'password.required' => 'La nueva contraseña es obligatoria.',
+            'password.min' => 'La nueva contraseña debe tener al menos 8 caracteres.',
+            'password.confirmed' => 'Las contraseñas no coinciden.',
+        ];
+
+        $request->validate($rules, $messages);
+
+        // Verificar contraseña actual si existe
+        if ($hasPassword && !Hash::check($request->current_password, $user->password)) {
+            return back()->withErrors(['current_password' => 'La contraseña actual es incorrecta.']);
+        }
+
+        // Actualizar contraseña
+        $user->update([
+            'password' => Hash::make($request->password)
+        ]);
+
+        // Enviar notificación de seguridad
+        $user->notify(new PasswordChangedNotification());
+
+        return redirect()->route('nutricionista.profile')->with('password_success', 'Tu contraseña ha sido actualizada correctamente.');
     }
 
     /**
