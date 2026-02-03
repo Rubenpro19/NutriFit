@@ -44,129 +44,65 @@
                 </div>
             </div>
 
-            {{-- Stats Cards --}}
-            <div class="grid grid-cols-2 gap-4 mb-6 lg:grid-cols-5">
-                {{-- Total --}}
-                <div class="rounded-xl bg-gradient-to-br from-green-600 to-emerald-600 p-4 text-white shadow-lg transform transition-all duration-200 hover:scale-105">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="material-symbols-outlined text-3xl opacity-80">calendar_month</span>
-                        <span class="text-3xl font-bold">{{ $stats['total'] }}</span>
-                    </div>
-                    <p class="text-sm font-medium opacity-90">Total</p>
-                </div>
-
-                {{-- Pendientes --}}
-                <div class="rounded-xl bg-gradient-to-br from-green-500 to-emerald-500 p-4 text-white shadow-lg transform transition-all duration-200 hover:scale-105">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="material-symbols-outlined text-3xl opacity-80">schedule</span>
-                        <span class="text-3xl font-bold">{{ $stats['pendientes'] }}</span>
-                    </div>
-                    <p class="text-sm font-medium opacity-90">Pendientes</p>
-                </div>
-
-                {{-- Completadas --}}
-                <div class="rounded-xl bg-gradient-to-br from-emerald-600 to-green-600 p-4 text-white shadow-lg transform transition-all duration-200 hover:scale-105">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="material-symbols-outlined text-3xl opacity-80">check_circle</span>
-                        <span class="text-3xl font-bold">{{ $stats['completadas'] }}</span>
-                    </div>
-                    <p class="text-sm font-medium opacity-90">Completadas</p>
-                </div>
-
-                {{-- Canceladas --}}
-                <div class="rounded-xl bg-gradient-to-br from-green-700 to-emerald-700 p-4 text-white shadow-lg transform transition-all duration-200 hover:scale-105">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="material-symbols-outlined text-3xl opacity-80">cancel</span>
-                        <span class="text-3xl font-bold">{{ $stats['canceladas'] }}</span>
-                    </div>
-                    <p class="text-sm font-medium opacity-90">Canceladas</p>
-                </div>
-
-                {{-- Vencidas --}}
-                <div class="rounded-xl bg-gradient-to-br from-emerald-700 to-green-700 p-4 text-white shadow-lg transform transition-all duration-200 hover:scale-105">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="material-symbols-outlined text-3xl opacity-80">error</span>
-                        <span class="text-3xl font-bold">{{ $stats['vencidas'] }}</span>
-                    </div>
-                    <p class="text-sm font-medium opacity-90">Vencidas</p>
-                </div>
-            </div>
-
             {{-- Filtros --}}
             <div class="mb-6 rounded-xl bg-white p-4 sm:p-6 shadow-sm dark:bg-gray-800">
                 <form method="GET" action="{{ route('nutricionista.appointments.index') }}" class="space-y-4">
-                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                         {{-- Búsqueda por paciente --}}
-                        <div>
-                            <label for="search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <div class="w-full">
+                            <label for="search" class="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <span class="material-symbols-outlined text-base">search</span>
                                 Buscar Paciente
                             </label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                    search
-                                </span>
-                                <input type="text" 
-                                       name="search" 
-                                       id="search"
-                                       value="{{ request('search') }}"
-                                       placeholder="Nombre del paciente..."
-                                       class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            </div>
+                            <input type="text" 
+                                   name="search" 
+                                   id="search"
+                                   value="{{ request('search') }}"
+                                   placeholder="Nombre del paciente..."
+                                   class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
                         </div>
 
                         {{-- Filtro por estado --}}
-                        <div>
-                            <label for="estado" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <div class="w-full">
+                            <label for="estado" class="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <span class="material-symbols-outlined text-base">filter_alt</span>
                                 Estado
                             </label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                    filter_list
-                                </span>
-                                <select name="estado" 
-                                        id="estado"
-                                        class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500 appearance-none">
-                                    <option value="todos" {{ request('estado') == 'todos' ? 'selected' : '' }}>Todos</option>
-                                    <option value="pendiente" {{ request('estado') == 'pendiente' ? 'selected' : '' }}>Pendientes</option>
-                                    <option value="completada" {{ request('estado') == 'completada' ? 'selected' : '' }}>Completadas</option>
-                                    <option value="cancelada" {{ request('estado') == 'cancelada' ? 'selected' : '' }}>Canceladas</option>
-                                    <option value="vencida" {{ request('estado') == 'vencida' ? 'selected' : '' }}>Vencidas</option>
-                                </select>
-                            </div>
+                            <select name="estado" 
+                                    id="estado"
+                                    class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                <option value="todos" {{ request('estado') == 'todos' ? 'selected' : '' }}>Todos</option>
+                                <option value="pendiente" {{ request('estado') == 'pendiente' ? 'selected' : '' }}>Pendientes</option>
+                                <option value="completada" {{ request('estado') == 'completada' ? 'selected' : '' }}>Completadas</option>
+                                <option value="cancelada" {{ request('estado') == 'cancelada' ? 'selected' : '' }}>Canceladas</option>
+                                <option value="vencida" {{ request('estado') == 'vencida' ? 'selected' : '' }}>Vencidas</option>
+                            </select>
                         </div>
 
                         {{-- Fecha desde --}}
-                        <div>
-                            <label for="fecha_desde" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <div class="w-full">
+                            <label for="fecha_desde" class="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <span class="material-symbols-outlined text-base">event</span>
                                 Desde
                             </label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                    calendar_today
-                                </span>
-                                <input type="date" 
-                                       name="fecha_desde" 
-                                       id="fecha_desde"
-                                       value="{{ request('fecha_desde') }}"
-                                       class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            </div>
+                            <input type="date" 
+                                   name="fecha_desde" 
+                                   id="fecha_desde"
+                                   value="{{ request('fecha_desde') }}"
+                                   class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
                         </div>
 
                         {{-- Fecha hasta --}}
-                        <div>
-                            <label for="fecha_hasta" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        <div class="w-full">
+                            <label for="fecha_hasta" class="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                <span class="material-symbols-outlined text-base">event</span>
                                 Hasta
                             </label>
-                            <div class="relative">
-                                <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-gray-400">
-                                    calendar_today
-                                </span>
-                                <input type="date" 
-                                       name="fecha_hasta" 
-                                       id="fecha_hasta"
-                                       value="{{ request('fecha_hasta') }}"
-                                       class="w-full pl-10 pr-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
-                            </div>
+                            <input type="date" 
+                                   name="fecha_hasta" 
+                                   id="fecha_hasta"
+                                   value="{{ request('fecha_hasta') }}"
+                                   class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
                         </div>
                     </div>
 
