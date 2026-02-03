@@ -89,7 +89,7 @@
                                    name="fecha_desde" 
                                    id="fecha_desde"
                                    value="{{ request('fecha_desde') }}"
-                                   class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                   class="w-full max-w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
                         </div>
 
                         {{-- Fecha hasta --}}
@@ -102,7 +102,7 @@
                                    name="fecha_hasta" 
                                    id="fecha_hasta"
                                    value="{{ request('fecha_hasta') }}"
-                                   class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
+                                   class="w-full max-w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-green-500">
                         </div>
                     </div>
 
