@@ -220,49 +220,52 @@
                         </div>
 
                         @if($hasPersonalData)
-                            <!-- Género (Solo Lectura) -->
-                            <div>
-                                <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-lg">wc</span>
-                                    Sexo
-                                </label>
-                                <div class="relative">
-                                    <input 
-                                        type="text" 
-                                        value="{{ 
-                                            $gender === 'male' ? 'Masculino' : 
-                                            ($gender === 'female' ? 'Femenino' : 'No especificado')
-                                        }}"
-                                        disabled
-                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-not-allowed"
-                                    >
-                                    <div class="absolute right-3 top-3 flex items-center gap-2 text-gray-500 dark:text-gray-400">
-                                        <span class="material-symbols-outlined text-sm">lock</span>
-                                        <span class="text-xs">Solo lectura</span>
+                            <!-- Grid para campos de información personal -->
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                                <!-- Género (Solo Lectura) -->
+                                <div>
+                                    <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">wc</span>
+                                        Sexo
+                                    </label>
+                                    <div class="relative">
+                                        <input 
+                                            type="text" 
+                                            value="{{ 
+                                                $gender === 'male' ? 'Masculino' : 
+                                                ($gender === 'female' ? 'Femenino' : 'No especificado')
+                                            }}"
+                                            disabled
+                                            class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-800 text-gray-700 dark:text-gray-300 cursor-not-allowed"
+                                        >
+                                        <div class="absolute right-3 top-3 flex items-center gap-2 text-gray-500 dark:text-gray-400">
+                                            <span class="material-symbols-outlined text-sm">lock</span>
+                                            <span class="text-xs">Solo lectura</span>
+                                        </div>
                                     </div>
+                                    <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">Este campo es asignado por el nutricionista.</p>
                                 </div>
-                                <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">Este campo es asignado por el nutricionista.</p>
-                            </div>
 
-                            <!-- Fecha de Nacimiento (Editable) -->
-                            <div>
-                                <label for="birth_date" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
-                                    <span class="material-symbols-outlined text-lg">cake</span>
-                                    Fecha de Nacimiento
-                                </label>
-                                <input 
-                                    type="date" 
-                                    id="birth_date"
-                                    wire:model="birth_date"
-                                    max="{{ now()->format('Y-m-d') }}"
-                                    class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent @error('birth_date') border-red-500 @enderror"
-                                >
-                                @error('birth_date')
-                                    <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
-                                @enderror
-                                @if($age)
-                                    <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Edad actual: <span class="font-semibold">{{ $age }} años</span></p>
-                                @endif
+                                <!-- Fecha de Nacimiento (Editable) -->
+                                <div>
+                                    <label for="birth_date" class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
+                                        <span class="material-symbols-outlined text-lg">cake</span>
+                                        Fecha de Nacimiento
+                                    </label>
+                                    <input 
+                                        type="date" 
+                                        id="birth_date"
+                                        wire:model="birth_date"
+                                        max="{{ now()->format('Y-m-d') }}"
+                                        class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent @error('birth_date') border-red-500 @enderror"
+                                    >
+                                    @error('birth_date')
+                                        <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
+                                    @enderror
+                                    @if($age)
+                                        <p class="mt-2 text-sm text-gray-600 dark:text-gray-400">Edad actual: <span class="font-semibold">{{ $age }} años</span></p>
+                                    @endif
+                                </div>
                             </div>
 
                             <!-- Teléfono (Editable) -->
