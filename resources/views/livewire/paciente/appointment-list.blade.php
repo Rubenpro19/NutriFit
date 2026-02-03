@@ -1,9 +1,10 @@
 <div>
     <!-- Filtros -->
     <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-6 border border-gray-200 dark:border-gray-700">
-        <div class="flex flex-wrap gap-4 items-end">
-            <div class="flex-1 min-w-[200px]">
-                <label for="estado" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="w-full">
+                <label for="estado" class="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <span class="material-symbols-outlined text-base">filter_alt</span>
                     Filtrar por estado
                 </label>
                 <select wire:model.live="estado" id="estado" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent">
@@ -15,8 +16,9 @@
                 </select>
             </div>
 
-            <div class="flex-1 min-w-[200px]">
-                <label for="nutricionista" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div class="w-full">
+                <label for="nutricionista" class="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <span class="material-symbols-outlined text-base">person</span>
                     Filtrar por nutricionista
                 </label>
                 <select wire:model.live="nutricionista" id="nutricionista" class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent">
@@ -27,28 +29,30 @@
                 </select>
             </div>
 
-            <div class="flex-1 min-w-[200px]">
-                <label for="fecha_desde" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div class="w-full">
+                <label for="fecha_desde" class="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <span class="material-symbols-outlined text-base">event</span>
                     Fecha desde
                 </label>
                 <input wire:model.live="fecha_desde" type="date" id="fecha_desde" 
                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent">
             </div>
 
-            <div class="flex-1 min-w-[200px]">
-                <label for="fecha_hasta" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+            <div class="w-full">
+                <label for="fecha_hasta" class="flex items-center gap-1 text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                    <span class="material-symbols-outlined text-base">event</span>
                     Fecha hasta
                 </label>
                 <input wire:model.live="fecha_hasta" type="date" id="fecha_hasta" 
                        class="w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-green-500 focus:border-transparent">
             </div>
+        </div>
 
-            <div class="flex gap-2">
-                <button wire:click="limpiarFiltros" type="button" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-2 px-6 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
-                    <span class="material-symbols-outlined">refresh</span>
-                    Limpiar
-                </button>
-            </div>
+        <div class="flex justify-center mt-4">
+            <button wire:click="limpiarFiltros" type="button" class="flex items-center gap-2 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 font-semibold py-2 px-6 rounded-lg hover:bg-gray-200 dark:hover:bg-gray-600 transition">
+                <span class="material-symbols-outlined">refresh</span>
+                Limpiar
+            </button>
         </div>
     </div>
 
