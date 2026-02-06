@@ -47,7 +47,7 @@ class AppointmentConfirmedForPatient extends Notification implements ShouldQueue
             ->line('**Hora:** ' . $appointmentTime)
             ->line('**Estado:** Pendiente')
             ->action('Ver Mis Citas', url('/paciente/citas'))
-            ->line('El nutricionista confirmará tu cita pronto. Te enviaremos una notificación.')
+            ->line('Te esperamos en tu cita. Si necesitas cancelar, hazlo con al menos 24 horas de anticipación.')
             ->salutation('Saludos, ' . config('app.name'));
     }
 

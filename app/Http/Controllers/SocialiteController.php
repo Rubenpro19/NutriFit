@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Notifications\WelcomeNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Laravel\Socialite\Facades\Socialite;
@@ -99,6 +100,9 @@ class SocialiteController extends Controller
             'data_consent' => true,
             'data_consent_at' => now(),
         ]);
+
+        // Enviar notificación de bienvenida
+        $user->notify(new WelcomeNotification());
 
         // Limpiar sesión
         session()->forget('google_user');
