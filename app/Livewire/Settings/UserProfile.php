@@ -58,6 +58,8 @@ class UserProfile extends Component
         'address.max' => 'La dirección no puede tener más de 255 caracteres.',
         'birth_date.date' => 'La fecha de nacimiento debe ser una fecha válida.',
         'birth_date.before' => 'La fecha de nacimiento debe ser anterior a hoy.',
+        'profile_photo.image' => 'El archivo debe ser una imagen (jpg, jpeg, png, gif, svg).',
+        'profile_photo.max' => 'La foto de perfil no puede ser mayor a 5MB. Por favor, reduce el tamaño del archivo.',
         'current_password.required_with' => 'Debes ingresar tu contraseña actual para cambiarla.',
         'password.min' => 'La nueva contraseña debe tener al menos 8 caracteres.',
         'password.confirmed' => 'Las contraseñas no coinciden.',
