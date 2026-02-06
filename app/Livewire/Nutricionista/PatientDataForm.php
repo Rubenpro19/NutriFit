@@ -5,6 +5,7 @@ namespace App\Livewire\Nutricionista;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\PersonalData;
+use App\Notifications\PersonalDataCreatedNotification;
 use Illuminate\Support\Facades\Auth;
 
 class PatientDataForm extends Component
@@ -95,6 +96,9 @@ class PatientDataForm extends Component
                 'phone' => $this->phone,
                 'address' => $this->address,
             ]);
+            
+            // Enviar notificación al paciente
+            $this->patient->notify(new PersonalDataCreatedNotification(Auth::user()));
             
             // Si hay un appointment_id pendiente, redirigir a registrar atención
             if ($this->appointmentId) {
