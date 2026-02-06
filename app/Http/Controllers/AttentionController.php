@@ -6,6 +6,7 @@ use App\Models\Appointment;
 use App\Models\Attention;
 use App\Models\AttentionData;
 use App\Models\AppointmentState;
+use App\Notifications\AttentionCompletedNotification;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 
@@ -208,9 +209,15 @@ class AttentionController extends Controller
 
             DB::commit();
 
+            // Cargar las relaciones necesarias para la notificación
+            $attention->load(['appointment', 'nutricionista', 'paciente', 'attentionData']);
+
+            // Enviar notificación al paciente
+            $appointment->paciente->notify(new AttentionCompletedNotification($attention));
+
             return redirect()
                 ->route('nutricionista.appointments.show', $appointment)
-                ->with('success', 'La atención ha sido registrada exitosamente. La cita ahora está completada.');
+                ->with('success', 'La atención ha sido registrada exitosamente. La cita ahora está completada y se ha notificado al paciente.');
 
         } catch (\Exception $e) {
             DB::rollBack();
