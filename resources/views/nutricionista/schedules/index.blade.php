@@ -142,24 +142,27 @@
                     </div>
 
                     <!-- Acciones rápidas -->
-                    <div class="bg-gray-50 dark:bg-gray-700/50 px-6 py-4 border-b border-gray-200 dark:border-gray-600">
-                        <div class="flex flex-wrap items-center gap-4">
-                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200">Acciones rápidas:</span>
-                            @foreach($daysOfWeek as $dayNumber => $dayName)
-                                <button 
-                                    type="button" 
-                                    onclick="toggleDay({{ $dayNumber }})"
-                                    class="text-sm px-4 py-2 rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 font-medium hover:bg-green-500 hover:border-green-500 hover:text-white hover:shadow-md hover:scale-105 active:scale-95 dark:hover:bg-green-600 dark:hover:border-green-600 transition-all duration-200"
-                                >
-                                    Marcar {{ $dayName }}
-                                </button>
-                            @endforeach
+                    <div class="bg-gray-50 dark:bg-gray-700/50 px-4 sm:px-6 py-4 border-b border-gray-200 dark:border-gray-600">
+                        <div class="mb-3">
+                            <span class="text-sm font-medium text-gray-800 dark:text-gray-200 block mb-3">Acciones rápidas:</span>
+                            <!-- Grid de 2 columnas en móvil, más en pantallas grandes -->
+                            <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-7 gap-2 sm:gap-3">
+                                @foreach($daysOfWeek as $dayNumber => $dayName)
+                                    <button 
+                                        type="button" 
+                                        onclick="toggleDay({{ $dayNumber }})"
+                                        class="text-xs sm:text-sm px-3 sm:px-4 py-2.5 sm:py-2 rounded-lg border-2 border-gray-300 dark:border-gray-600 text-gray-800 dark:text-gray-200 font-medium hover:bg-green-500 hover:border-green-500 hover:text-white hover:shadow-md hover:scale-105 active:scale-95 dark:hover:bg-green-600 dark:hover:border-green-600 transition-all duration-200 whitespace-nowrap"
+                                    >
+                                        Marcar {{ $dayName }}
+                                    </button>
+                                @endforeach
+                            </div>
                         </div>
-                        <div class="mt-4 flex justify-end">
+                        <div class="flex justify-end">
                             <button 
                                 type="button" 
                                 onclick="document.getElementById('clearAllModal').classList.remove('hidden'); document.getElementById('clearAllModal').style.display='block';"
-                                class="text-sm px-4 py-2 rounded-lg border-2 border-red-400 dark:border-red-500 text-red-600 dark:text-red-400 font-medium hover:bg-red-600 hover:border-red-600 hover:text-white hover:shadow-md hover:scale-105 active:scale-95 dark:hover:bg-red-600 dark:hover:border-red-600 dark:hover:text-white transition-all duration-200"
+                                class="text-xs sm:text-sm px-3 sm:px-4 py-2.5 sm:py-2 rounded-lg border-2 border-red-400 dark:border-red-500 text-red-600 dark:text-red-400 font-medium hover:bg-red-600 hover:border-red-600 hover:text-white hover:shadow-md hover:scale-105 active:scale-95 dark:hover:bg-red-600 dark:hover:border-red-600 dark:hover:text-white transition-all duration-200"
                             >
                                 Limpiar todo
                             </button>
