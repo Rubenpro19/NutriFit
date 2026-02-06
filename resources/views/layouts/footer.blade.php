@@ -21,21 +21,21 @@
             {{-- Información de Contacto --}}
             <div class="flex flex-wrap items-center justify-center gap-6 text-sm">
                 @if($settings?->email_contacto)
-                    <a href="mailto:{{ $settings->email_contacto }}" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
+                    <a href="mailto:{{ $settings->email_contacto }}" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 active:text-green-600 dark:text-gray-300 dark:hover:text-green-500 dark:active:text-green-500">
                         <span class="material-symbols-outlined text-base">mail</span>
                         {{ $settings->email_contacto }}
                     </a>
                     <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
                 @endif
                 @if($settings?->telefono)
-                    <a href="{{ $settings->whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
+                    <a href="{{ $settings->whatsapp_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 active:text-green-600 dark:text-gray-300 dark:hover:text-green-500 dark:active:text-green-500">
                         <span class="material-symbols-outlined text-base">phone</span>
                         {{ $settings->telefono_formateado }}
                     </a>
                     <span class="hidden text-gray-300 dark:text-gray-700 md:inline">•</span>
                 @endif
                 @if($settings?->direccion && $settings?->google_maps_url)
-                    <a href="{{ $settings->google_maps_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 dark:text-gray-300 dark:hover:text-green-500">
+                    <a href="{{ $settings->google_maps_url }}" target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 text-gray-600 transition hover:text-green-600 active:text-green-600 dark:text-gray-300 dark:hover:text-green-500 dark:active:text-green-500">
                         <span class="material-symbols-outlined text-base">location_on</span>
                         {{ $settings->direccion }}
                     </a>
