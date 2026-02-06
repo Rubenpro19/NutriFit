@@ -38,7 +38,7 @@ class UserProfile extends Component
             'phone' => 'nullable|string|max:10',
             'address' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date|before:today',
-            'profile_photo' => 'nullable|image|max:2048',
+            'profile_photo' => 'nullable|image|max:5120',
         ];
 
         // Solo validar contraseña actual si el usuario tiene password establecido
@@ -100,7 +100,7 @@ class UserProfile extends Component
             'phone' => 'nullable|string|max:10',
             'address' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date|before:today',
-            'profile_photo' => 'nullable|image|max:2048',
+            'profile_photo' => 'nullable|image|max:5120',
         ]);
 
         try {

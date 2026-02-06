@@ -34,7 +34,7 @@ class NutricionistaProfile extends Component
         $rules = [
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:10',
-            'profile_photo' => 'nullable|image|max:2048',
+            'profile_photo' => 'nullable|image|max:5120',
             'consultation_price' => 'required|numeric|min:0|max:999999.99',
         ];
 
@@ -88,7 +88,7 @@ class NutricionistaProfile extends Component
         $this->validate([
             'name' => 'required|string|max:255',
             'phone' => 'nullable|string|max:10',
-            'profile_photo' => 'nullable|image|max:2048',
+            'profile_photo' => 'nullable|image|max:5120',
             'consultation_price' => 'required|numeric|min:0|max:999999.99',
         ]);
 
