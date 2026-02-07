@@ -38,7 +38,7 @@ class UserProfile extends Component
             'phone' => 'nullable|string|max:10',
             'address' => 'nullable|string|max:255',
             'birth_date' => 'nullable|date|before:today',
-            'profile_photo' => 'nullable|image|max:5120',
+            'profile_photo' => 'nullable|image|max:2048',
         ];
 
         // Solo validar contraseña actual si el usuario tiene password establecido
@@ -59,8 +59,8 @@ class UserProfile extends Component
         'birth_date.date' => 'La fecha de nacimiento debe ser una fecha válida.',
         'birth_date.before' => 'La fecha de nacimiento debe ser anterior a hoy.',
         'profile_photo.image' => 'El archivo debe ser una imagen (jpg, jpeg, png, gif, svg).',
-        'profile_photo.max' => 'La foto de perfil no puede ser mayor a 5MB. Por favor, reduce el tamaño del archivo.',
-        'profile_photo.uploaded' => 'La foto de perfil es demasiado grande para ser subida. El tamaño máximo permitido es 5MB.',
+        'profile_photo.max' => 'La foto de perfil no puede ser mayor a 2MB. Por favor, reduce el tamaño del archivo.',
+        'profile_photo.uploaded' => 'La foto de perfil es demasiado grande para ser subida. El tamaño máximo permitido es 2MB.',
         'current_password.required_with' => 'Debes ingresar tu contraseña actual para cambiarla.',
         'password.min' => 'La nueva contraseña debe tener al menos 8 caracteres.',
         'password.confirmed' => 'Las contraseñas no coinciden.',

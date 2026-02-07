@@ -153,7 +153,7 @@
                     <div class="space-y-6">
                         <!-- Foto de Perfil -->
                         @if($hasPersonalData)
-                            <div>
+                            <div x-data="{ isCompressing: false }">
                                 <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                     <span class="material-symbols-outlined text-lg">photo_camera</span>
                                     Foto de Perfil
@@ -161,9 +161,9 @@
                                 <div class="flex items-center gap-4">
                                     <input 
                                         type="file" 
-                                        id="profile_photo"
-                                        wire:model="profile_photo"
+                                        id="profile_photo_paciente"
                                         accept="image/*"
+                                        @change="isCompressing = true"
                                         class="block w-full text-sm text-gray-900 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer bg-white dark:bg-gray-800 focus:ring-2 focus:ring-green-500 focus:border-transparent file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-green-50 file:text-green-700 hover:file:bg-green-100 dark:file:bg-green-900/30 dark:file:text-green-400 dark:hover:file:bg-green-800/50 file:transition-colors"
                                     >
                                 </div>
@@ -171,11 +171,15 @@
                                     <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                                 @enderror
                                 <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                                    Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 5MB.
+                                    Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 2MB. Las imágenes se comprimen automáticamente.
                                 </p>
+                                <div x-show="isCompressing" x-cloak class="mt-2 text-sm text-amber-600 dark:text-amber-400 flex items-center gap-2">
+                                    <span class="material-symbols-outlined animate-spin text-sm">sync</span>
+                                    Comprimiendo imagen...
+                                </div>
                                 <div wire:loading wire:target="profile_photo" class="mt-2 text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">
                                     <span class="material-symbols-outlined animate-spin text-sm">progress_activity</span>
-                                    Cargando imagen...
+                                    Subiendo imagen al servidor...
                                 </div>
                             </div>
                         @endif
@@ -490,5 +494,148 @@
             });
         </script>
     @endif
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const fileInput = document.getElementById('profile_photo_paciente');
+            
+            if (fileInput) {
+                fileInput.addEventListener('change', async function(e) {
+                    const file = e.target.files[0];
+                    
+                    if (!file || !file.type.startsWith('image/')) {
+                        return;
+                    }
+
+                    try {
+                        // Comprimir la imagen
+                        const compressedFile = await compressImage(file, {
+                            maxWidth: 1920,
+                            maxHeight: 1920,
+                            quality: 0.8,
+                            maxSizeMB: 2
+                        });
+
+                        // Crear un nuevo DataTransfer para asignar el archivo comprimido
+                        const dataTransfer = new DataTransfer();
+                        dataTransfer.items.add(compressedFile);
+                        fileInput.files = dataTransfer.files;
+
+                        // Disparar evento para que Livewire detecte el cambio
+                        const event = new Event('change', { bubbles: true });
+                        fileInput.dispatchEvent(event);
+
+                        // Actualizar Livewire manualmente
+                        const livewireComponent = window.Livewire.find(fileInput.closest('[wire\\:id]').getAttribute('wire:id'));
+                        if (livewireComponent) {
+                            livewireComponent.upload('profile_photo', compressedFile, 
+                                // Success callback
+                                () => {
+                                    console.log('Imagen subida correctamente');
+                                },
+                                // Error callback
+                                () => {
+                                    console.error('Error al subir la imagen');
+                                },
+                                // Progress callback
+                                (event) => {
+                                    console.log('Progreso:', Math.round((event.detail.progress || 0)));
+                                }
+                            );
+                        }
+
+                    } catch (error) {
+                        console.error('Error al comprimir la imagen:', error);
+                        alert('Error al procesar la imagen. Por favor, intenta con otra imagen.');
+                    }
+                });
+            }
+
+            /**
+             * Comprime una imagen reduciendo su resolución y calidad
+             */
+            async function compressImage(file, options = {}) {
+                const {
+                    maxWidth = 1920,
+                    maxHeight = 1920,
+                    quality = 0.8,
+                    maxSizeMB = 2
+                } = options;
+
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        
+                        img.onload = function() {
+                            // Calcular nuevas dimensiones manteniendo el aspect ratio
+                            let width = img.width;
+                            let height = img.height;
+                            
+                            if (width > maxWidth || height > maxHeight) {
+                                const aspectRatio = width / height;
+                                
+                                if (width > height) {
+                                    width = maxWidth;
+                                    height = width / aspectRatio;
+                                } else {
+                                    height = maxHeight;
+                                    width = height * aspectRatio;
+                                }
+                            }
+
+                            // Crear canvas y redimensionar
+                            const canvas = document.createElement('canvas');
+                            canvas.width = width;
+                            canvas.height = height;
+                            
+                            const ctx = canvas.getContext('2d');
+                            ctx.drawImage(img, 0, 0, width, height);
+
+                            // Función recursiva para ajustar la calidad hasta alcanzar el tamaño deseado
+                            let currentQuality = quality;
+                            
+                            function attemptCompression() {
+                                canvas.toBlob(function(blob) {
+                                    const sizeMB = blob.size / 1024 / 1024;
+                                    
+                                    // Si el tamaño es aceptable o la calidad ya es muy baja, usar este blob
+                                    if (sizeMB <= maxSizeMB || currentQuality <= 0.1) {
+                                        const fileName = file.name.replace(/\.[^/.]+$/, '') + '_compressed.jpg';
+                                        const compressedFile = new File([blob], fileName, {
+                                            type: 'image/jpeg',
+                                            lastModified: Date.now()
+                                        });
+                                        
+                                        console.log(`Imagen comprimida: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${sizeMB.toFixed(2)}MB`);
+                                        resolve(compressedFile);
+                                    } else {
+                                        // Reducir calidad y volver a intentar
+                                        currentQuality -= 0.1;
+                                        attemptCompression();
+                                    }
+                                }, 'image/jpeg', currentQuality);
+                            }
+                            
+                            attemptCompression();
+                        };
+                        
+                        img.onerror = function() {
+                            reject(new Error('No se pudo cargar la imagen'));
+                        };
+                        
+                        img.src = e.target.result;
+                    };
+                    
+                    reader.onerror = function() {
+                        reject(new Error('No se pudo leer el archivo'));
+                    };
+                    
+                    reader.readAsDataURL(file);
+                });
+            }
+        });
+    </script>
 
 </div>
