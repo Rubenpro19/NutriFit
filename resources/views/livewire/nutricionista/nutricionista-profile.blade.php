@@ -25,18 +25,26 @@
         <!-- Columna Izquierda: Avatar e Información de Cuenta -->
         <div class="lg:col-span-1 space-y-6">
             <!-- Card de Avatar -->
-            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6">
+            <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6" 
+                 x-data="{ 
+                     previewUrl: null,
+                     showPreview: @entangle('profile_photo').live
+                 }"
+                 @photo-preview.window="previewUrl = $event.detail.url">
                 <div class="text-center">
                     <!-- Foto de Perfil o Iniciales -->
-                    @if($profile_photo)
-                        <!-- Vista previa temporal de nueva foto -->
+                    <template x-if="previewUrl">
+                        <!-- Vista previa de nueva foto (desde JavaScript) -->
                         <div class="relative inline-block mb-4">
-                            <img src="{{ $profile_photo->temporaryUrl() }}" alt="Vista previa" class="w-24 h-24 rounded-full object-cover shadow-lg mx-auto">
-                            <button wire:click="$set('profile_photo', null)" type="button" class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition">
+                            <img :src="previewUrl" alt="Vista previa" class="w-24 h-24 rounded-full object-cover shadow-lg mx-auto">
+                            <button @click="previewUrl = null; @this.set('profile_photo', null); document.getElementById('profile_photo').value = ''" 
+                                    type="button" 
+                                    class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition">
                                 <span class="material-symbols-outlined text-sm">close</span>
                             </button>
                         </div>
-                    @elseif($profile_photo_path)
+                    </template>
+                    <template x-if="!previewUrl && '{{ $profile_photo_path }}'">
                         <!-- Foto guardada -->
                         <div class="relative inline-block mb-4" x-data="{ showModal: false }">
                             <img src="{{ asset('storage/' . $profile_photo_path) }}" 
@@ -91,12 +99,13 @@
                                 </div>
                             </div>
                         </div>
-                    @else
+                    </template>
+                    <template x-if="!previewUrl && !'{{ $profile_photo_path }}'">
                         <!-- Iniciales por defecto -->
                         <div class="w-24 h-24 bg-gradient-to-br from-green-400 to-emerald-500 rounded-full flex items-center justify-center text-white text-3xl font-bold shadow-lg mx-auto mb-4">
                             {{ strtoupper(substr($name, 0, 1)) }}{{ strtoupper(substr(explode(' ', $name)[1] ?? '', 0, 1)) }}
                         </div>
-                    @endif
+                    </template>
                     
                     <h2 class="text-xl font-bold text-gray-900 dark:text-white">{{ $name }}</h2>
                     <p class="text-sm text-gray-600 dark:text-gray-400 mt-1">{{ $email }}</p>
@@ -413,39 +422,45 @@
 
                     try {
                         // Comprimir la imagen
-                        const compressedFile = await compressImage(file, {
+                        const { compressedFile, previewUrl } = await compressImage(file, {
                             maxWidth: 1920,
                             maxHeight: 1920,
                             quality: 0.8,
                             maxSizeMB: 2
                         });
 
+                        // Mostrar vista previa
+                        window.dispatchEvent(new CustomEvent('photo-preview', { 
+                            detail: { url: previewUrl } 
+                        }));
+
                         // Crear un nuevo DataTransfer para asignar el archivo comprimido
                         const dataTransfer = new DataTransfer();
                         dataTransfer.items.add(compressedFile);
                         fileInput.files = dataTransfer.files;
 
-                        // Disparar evento para que Livewire detecte el cambio
-                        const event = new Event('change', { bubbles: true });
-                        fileInput.dispatchEvent(event);
-
                         // Actualizar Livewire manualmente
-                        const livewireComponent = window.Livewire.find(fileInput.closest('[wire\\:id]').getAttribute('wire:id'));
-                        if (livewireComponent) {
-                            livewireComponent.upload('profile_photo', compressedFile, 
-                                // Success callback
-                                () => {
-                                    console.log('Imagen subida correctamente');
-                                },
-                                // Error callback
-                                () => {
-                                    console.error('Error al subir la imagen');
-                                },
-                                // Progress callback
-                                (event) => {
-                                    console.log('Progreso:', Math.round((event.detail.progress || 0)));
-                                }
-                            );
+                        const livewireElement = fileInput.closest('[wire\\:id]');
+                        if (livewireElement) {
+                            const componentId = livewireElement.getAttribute('wire:id');
+                            const livewireComponent = window.Livewire.find(componentId);
+                            
+                            if (livewireComponent) {
+                                livewireComponent.upload('profile_photo', compressedFile, 
+                                    // Success callback
+                                    () => {
+                                        console.log('Imagen subida correctamente');
+                                    },
+                                    // Error callback
+                                    (error) => {
+                                        console.error('Error al subir la imagen:', error);
+                                    },
+                                    // Progress callback
+                                    (event) => {
+                                        console.log('Progreso:', Math.round((event.detail.progress || 0)) + '%');
+                                    }
+                                );
+                            }
                         }
 
                     } catch (error) {
@@ -512,8 +527,11 @@
                                             lastModified: Date.now()
                                         });
                                         
+                                        // Crear URL para vista previa
+                                        const previewUrl = URL.createObjectURL(blob);
+                                        
                                         console.log(`Imagen comprimida: ${(file.size / 1024 / 1024).toFixed(2)}MB → ${sizeMB.toFixed(2)}MB`);
-                                        resolve(compressedFile);
+                                        resolve({ compressedFile, previewUrl });
                                     } else {
                                         // Reducir calidad y volver a intentar
                                         currentQuality -= 0.1;
