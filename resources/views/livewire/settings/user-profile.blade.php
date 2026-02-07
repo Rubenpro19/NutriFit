@@ -164,7 +164,9 @@
                     <div class="space-y-6">
                         <!-- Foto de Perfil -->
                         @if($hasPersonalData)
-                            <div x-data="{ isCompressing: false }">
+                            <div x-data="{ isCompressing: false }"
+                                 @compression-complete.window="isCompressing = false"
+                                 @photo-cleared.window="isCompressing = false">
                                 <label class="block text-sm font-semibold text-gray-900 dark:text-white mb-2 flex items-center gap-2">
                                     <span class="material-symbols-outlined text-lg">photo_camera</span>
                                     Foto de Perfil
@@ -527,6 +529,9 @@
                             maxSizeMB: 2
                         });
 
+                        // Indicar que la compresión terminó
+                        window.dispatchEvent(new CustomEvent('compression-complete'));
+
                         // Mostrar vista previa
                         window.dispatchEvent(new CustomEvent('photo-preview', { 
                             detail: { url: previewUrl } 
@@ -563,6 +568,7 @@
 
                     } catch (error) {
                         console.error('Error al comprimir la imagen:', error);
+                        window.dispatchEvent(new CustomEvent('compression-complete'));
                         alert('Error al procesar la imagen. Por favor, intenta con otra imagen.');
                     }
                 });
