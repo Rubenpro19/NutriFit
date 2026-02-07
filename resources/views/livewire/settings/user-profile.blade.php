@@ -325,15 +325,17 @@
                     Cambiar Contraseña
                 </h2>
 
-                @if ($errors->any())
+                @if ($errors->has('current_password') || $errors->has('password') || $errors->has('password_confirmation'))
                     <div class="mb-6 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 text-red-800 dark:text-red-200 px-4 py-3 rounded-lg">
                         <div class="flex items-start gap-3">
                             <span class="material-symbols-outlined text-red-600 dark:text-red-400 flex-shrink-0">error</span>
                             <div class="flex-1">
                                 <h3 class="font-bold mb-1">Error al actualizar contraseña</h3>
                                 <ul class="list-disc list-inside space-y-1 text-sm">
-                                    @foreach ($errors->all() as $error)
-                                        <li>{{ $error }}</li>
+                                    @foreach (['current_password', 'password', 'password_confirmation'] as $field)
+                                        @error($field)
+                                            <li>{{ $message }}</li>
+                                        @enderror
                                     @endforeach
                                 </ul>
                             </div>
@@ -478,7 +480,7 @@
         </div>
     </div>
 
-    @if ($errors->any())
+    @if ($errors->has('current_password') || $errors->has('password') || $errors->has('password_confirmation'))
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const passwordSection = document.getElementById('password-section');
