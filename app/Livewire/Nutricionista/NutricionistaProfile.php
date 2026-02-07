@@ -56,6 +56,11 @@ class NutricionistaProfile extends Component
         'password.confirmed' => 'Las contraseñas no coinciden.',
         'profile_photo.image' => 'El archivo debe ser una imagen (jpg, jpeg, png, gif, svg).',
         'profile_photo.max' => 'La foto de perfil no puede ser mayor a 5MB. Por favor, reduce el tamaño del archivo.',
+        'profile_photo.uploaded' => 'La foto de perfil es demasiado grande para ser subida. El tamaño máximo permitido es 5MB.',
+        'consultation_price.required' => 'El precio de consulta es obligatorio.',
+        'consultation_price.numeric' => 'El precio de consulta debe ser un número.',
+        'consultation_price.min' => 'El precio de consulta debe ser mayor o igual a 0.',
+        'consultation_price.max' => 'El precio de consulta no puede ser mayor a 999,999.99.',
     ];
 
     public function mount()

@@ -222,7 +222,7 @@
                             <p class="mt-2 text-sm text-red-600 dark:text-red-400">{{ $message }}</p>
                         @enderror
                         <p class="mt-2 text-xs text-gray-600 dark:text-gray-400">
-                            Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 2MB.
+                            Formatos permitidos: JPG, PNG, GIF. Tamaño máximo: 5MB.
                         </p>
                         <div wire:loading wire:target="profile_photo" class="mt-2 text-sm text-blue-600 dark:text-blue-400 flex items-center gap-2">
                             <span class="material-symbols-outlined animate-spin text-sm">progress_activity</span>
