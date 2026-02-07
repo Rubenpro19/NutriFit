@@ -26,18 +26,20 @@
         <div class="lg:col-span-1 space-y-6">
             <!-- Card de Avatar -->
             <div class="bg-white dark:bg-gray-900 rounded-xl shadow-lg p-6" 
-                 x-data="{ 
-                     previewUrl: null,
-                     showPreview: @entangle('profile_photo').live
-                 }"
-                 @photo-preview.window="previewUrl = $event.detail.url">
+                 x-data="{ previewUrl: null }"
+                 @photo-preview.window="previewUrl = $event.detail.url"
+                 @photo-cleared.window="previewUrl = null">
                 <div class="text-center">
                     <!-- Foto de Perfil o Iniciales -->
                     <template x-if="previewUrl">
                         <!-- Vista previa de nueva foto (desde JavaScript) -->
                         <div class="relative inline-block mb-4">
                             <img :src="previewUrl" alt="Vista previa" class="w-24 h-24 rounded-full object-cover shadow-lg mx-auto">
-                            <button @click="previewUrl = null; @this.set('profile_photo', null); document.getElementById('profile_photo').value = ''" 
+                            <button @click="
+                                        previewUrl = null; 
+                                        document.getElementById('profile_photo').value = ''; 
+                                        window.dispatchEvent(new CustomEvent('photo-cleared'));
+                                    " 
                                     type="button" 
                                     class="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 hover:bg-red-600 transition">
                                 <span class="material-symbols-outlined text-sm">close</span>
