@@ -508,7 +508,7 @@
         </script>
     @endif
 
-w    <!-- Image Compressor Script -->
+    <!-- Image Compressor Script -->
     <script src="{{ asset('js/image-compressor.js') }}"></script>
     <script>
         initializeImageCompressor('profile_photo_paciente', 'profile_photo');
