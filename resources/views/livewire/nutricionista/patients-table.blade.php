@@ -204,14 +204,21 @@
                         @endif
                     </div>
 
-                    <!-- Botón de Acción Principal -->
-                    <div class="p-6 pt-0">
+                    <!-- Botones de Acción -->
+                    <div class="p-6 pt-0 grid grid-cols-2 gap-2">
                         <a 
                             href="{{ route('nutricionista.patients.show', $patient) }}"
-                            class="flex items-center justify-center gap-2 w-full px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95"
+                            class="flex items-center justify-center gap-1 px-3 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-lg hover:from-green-700 hover:to-emerald-700 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 text-sm"
                         >
-                            <span class="material-symbols-outlined">person_search</span>
-                            Ver Detalles del Paciente
+                            <span class="material-symbols-outlined text-base">person_search</span>
+                            Ver Perfil
+                        </a>
+                        <a 
+                            href="{{ route('nutricionista.patients.history', $patient) }}"
+                            class="flex items-center justify-center gap-1 px-3 py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-semibold rounded-lg hover:from-teal-700 hover:to-cyan-700 transition-all duration-200 shadow-md hover:shadow-lg hover:scale-[1.02] active:scale-95 text-sm"
+                        >
+                            <span class="material-symbols-outlined text-base">monitoring</span>
+                            Historial
                         </a>
                     </div>
                 </div>

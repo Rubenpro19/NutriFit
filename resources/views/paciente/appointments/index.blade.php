@@ -31,9 +31,11 @@
                         </p>
                     </div>
                 </div>
-                <div class="flex-shrink-0 hidden sm:flex items-center">
-                    <span class="material-symbols-outlined text-3xl sm:text-4xl text-green-600 dark:text-green-400">history</span>
-                </div>
+                <a href="{{ route('paciente.history') }}"
+                   class="flex-shrink-0 flex items-center gap-2 px-4 py-2.5 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg hover:scale-105 transition-all shadow-md text-sm">
+                    <span class="material-symbols-outlined text-base">monitoring</span>
+                    <span class="hidden sm:inline">Historial Clínico</span>
+                </a>
             </div>
         </div>
 

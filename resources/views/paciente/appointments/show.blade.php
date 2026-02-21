@@ -891,10 +891,16 @@
                                 @endif
                             @endif
 
+                            <a href="{{ route('paciente.history') }}"
+                                class="w-full flex items-center justify-center gap-2 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-semibold py-3 px-4 rounded-xl hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg transition shadow-md mb-3">
+                                <span class="material-symbols-outlined">monitoring</span>
+                                Ver Historial Clínico
+                            </a>
+
                             <a href="{{ route('paciente.appointments.index') }}"
                                 class="w-full flex items-center justify-center gap-2 bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400 font-semibold py-3 px-4 rounded-xl hover:bg-green-200 dark:hover:bg-green-900/50 transition">
                                 <span class="material-symbols-outlined">arrow_back</span>
-                                Volver al Historial
+                                Volver a Mis Citas
                             </a>
 
                             <!-- Información adicional -->

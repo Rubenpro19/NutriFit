@@ -239,13 +239,17 @@
                         @endif
                     </div>
 
-                    <!-- Botón de Acceso al Perfil Completo -->
-                    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                    <!-- Botones de Acceso al Perfil e Historial -->
+                    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700 grid grid-cols-1 sm:grid-cols-2 gap-3">
                         <a href="{{ route('nutricionista.patients.show', $appointment->paciente) }}" 
-                           class="flex items-center justify-center gap-2 w-full px-6 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-bold rounded-xl hover:from-green-700 hover:to-emerald-700 hover:shadow-xl hover:scale-105 transition-all shadow-lg">
-                            <span class="material-symbols-outlined">person_search</span>
-                            Ver Perfil Completo del Paciente
-                            <span class="material-symbols-outlined">arrow_forward</span>
+                           class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-green-600 to-emerald-600 text-white font-semibold rounded-xl hover:from-green-700 hover:to-emerald-700 hover:shadow-lg hover:scale-105 transition-all shadow-md text-sm">
+                            <span class="material-symbols-outlined text-base">person_search</span>
+                            Ver Perfil
+                        </a>
+                        <a href="{{ route('nutricionista.patients.history', $appointment->paciente) }}" 
+                           class="flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg hover:scale-105 transition-all shadow-md text-sm">
+                            <span class="material-symbols-outlined text-base">monitoring</span>
+                            Historial Clínico
                         </a>
                     </div>
                         </div>
@@ -1050,6 +1054,16 @@
                             <p class="text-sm text-gray-600 dark:text-gray-400">No hay acciones disponibles para esta cita</p>
                         </div>
                     @endif
+
+                    <!-- Acceso rápido al historial clínico -->
+                    <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
+                        <a href="{{ route('nutricionista.patients.history', $appointment->paciente) }}"
+                           class="w-full flex items-center justify-center gap-2 px-4 py-3 bg-gradient-to-r from-teal-600 to-cyan-600 text-white font-semibold rounded-xl hover:from-teal-700 hover:to-cyan-700 hover:shadow-lg hover:scale-105 transition-all shadow-md">
+                            <span class="material-symbols-outlined">monitoring</span>
+                            Ver Historial Clínico
+                            <span class="material-symbols-outlined text-base">arrow_forward</span>
+                        </a>
+                    </div>
 
                     <!-- Información adicional -->
                     <div class="mt-6 pt-6 border-t border-gray-200 dark:border-gray-700">
