@@ -26,47 +26,71 @@
 
         /* Header del documento */
         .header {
-            background: linear-gradient(135deg, #059669, #10b981);
+            background: #059669;
             color: white;
-            padding: 12px 15px;
-            margin-bottom: 12px;
-            border-radius: 0 0 8px 8px;
+            padding: 15px 20px;
+            margin-bottom: 20px;
+            border-bottom: 4px solid #10b981;
         }
 
         .header-content {
-            display: table;
             width: 100%;
         }
 
         .header-left {
-            display: table-cell;
-            vertical-align: middle;
-            width: 70%;
+            float: left;
+            width: 65%;
         }
 
         .header-right {
-            display: table-cell;
-            vertical-align: middle;
-            text-align: right;
+            float: right;
             width: 30%;
+            text-align: right;
+            margin-top: 10px;
         }
 
-        .logo-text {
-            font-size: 22px;
-            font-weight: bold;
-            margin-bottom: 3px;
+        .header-clear {
+            clear: both;
+        }
+
+        .brand-container {
+            margin-bottom: 6px;
+        }
+
+        .brand-icon-box {
+            display: inline-block;
+            width: 26px;
+            height: 26px;
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+            text-align: center;
+            line-height: 26px;
+            font-size: 16px;
+            vertical-align: middle;
+            margin-right: 8px;
+        }
+
+        .brand-name {
+            font-size: 18px;
+            font-weight: 700;
+            color: #ffffff;
+            vertical-align: middle;
+            display: inline-block;
         }
 
         .subtitle {
             font-size: 11px;
-            opacity: 0.9;
+            color: #ffffff;
+            font-weight: 400;
+            margin-top: 3px;
         }
 
         .attention-number {
             font-size: 12px;
-            background: rgba(255,255,255,0.2);
-            padding: 6px 12px;
-            border-radius: 15px;
+            font-weight: 600;
+            background: rgba(255,255,255,0.25);
+            padding: 8px 15px;
+            border-radius: 4px;
             display: inline-block;
         }
 
@@ -386,8 +410,9 @@
         /* Fecha de atención */
         .attention-date {
             font-size: 10px;
-            color: #6b7280;
-            margin-top: 3px;
+            color: #ffffff;
+            margin-top: 4px;
+            font-weight: 400;
         }
 
         /* Macros table */
@@ -407,7 +432,10 @@
     <div class="header">
         <div class="header-content">
             <div class="header-left">
-                <div class="logo-text">🥗 NutriFit</div>
+                <div class="brand-container">
+                    <span class="brand-icon-box">☘️</span>
+                    <span class="brand-name">NutriFit</span>
+                </div>
                 <div class="subtitle">Informe de Atención Nutricional</div>
                 <div class="attention-date">Fecha: {{ $attentionDate }}</div>
             </div>
@@ -416,6 +444,7 @@
                     Atención #{{ $attentionNumber }}
                 </div>
             </div>
+            <div class="header-clear"></div>
         </div>
     </div>
 
