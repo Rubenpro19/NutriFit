@@ -287,9 +287,7 @@ MAIL_FROM_ADDRESS="noreply@nutrifit.com"
 MAIL_FROM_NAME="${APP_NAME}"
 ```
 
-### 5. Seeders (Datos de Prueba) - Opcional
-
-Si deseas cargar datos de ejemplo:
+### 5. Seeder (Necesario para usuario ADMIN)
 
 ```bash
 php artisan db:seed
@@ -432,20 +430,12 @@ El sistema implementa 3 roles principales:
 | **Nutricionista** | Gestión de agenda y atenciones | `/nutricionista/*` |
 | **Paciente** | Agendar citas y ver historial | `/paciente/*` |
 
-### Credenciales de Prueba (si usas seeders)
+### Credenciales de Prueba del Administrador
 
 ```
 Admin:
 Email: nutifit2026@gmail.com
-Password: password
-
-Nutricionista:
-Se crea desde el panel del Admin
-
-Paciente:
-Email: ana.torres@gmail.com
-Password: ana123
-```
+Password: NutriAdmin123 (en caso de no haber configurado la variable ADMIN_PASSWORD en el .env)
 
 ---
 
