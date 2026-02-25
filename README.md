@@ -169,8 +169,8 @@ Deben estar habilitadas:
 ### 1. Clonar el Repositorio
 
 ```bash
-git clone https://github.com/tu-usuario/nutrifit.git
-cd nutrifit
+git clone https://github.com/Rubenpro19/NutriFit.git
+cd Nutrifit
 ```
 
 ### 2. Instalación Rápida (Recomendado)
@@ -401,16 +401,15 @@ El sistema implementa 3 roles principales:
 
 ```
 Admin:
-Email: admin@nutrifit.com
+Email: nutifit2026@gmail.com
 Password: password
 
 Nutricionista:
-Email: nutricionista@nutrifit.com
-Password: password
+Se crea desde el panel del Admin
 
 Paciente:
-Email: paciente@nutrifit.com
-Password: password
+Email: ana.torres@gmail.com
+Password: ana123
 ```
 
 ---
@@ -471,28 +470,6 @@ Las contribuciones son bienvenidas. Por favor:
 3. Commit tus cambios (`git commit -m 'Add: nueva característica'`)
 4. Push a la rama (`git push origin feature/AmazingFeature`)
 5. Abre un Pull Request
-
-### Convenciones de Código
-
-- Seguir **PSR-12** (Laravel Pint configurado)
-- Escribir tests para nuevas funcionalidades
-- Documentar funciones públicas con PHPDoc
-
----
-
-## 📄 Licencia
-
-Este proyecto está bajo la licencia **MIT**. Ver archivo `LICENSE` para más detalles.
-
----
-
-## 📞 Soporte
-
-Si tienes alguna pregunta o problema:
-
-- 📧 Email: soporte@nutrifit.com
-- 💬 Issues: [GitHub Issues](https://github.com/tu-usuario/nutrifit/issues)
-- 📚 Documentación: [Wiki del Proyecto](https://github.com/tu-usuario/nutrifit/wiki)
 
 ---
 
