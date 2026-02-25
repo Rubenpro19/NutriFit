@@ -42,43 +42,7 @@ class DatabaseSeeder extends Seeder
             'email_verified_at' => now(),
         ]);
 
-        // 🔹 Pacientes de prueba
-        $pacientes = [
-            ['name' => 'Ana Torres',     'email' => 'ana.torres@gmail.com',     'password' => 'ana123'],
-            ['name' => 'Carlos Mendoza', 'email' => 'carlos.mendoza@gmail.com', 'password' => 'carlos123'],
-            ['name' => 'María López',    'email' => 'maria.lopez@gmail.com',    'password' => 'maria123'],
-            ['name' => 'Jorge Ramírez',  'email' => 'jorge.ramirez@gmail.com',  'password' => 'jorge123'],
-            ['name' => 'Sofía Castillo', 'email' => 'sofia.castillo@gmail.com', 'password' => 'sofia123'],
-            ['name' => 'Ruben Mera', 'email' => 'dariomera05@gmail.com', 'password' => 'ruben1905'],
-        ];
-
-        foreach ($pacientes as $paciente) {
-            User::create([
-                'name'              => $paciente['name'],
-                'email'             => $paciente['email'],
-                'password'          => Hash::make($paciente['password']),
-                'role_id'           => $pacienteRole->id,
-                'user_state_id'     => $activoState->id,
-                'email_verified_at' => now(),
-            ]);
-        }
-
-        $nutricionista = [
-            ['name' => 'Steven Bravo', 'email' => 'dariomera911@gmail.com', 'password' => 'ruben1905'],
-        ];
-
-        foreach ($nutricionista as $nutri) {
-            User::create([
-                'name'              => $nutri['name'],
-                'email'             => $nutri['email'],
-                'password'          => Hash::make($nutri['password']),
-                'role_id'           => $nutricionistaRole->id,
-                'user_state_id'     => $activoState->id,
-                'email_verified_at' => now(),
-            ]);
-        }
-
         // 🔹 Historial clínico de demostración para Ruben Mera
-        $this->call(RubenMeraHistorySeeder::class);
+        // $this->call(RubenMeraHistorySeeder::class);
     }
 }
