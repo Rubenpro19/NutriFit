@@ -1,3 +1,17 @@
+@php
+    // Si el usuario ya tiene el email verificado, redirigir al dashboard correspondiente
+    if (auth()->user() && auth()->user()->hasVerifiedEmail()) {
+        $route = match (true) {
+            auth()->user()->isAdmin() => route('admin.dashboard'),
+            auth()->user()->isNutricionista() => route('nutricionista.dashboard'),
+            auth()->user()->isPaciente() => route('paciente.dashboard'),
+            default => route('home'),
+        };
+        header("Location: $route");
+        exit;
+    }
+@endphp
+
 @extends('layouts.app')
 
 @section('title', 'Verificar Correo Electrónico - NutriFit')
