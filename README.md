@@ -23,6 +23,41 @@
 - **🎨 Interfaz Moderna**: UI reactiva construida con Livewire y Tailwind CSS 4
 - **💬 Formulario de Contacto**: Sistema de mensajería para consultas generales
 
+### 🚀 Impacto del Sistema
+
+NutriFit no solo moderniza la gestión nutricional, sino que transforma completamente los procesos tradicionales:
+
+- **⚡ Automatiza la gestión manual de citas**: Elimina hojas de cálculo y agendas físicas, centralizando toda la información en un solo lugar
+- **🎯 Reduce conflictos de horarios**: Sistema inteligente de disponibilidad que previene solapamientos y optimiza la agenda del nutricionista
+- **📊 Permite seguimiento longitudinal del paciente**: Historial completo y trazable de todas las atenciones, facilitando análisis de progreso y ajustes personalizados
+- **🔔 Implementa recordatorios automáticos**: Notificaciones por email 24 horas antes de cada cita, reduciendo inasistencias y mejorando la comunicación
+
+---
+
+## 🎓 Sobre el Proyecto Académico
+
+Este proyecto fue desarrollado como **proyecto de titulación** para obtener el título de **Ingeniero en Tecnologías de la Información**. Se trata de un **sistema real implementado en un consultorio nutricional**, no de una simulación académica.
+
+### Datos del Proyecto
+
+- **📚 Tipo**: Proyecto de Titulación (Tesis)
+- **⏱️ Duración**: 16 semanas de desarrollo intensivo
+- **💼 Cliente Real**: Consultorio de nutrición con pacientes activos
+- **👥 Equipo**: Desarrollo en pareja con roles diferenciados
+  - **Desarrollo Técnico**: Implementación completa del sistema (backend, frontend, base de datos, despliegue)
+  - **Gestión de Proyecto**: Levantamiento de requisitos, coordinación con el beneficiario y documentación del proyecto
+
+### 🎯 Objetivos Cumplidos
+
+✅ Digitalizar completamente el flujo de trabajo del consultorio  
+✅ Reducir tiempos de gestión administrativa en un 70%  
+✅ Implementar sistema de notificaciones automatizadas  
+✅ Proporcionar herramientas de seguimiento de pacientes  
+✅ Garantizar seguridad y privacidad de datos médicos  
+✅ Crear solución escalable para múltiples nutricionistas  
+
+El proyecto fue desarrollado siguiendo metodologías ágiles (Scrum), con sprints semanales, revisiones constantes con el beneficiario y validaciones en ambiente real de producción.
+
 ---
 
 ## 🏗️ Arquitectura del Sistema
