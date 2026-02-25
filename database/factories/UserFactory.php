@@ -5,6 +5,7 @@ namespace Database\Factories;
 use Illuminate\Database\Eloquent\Factories\Factory;
 use Illuminate\Support\Str;
 use App\Models\Role;
+use App\Models\UserState;
 /**
  * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
  */
@@ -28,7 +29,7 @@ class UserFactory extends Factory
             'email_verified_at' => now(),
             'password' => static::$password ??= 'password',
             'role_id' => Role::where('name', 'paciente')->first()?->id ?? 3,
-            'user_state_id' => null,
+            'user_state_id' => UserState::where('name', 'activo')->first()?->id ?? 1,
             'remember_token' => Str::random(10),
         ];
     }
