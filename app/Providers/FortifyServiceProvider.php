@@ -91,7 +91,25 @@ class FortifyServiceProvider extends ServiceProvider
     private function configureViews(): void
     {
         Fortify::loginView(fn () => view('livewire.auth.login'));
-        Fortify::verifyEmailView(fn () => view('livewire.auth.verify-email'));
+        
+        // Verificar si el usuario ya está verificado y redirigir al dashboard correspondiente
+        Fortify::verifyEmailView(function () {
+            $user = auth()->user();
+            
+            if ($user && $user->hasVerifiedEmail()) {
+                $route = match (true) {
+                    $user->isAdmin() => 'admin.dashboard',
+                    $user->isNutricionista() => 'nutricionista.dashboard',
+                    $user->isPaciente() => 'paciente.dashboard',
+                    default => 'home',
+                };
+                
+                return redirect()->route($route);
+            }
+            
+            return view('livewire.auth.verify-email');
+        });
+        
         Fortify::twoFactorChallengeView(fn () => view('livewire.auth.two-factor-challenge'));
         Fortify::confirmPasswordView(fn () => view('livewire.auth.confirm-password'));
         Fortify::registerView(fn () => view('livewire.auth.register'));
