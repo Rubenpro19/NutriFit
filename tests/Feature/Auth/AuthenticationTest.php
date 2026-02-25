@@ -19,7 +19,7 @@ test('users can authenticate using the login screen', function () {
 
     $response
         ->assertSessionHasNoErrors()
-        ->assertRedirect(route('dashboard', absolute: false));
+        ->assertRedirect(route('paciente.dashboard', absolute: false));
 
     $this->assertAuthenticated();
 });
@@ -47,6 +47,13 @@ test('users with two factor enabled are redirected to two factor challenge', fun
     ]);
 
     $user = User::factory()->create();
+
+    // Habilitar 2FA para el usuario
+    $user->forceFill([
+        'two_factor_secret' => encrypt('test-secret'),
+        'two_factor_recovery_codes' => encrypt(json_encode(['code1', 'code2'])),
+        'two_factor_confirmed_at' => now(),
+    ])->save();
 
     $response = $this->post(route('login.store'), [
         'email' => $user->email,

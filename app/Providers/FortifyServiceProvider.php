@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Actions\Fortify\CreateNewUser;
 use App\Actions\Fortify\ResetUserPassword;
 use App\Actions\RedirectAfterLogin;
+use App\Actions\RedirectAfterEmailVerification;
 use Illuminate\Cache\RateLimiting\Limit;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
@@ -13,6 +14,7 @@ use Illuminate\Support\Str;
 use Laravel\Fortify\Contracts\LoginResponse; 
 use Laravel\Fortify\Fortify;
 use Laravel\Fortify\Contracts\RegisterResponse;
+use Laravel\Fortify\Contracts\VerifyEmailResponse;
 use App\Actions\RedirectAfterRegister;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
@@ -27,6 +29,7 @@ class FortifyServiceProvider extends ServiceProvider
     {
         $this->app->singleton(LoginResponse::class, RedirectAfterLogin::class);
         $this->app->singleton(RegisterResponse::class, RedirectAfterRegister::class);
+        $this->app->singleton(VerifyEmailResponse::class, RedirectAfterEmailVerification::class);
     }
 
     /**

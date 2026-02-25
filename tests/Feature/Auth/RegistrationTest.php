@@ -12,10 +12,11 @@ test('new users can register', function () {
         'email' => 'test@example.com',
         'password' => 'password',
         'password_confirmation' => 'password',
+        'data_consent' => true,
     ]);
 
     $response->assertSessionHasNoErrors()
-        ->assertRedirect(route('dashboard', absolute: false));
+        ->assertRedirect(route('paciente.dashboard', absolute: false));
 
     $this->assertAuthenticated();
 });
